@@ -1,5 +1,5 @@
 const router = app => {
-    app.get('/', (request, response) => {
+    app.get('/getUser', (request, response) => {
         response.send(users);
     });
 }

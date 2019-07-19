@@ -23,12 +23,20 @@ connection.connect(function (err) {
     
 });
 
+
+
 // Close the connection
 /*connection.end(function () {
     // The connection has been closed
 });*/
 
 const app = express();
+
+app.configure(function () {
+    app.use(express.bodyParser());
+    app.use(app.router);
+});
+
 // get all todos
 app.get('/getUsers', (req, res) => {
 

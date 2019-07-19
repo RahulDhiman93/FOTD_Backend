@@ -48,24 +48,13 @@ app.get('/getUsers', (req, res) => {
     });
 });
 
-app.post('/newUser', (error ,req, res) => {
-   
-    if (error) {
-       error.status(400).send({
-           success : 'false',
-           message : 'Error in data',
-           data : rows
-       })
-       return
-    } 
+app.post('/newUser', (req, res) => {
 
-    if (res) {
         res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
-            data: rows
+            data: req.body
         })
-    }
     
 });
 

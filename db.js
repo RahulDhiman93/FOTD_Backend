@@ -23,19 +23,19 @@ connection.connect(function (err) {
 });
 
 // Close the connection
-connection.end(function () {
+/*connection.end(function () {
     // The connection has been closed
-});
+});*/
 
 const app = express();
 // get all todos
 app.get('/getUsers', (req, res) => {
 
-    $query = 'SELECT * FROM `Users`';
+    var query = 'SELECT * FROM `Users`';
 
-    connection.query($query, function (err, rows, fields) {
+    connection.query(query, function (err, rows, fields) {
         if (err) {
-            console.log("An error ocurred performing the query.");
+            console.log(err,"An error ocurred performing the query.");
             return;
         }
         res.status(200).send({

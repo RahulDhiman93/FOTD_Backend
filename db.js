@@ -1,5 +1,6 @@
 // Get the mysql service
 var mysql = require('mysql');
+var userData;
 
 // Add the credentials to access your database
 var connection = mysql.createConnection({
@@ -29,6 +30,7 @@ connection.query($query, function (err, rows, fields) {
         return;
     }
 
+    userData = rows
     console.log("Query succesfully executed: ", rows);
 });
 
@@ -37,3 +39,17 @@ connection.end(function () {
     // The connection has been closed
 });
 
+const app = express();
+// get all todos
+app.get('/getUsers', (req, res) => {
+    res.status(200).send({
+        success: 'true',
+        message: 'todos retrieved successfully',
+        data   : userData
+    })
+});
+const PORT = 3000;
+
+app.listen(PORT, () => {
+    console.log(`server running on port ${PORT}`)
+});

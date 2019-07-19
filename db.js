@@ -21,19 +21,6 @@ connection.connect(function (err) {
     
 });
 
-// Perform a query
-$query = 'SELECT * FROM `Users`';
-
-connection.query($query, function (err, rows, fields) {
-    if (err) {
-        console.log("An error ocurred performing the query.");
-        return;
-    }
-
-    userData = rows
-    console.log("Query succesfully executed: ", rows);
-});
-
 // Close the connection
 connection.end(function () {
     // The connection has been closed
@@ -42,11 +29,21 @@ connection.end(function () {
 const app = express();
 // get all todos
 app.get('/getUsers', (req, res) => {
-    res.status(200).send({
-        success: 'true',
-        message: 'todos retrieved successfully',
-        data   : userData
-    })
+
+    $query = 'SELECT * FROM `Users`';
+
+    connection.query($query, function (err, rows, fields) {
+        if (err) {
+            console.log("An error ocurred performing the query.");
+            return;
+        }
+        res.status(200).send({
+            success: 'true',
+            message: 'Data retrieved successfully',
+            data: rows
+        })
+        console.log("Query succesfully executed: ", rows);
+    });
 });
 const PORT = 3000;
 

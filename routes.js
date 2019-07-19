@@ -14,6 +14,11 @@ const users = [{
     name: "Bertram Gilfoyle",
     email: "gilfoyle@piedpiper.com",
 },
+{
+    id: 3,
+    name: "Rahul Dhiman",
+    email: "rahul.dhiman@jungleworks.com",
+},
 ];
 
 module.exports = router;

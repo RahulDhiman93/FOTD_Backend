@@ -1,6 +1,7 @@
 // Get the mysql service
 var express = require('express');
 var mysql = require('mysql');
+const PORT = 3000;
 var userData;
 
 // Add the credentials to access your database
@@ -46,7 +47,28 @@ app.get('/getUsers', (req, res) => {
         console.log("Query succesfully executed: ", rows);
     });
 });
-const PORT = 3000;
+
+app.post('/newUser', (error ,req, res) => {
+   
+    if (error) {
+       error.status(400).send({
+           success : 'false',
+           message : 'Error in data',
+           data : rows
+       })
+       return
+    } 
+
+    if (res) {
+        res.status(200).send({
+            success: 'true',
+            message: 'Data retrieved successfully',
+            data: rows
+        })
+    }
+    
+});
+
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)

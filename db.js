@@ -1,5 +1,6 @@
 // Get the mysql service
 var express = require('express');
+const bodyParser = require('body-parser');
 var mysql = require('mysql');
 const PORT = 3000;
 var userData;
@@ -32,11 +33,10 @@ connection.connect(function (err) {
 
 const app = express();
 
-app.configure(function () {
-    app.use(express.bodyParser());
-    app.use(app.router);
-});
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+    extended: true,
+}));
 // get all todos
 app.get('/getUsers', (req, res) => {
 

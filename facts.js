@@ -3,7 +3,7 @@ var express = require('express');
 var moment = require('moment');
 const bodyParser = require('body-parser');
 var mysql = require('mysql');
-const PORT = 3000;
+const PORT = 3001;
 
 // Add the credentials to access your database
 var connection = mysql.createConnection({

@@ -30,9 +30,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
-// get all todos
+// get all facts
 app.get('/todaysFact', (req, res) => {
 
+    console.log('TODAYS FACT API HITTED');
     var today = moment().format("YYYY-MM-DD")
     var query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
 

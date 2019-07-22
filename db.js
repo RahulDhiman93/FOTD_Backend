@@ -27,9 +27,7 @@ connection.connect(function (err) {
 
 
 // Close the connection
-/*connection.end(function () {
-    // The connection has been closed
-});*/
+
 
 const app = express();
 
@@ -58,15 +56,27 @@ app.get('/getUsers', (req, res) => {
 
 app.post('/addUser', (req, res) => {
 
+    var query = 'INSERT INTO `Users`(`user_id`, `user_name`) VALUES (5,Node)';
+
+    connection.query(query, function (err, rows, fields) {
+        if (err) {
+            console.log(err, "An error ocurred performing the query.");
+            return;
+        }
         res.status(200).send({
             success: 'true',
-            message: 'Data retrieved successfully',
+            message: 'User added successfully',
             data: req.body
         })
-    
+        console.log("Query succesfully executed: ", rows);
+    });
 });
 
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
+});
+
+connection.end(function () {
+    // The connection has been closed
 });

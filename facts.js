@@ -37,9 +37,13 @@ app.get('/todaysFact', (req, res) => {
     var today = moment().format("YYYY-MM-DD")
     var query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
 
-    connection.query(query, [today],function (err, rows, fields) {
+    connection.query(query, [today], function (err, rows, fields) {
         if (err) {
-            console.log(err, "An error ocurred performing the query.");
+            err.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            })
             return;
         }
         res.status(200).send({

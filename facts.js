@@ -1,15 +1,16 @@
 // Get the mysql service
 var express = require('express');
+var moment = require('moment');
 const bodyParser = require('body-parser');
 var mysql = require('mysql');
 const PORT = 3000;
 
 // Add the credentials to access your database
 var connection = mysql.createConnection({
-    host      : 'localhost',
-    user      : 'root',
-    password  : 'R@hul1234',
-    database  : 'TestingDB'
+    host: 'localhost',
+    user: 'root',
+    password: 'R@hul1234',
+    database: 'TestingDB'
 });
 
 // connect to mysql
@@ -20,7 +21,7 @@ connection.connect(function (err) {
         console.log(err.code);
         console.log(err.fatal);
     }
-    
+
 });
 
 const app = express();
@@ -30,13 +31,14 @@ app.use(bodyParser.urlencoded({
     extended: true,
 }));
 // get all todos
-app.get('/getUsers', (req, res) => {
+app.get('/todaysFact', (req, res) => {
 
-    var query = 'SELECT * FROM `Users`';
+    var today = moment().format("YYYY-MM-DD")
+    var query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
 
-    connection.query(query, function (err, rows, fields) {
+    connection.query(query, [today],function (err, rows, fields) {
         if (err) {
-            console.log(err,"An error ocurred performing the query.");
+            console.log(err, "An error ocurred performing the query.");
             return;
         }
         res.status(200).send({
@@ -47,26 +49,6 @@ app.get('/getUsers', (req, res) => {
         console.log("Query succesfully executed: ", rows);
     });
 });
-
-app.post('/addUser', (req, res) => {
-
-    console.log(req.body);
-    var query = 'INSERT INTO `Users`(`user_name`) VALUES (?)';
-
-    connection.query(query, [req.body.user_name],function (err, rows, fields) {
-        if (err) {
-            console.log(err, "An error ocurred performing the query.");
-            return;
-        }
-        res.status(200).send({
-            success: 'true',
-            message: 'User added successfully',
-            data: req.body
-        })
-        console.log("Query succesfully executed: ", rows);
-    });
-});
-
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)

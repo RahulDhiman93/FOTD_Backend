@@ -54,7 +54,7 @@ app.post('/addUser', (req, res) => {
     console.log(req.body);
     var query = 'INSERT INTO `Users`(`user_id`, `user_name`) VALUES (?,?)';
 
-    connection.query(query, [req.body.user_id. req.body.user_name],function (err, rows, fields) {
+    connection.query(query, [req.body.user_id, req.body.user_name],function (err, rows, fields) {
         if (err) {
             console.log(err, "An error ocurred performing the query.");
             return;

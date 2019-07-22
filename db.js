@@ -24,11 +24,6 @@ connection.connect(function (err) {
     
 });
 
-
-
-// Close the connection
-
-
 const app = express();
 
 app.use(bodyParser.json());
@@ -76,8 +71,4 @@ app.post('/addUser', (req, res) => {
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
-});
-
-connection.end(function () {
-    // The connection has been closed
 });

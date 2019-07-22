@@ -56,6 +56,7 @@ app.get('/getUsers', (req, res) => {
 
 app.post('/addUser', (req, res) => {
 
+    console.log(req.body);
     var query = 'INSERT INTO `Users`(`user_id`, `user_name`) VALUES (5,Node)';
 
     connection.query(query, function (err, rows, fields) {

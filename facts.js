@@ -46,10 +46,11 @@ app.get('/todaysFact', (req, res) => {
             })
             return;
         }
+
         res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
-            data: rows
+            data: rows[0]
         })
         console.log("Query succesfully executed: ", rows);
     });

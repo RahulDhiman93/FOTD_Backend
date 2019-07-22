@@ -56,7 +56,7 @@ app.get('/getUsers', (req, res) => {
     });
 });
 
-app.post('/newUser', (req, res) => {
+app.post('/addUser', (req, res) => {
 
         res.status(200).send({
             success: 'true',

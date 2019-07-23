@@ -78,7 +78,8 @@ app.post('/addFacts', (req, res) => {
             let fact_new = [];
             req.body.facts.forEach((fact, index) => {
                 fact.fact_stamp = moment(last_date).add(index + 1, "day").format("YYYY-MM-DD");
-                fact_new.push(fact);
+                let insert_arr = [fact.fact, fact.fact_stamp, fact.fact_key];
+                fact_new.push(insert_arr);
             });
             console.log(fact_new);
             let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES ?";

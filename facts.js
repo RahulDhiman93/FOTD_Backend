@@ -75,11 +75,14 @@ app.post('/todaysFact', (req, res) => {
             return;
         } else if (!underscore.isEmpty(rows)) {
             let last_date = moment(rows[0].fact_stamp).format("YYYY-MM-DD");
+            let fact_new = [];
             req.body.facts.forEach((fact, index) => {
                 fact.fact_stamp = moment(last_date).add(index + 1, "day").format("YYYY-MM-DD");
+                fact_new.push(fact);
             });
+            console.log(fact_new);
             let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES (?)";
-            let ss = connection.query(query, [req.body.facts], (err, rows, fields) => {
+            let ss = connection.query(query, [fact_new], (err, rows, fields) => {
                 console.log("==POST====", err, ss.sql)
                 if (err) {
                     err.status(400).send({

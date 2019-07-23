@@ -36,11 +36,14 @@ app.use(bodyParser.urlencoded({
 app.post('/addDeviceToken', (req, res) => {
 
     console.log('DEVICE TOKEN API HIT');
-    var token = req.device_token
-    var query = 'INSERT INTO `DeviceTokens` (`deviceToken`) VALUES (?)';
+    console.log(req);
+    let token = req.device_token
+    let query = 'INSERT INTO `DeviceTokens` (`deviceToken`) VALUES (?)';
+
 
     connection.query(query, [token], (err, rows, fields) => {
         if (err) {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Token Error',
@@ -62,8 +65,8 @@ app.post('/addDeviceToken', (req, res) => {
 app.get('/todaysFact', (req, res) => {
 
     console.log('TODAYS FACT API HITTED');
-    var today = moment().format("YYYY-MM-DD")
-    var query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
+    let today = moment().format("YYYY-MM-DD")
+    let query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {

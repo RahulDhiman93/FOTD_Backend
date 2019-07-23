@@ -1,12 +1,13 @@
 // Get the mysql service
-var express = require('express');
-var moment = require('moment');
+const express = require('express');
+const moment = require('moment');
+const underscore = require('underscore');
 const bodyParser = require('body-parser');
-var mysql = require('mysql');
+const mysql = require('mysql');
 const PORT = 3001;
 
 // Add the credentials to access your database
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: 'R@hul1234',
@@ -37,7 +38,7 @@ app.get('/todaysFact', (req, res) => {
     var today = moment().format("YYYY-MM-DD")
     var query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
 
-    connection.query(query, [today], function (err, rows, fields) {
+    connection.query(query, [today], (err, rows, fields) => {
         if (err) {
             err.status(400).send({
                 success: 'false',
@@ -53,6 +54,58 @@ app.get('/todaysFact', (req, res) => {
             data: rows[0]
         })
         console.log("Query succesfully executed: ", rows);
+    });
+});
+
+
+// get all facts
+app.post('/todaysFact', (req, res) => {
+
+    console.log('TODAYS FACT API HITTED');
+    var today = moment().format("YYYY-MM-DD")
+    var query = 'SELECT * FROM `Facts` ORDER BY fact_id DESC LIMIT 1';
+
+    connection.query(query, [today], (err, rows, fields) => {
+        if (err) {
+            err.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            })
+            return;
+        } else if (!underscore.isEmpty(rows)) {
+            let last_date = moment(rows[0].fact_stamp).format("YYYY-MM-DD");
+            req.body.facts.forEach((fact, index) => {
+                fact.fact_stamp = moment(last_date).add(index + 1, "day").format("YYYY-MM-DD");
+            });
+            let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES (?)";
+            let ss = connection.query(query, [req.body.facts], (err, rows, fields) => {
+                console.log("==POST====", err, ss.sql)
+                if (err) {
+                    err.status(400).send({
+                        success: 'false',
+                        message: 'Server Error, Please try again!',
+                        data: null
+                    })
+                    return;
+                } else {
+                    res.status(200).send({
+                        success: 'true',
+                        message: 'Data retrieved successfully',
+                        data: rows[0]
+                    })
+                }
+            });
+            console.log("Query succesfully executed: ", rows);
+        } else {
+            err.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            })
+            return;
+        }
+
     });
 });
 

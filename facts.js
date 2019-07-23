@@ -59,7 +59,7 @@ app.get('/todaysFact', (req, res) => {
 
 
 // get all facts
-app.post('/todaysFact', (req, res) => {
+app.post('/addFacts', (req, res) => {
 
     console.log('TODAYS FACT API HITTED');
     var today = moment().format("YYYY-MM-DD")
@@ -82,7 +82,7 @@ app.post('/todaysFact', (req, res) => {
             });
             console.log(fact_new);
             let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES (?)";
-            let ss = connection.query(query, [fact_new], (err, rows, fields) => {
+            let ss = connection.query(sql, [fact_new], (err, rows, fields) => {
                 console.log("==POST====", err, ss.sql)
                 if (err) {
                     err.status(400).send({

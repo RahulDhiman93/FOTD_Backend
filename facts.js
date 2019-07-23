@@ -31,6 +31,33 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
     extended: true,
 }));
+
+//Get device tokens
+app.post('/addDeviceToken', (req, res) => {
+
+    console.log('DEVICE TOKEN API HIT');
+    var token = req.device_token
+    var query = 'INSERT INTO `DeviceTokens` (`deviceToken`) VALUES (?)';
+
+    connection.query(query, [token], (err, rows, fields) => {
+        if (err) {
+            return res.status(400).send({
+                success: 'false',
+                message: 'Token Error',
+                data: null
+            });
+        }
+
+        return res.status(200).send({
+            success: 'true',
+            message: 'Token Added Successfully',
+            data: rows[0]
+        });
+    });
+
+});
+
+
 // get all facts
 app.get('/todaysFact', (req, res) => {
 

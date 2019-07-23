@@ -59,7 +59,7 @@ app.get('/todaysFact', (req, res) => {
 // get all facts
 app.post('/addFacts', (req, res) => {
 
-    console.log('TODAYS FACT API HITTED');
+    console.log('ADD FACT API HITTED');
     let today = moment().format("YYYY-MM-DD")
     let query = 'SELECT * FROM `Facts` ORDER BY fact_id DESC LIMIT 1';
 

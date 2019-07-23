@@ -4,6 +4,7 @@ const moment = require('moment');
 const underscore = require('underscore');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
+const apn = require('apn');
 const PORT = 3001;
 
 // Add the credentials to access your database
@@ -135,6 +136,31 @@ app.post('/addFacts', (req, res) => {
         }
 
     });
+});
+
+
+app.post('/sendBulkPush', (req, res) => {
+
+    console.log('BULK PUSH API HIT');
+    let query = 'SELECT * FROM `DeviceTokens`';
+
+    connection.query(query, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                success: 'false',
+                message: 'DeviceToken Error',
+                data: null
+            });
+        }
+
+        return res.status(200).send({
+            success: 'true',
+            message: 'Device Token get Successfully',
+            data: rows
+        });
+    });
+
 });
 
 app.listen(PORT, () => {

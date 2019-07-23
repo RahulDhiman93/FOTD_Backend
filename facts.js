@@ -154,7 +154,7 @@ app.post('/sendBulkPush', (req, res) => {
         } else if (!underscore.isEmpty(rows)) {
             let deviceTokensArray = []
             rows.forEach((row, index) => {
-                deviceTokensArray.push(row.device_token)
+                deviceTokensArray.push(row.deviceToken)
             });
 
             return res.status(200).send({

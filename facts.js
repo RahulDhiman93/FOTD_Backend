@@ -36,7 +36,7 @@ app.use(bodyParser.urlencoded({
 app.post('/addDeviceToken', (req, res) => {
 
     console.log('DEVICE TOKEN API HIT');
-    console.log(req);
+    console.log(req.device_token);
     let token = req.device_token
     let query = 'INSERT INTO `DeviceTokens` (`deviceToken`) VALUES (?)';
 

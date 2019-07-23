@@ -146,19 +146,30 @@ app.post('/sendBulkPush', (req, res) => {
 
     connection.query(query, (err, rows, fields) => {
         if (err) {
-            console.log(err);
             return res.status(400).send({
                 success: 'false',
-                message: 'DeviceToken Error',
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        } else if (!underscore.isEmpty(rows)) {
+            let deviceTokensArray = []
+            rows.forEach((row, index) => {
+                deviceTokensArray.push(row.device_token)
+            });
+
+            return res.status(200).send({
+                success: 'true',
+                message: 'Get device token successfull',
+                data: deviceTokensArray
+            });
+
+        } else {
+            return res.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
                 data: null
             });
         }
-
-        return res.status(200).send({
-            success: 'true',
-            message: 'Device Token get Successfully',
-            data: rows
-        });
     });
 
 });

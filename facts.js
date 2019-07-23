@@ -81,7 +81,7 @@ app.post('/addFacts', (req, res) => {
                 fact_new.push(fact);
             });
             console.log(fact_new);
-            let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES (?)";
+            let sql = "INSERT INTO `Facts` (fact,fact_stamp,fact_key) VALUES ?";
             let ss = connection.query(sql, [fact_new], (err, rows, fields) => {
                 console.log("==POST====", err, ss.sql)
                 if (err) {

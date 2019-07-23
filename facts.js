@@ -40,20 +40,18 @@ app.get('/todaysFact', (req, res) => {
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {
-            err.status(400).send({
+            return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
                 data: null
-            })
-            return;
+            });
         }
 
-        res.status(200).send({
+        return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
             data: rows[0]
-        })
-        console.log("Query succesfully executed: ", rows);
+        });
     });
 });
 
@@ -62,17 +60,16 @@ app.get('/todaysFact', (req, res) => {
 app.post('/addFacts', (req, res) => {
 
     console.log('TODAYS FACT API HITTED');
-    var today = moment().format("YYYY-MM-DD")
-    var query = 'SELECT * FROM `Facts` ORDER BY fact_id DESC LIMIT 1';
+    let today = moment().format("YYYY-MM-DD")
+    let query = 'SELECT * FROM `Facts` ORDER BY fact_id DESC LIMIT 1';
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {
-            err.status(400).send({
+            return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
                 data: null
-            })
-            return;
+            });
         } else if (!underscore.isEmpty(rows)) {
             let last_date = moment(rows[0].fact_stamp).format("YYYY-MM-DD");
             let fact_new = [];
@@ -86,28 +83,26 @@ app.post('/addFacts', (req, res) => {
             let ss = connection.query(sql, [fact_new], (err, rows, fields) => {
                 console.log("==POST====", err, ss.sql)
                 if (err) {
-                    err.status(400).send({
+                    return res.status(400).send({
                         success: 'false',
                         message: 'Server Error, Please try again!',
                         data: null
-                    })
-                    return;
+                    });
                 } else {
-                    res.status(200).send({
+                    return res.status(200).send({
                         success: 'true',
                         message: 'Data retrieved successfully',
                         data: rows[0]
-                    })
+                    });
                 }
             });
             console.log("Query succesfully executed: ", rows);
         } else {
-            err.status(400).send({
+            return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
                 data: null
-            })
-            return;
+            });
         }
 
     });

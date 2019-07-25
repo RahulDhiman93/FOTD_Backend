@@ -187,15 +187,26 @@ app.post('/sendBulkPush', (req, res) => {
             notification.topic = "io.github.node-apn.test-app";
 
             provider.send(notification, deviceTokensArray).then((response) => {
+
+                if (response.sent) {
+                    return res.status(200).send({
+                        success: 'true',
+                        message: 'Bulk Send Successfully',
+                        data: deviceTokensArray
+                    });
+                } 
+                else { 
+                    return res.status(400).send({
+                        success: 'false',
+                        message: 'Bulk Send Failed',
+                        data: deviceTokensArray
+                    });
+                }
                 // response.sent: Array of device tokens to which the notification was sent succesfully
                 // response.failed: Array of objects containing the device token (`device`) and either an `error`, or a `status` and `response` from the API
             });
 
-            // return res.status(200).send({
-            //     success: 'true',
-            //     message: 'Get device token successfull',
-            //     data: deviceTokensArray
-            // });
+            
 
         } else {
             return res.status(400).send({

@@ -15,6 +15,15 @@ const connection = mysql.createConnection({
     database: 'TestingDB'
 });
 
+const provider = new apn.Provider({
+    token: {
+        key: "path/to/key.pem",
+        keyId: "key-id",
+        teamId: "BM93ACT257"
+    },
+    production: true
+});
+
 // connect to mysql
 connection.connect(function (err) {
     // in case of error
@@ -67,6 +76,7 @@ app.get('/todaysFact', (req, res) => {
     console.log('TODAYS FACT API HITTED');
     let today = moment().format("YYYY-MM-DD")
     let query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
+    let analysisQuery = 'IINSERT INTO `Analysis`(`analysis_date`, `analysis_fact_id`) VALUES (?,?)'
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {
@@ -76,6 +86,16 @@ app.get('/todaysFact', (req, res) => {
                 data: null
             });
         }
+
+        connection.query(analysisQuery, [today,rows[0].fact_id], (err, rows, fields) => {
+            if (err) {
+                return res.status(400).send({
+                    success: 'false',
+                    message: 'Server Error, Please try again!',
+                    data: null
+                });
+            }
+        });
 
         return res.status(200).send({
             success: 'true',
@@ -157,11 +177,13 @@ app.post('/sendBulkPush', (req, res) => {
                 deviceTokensArray.push(row.deviceToken)
             });
 
-            return res.status(200).send({
-                success: 'true',
-                message: 'Get device token successfull',
-                data: deviceTokensArray
-            });
+
+
+            // return res.status(200).send({
+            //     success: 'true',
+            //     message: 'Get device token successfull',
+            //     data: deviceTokensArray
+            // });
 
         } else {
             return res.status(400).send({

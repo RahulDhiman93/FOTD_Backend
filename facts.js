@@ -34,7 +34,7 @@ let provider = new apn.Provider({
         keyId: "TB83X4KZ64",
         teamId: "BM93ACT257"
     },
-    production: true
+    production: false
 });
 
 

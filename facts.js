@@ -6,6 +6,7 @@ const bodyParser = require('body-parser');
 const mysql = require('mysql');
 const apn = require('apn');
 const PORT = 3001;
+const app = express();
 
 // Add the credentials to access your database
 const connection = mysql.createConnection({
@@ -27,7 +28,15 @@ connection.connect(function (err) {
 
 });
 
-const app = express();
+let provider = new apn.Provider({
+    token: {
+        key: "./AuthKey_TB83X4KZ64.p8",
+        keyId: "TB83X4KZ64",
+        teamId: "BM93ACT257"
+    },
+    production: true
+});
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -172,7 +181,15 @@ app.post('/sendBulkPush', (req, res) => {
                 deviceTokensArray.push(row.deviceToken)
             });
 
+            let notification = new apn.Notification();
+            notification.alert = "Hello, world!";
+            notification.badge = 1;
+            notification.topic = "io.github.node-apn.test-app";
 
+            provider.send(notification, deviceTokensArray).then((response) => {
+                // response.sent: Array of device tokens to which the notification was sent succesfully
+                // response.failed: Array of objects containing the device token (`device`) and either an `error`, or a `status` and `response` from the API
+            });
 
             // return res.status(200).send({
             //     success: 'true',

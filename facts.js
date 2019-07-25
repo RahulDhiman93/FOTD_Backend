@@ -66,7 +66,7 @@ app.post('/addDeviceToken', (req, res) => {
 app.get('/todaysFact', (req, res) => {
 
     console.log('TODAYS FACT API HITTED');
-    let today = moment().format("YYYY-MM-DD")
+    let today = moment().format("YYYY-MM-DD");
     let query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
     let analysisQuery = 'IINSERT INTO `Analysis` (`analysis_date`, `analysis_fact_id`) VALUES (?,?)'
 
@@ -83,6 +83,7 @@ app.get('/todaysFact', (req, res) => {
         console.log('fact Id for analysis is : ',factId);
         connection.query(analysisQuery, [today, factId], (err, rows, fields) => {
             if (err) {
+                console.log('Error in analysis query : ',err);
                 return res.status(400).send({
                     success: 'false',
                     message: 'Server Error, Please try again!',

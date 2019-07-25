@@ -47,11 +47,12 @@ app.use(bodyParser.urlencoded({
 app.post('/addDeviceToken', (req, res) => {
 
     console.log('DEVICE TOKEN API HIT');
-    let token = req.body.device_token
-    let query = 'INSERT INTO `DeviceTokens` (`deviceToken`) VALUES (?)';
+    let token = req.body.device_token;
+    let deviceType = req.body.device_type;
+    let query = 'INSERT INTO `DeviceTokens` (`deviceToken`, `device_type`) VALUES (?,?)';
 
 
-    connection.query(query, [token], (err, rows, fields) => {
+    connection.query(query, [token, deviceType], (err, rows, fields) => {
         if (err) {
             console.log(err);
             return res.status(400).send({
@@ -81,6 +82,7 @@ app.get('/todaysFact', (req, res) => {
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
@@ -119,6 +121,7 @@ app.post('/addFacts', (req, res) => {
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
@@ -152,6 +155,7 @@ app.post('/addFacts', (req, res) => {
             });
             console.log("Query succesfully executed: ", rows);
         } else {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
@@ -170,6 +174,7 @@ app.post('/sendBulkPush', (req, res) => {
 
     connection.query(query, (err, rows, fields) => {
         if (err) {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',
@@ -196,6 +201,7 @@ app.post('/sendBulkPush', (req, res) => {
                     });
                 } 
                 else { 
+                    console.log(err);
                     return res.status(400).send({
                         success: 'false',
                         message: 'Bulk Send Failed',
@@ -209,6 +215,7 @@ app.post('/sendBulkPush', (req, res) => {
             
 
         } else {
+            console.log(err);
             return res.status(400).send({
                 success: 'false',
                 message: 'Server Error, Please try again!',

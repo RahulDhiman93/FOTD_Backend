@@ -78,8 +78,10 @@ app.get('/todaysFact', (req, res) => {
                 data: null
             });
         }
-
-        connection.query(analysisQuery, [today,rows[0].fact_id], (err, rows, fields) => {
+ 
+        let factId = rows[0].fact_id
+        console.log('fact Id for analysis is : ',factId);
+        connection.query(analysisQuery, [today, factId], (err, rows, fields) => {
             if (err) {
                 return res.status(400).send({
                     success: 'false',

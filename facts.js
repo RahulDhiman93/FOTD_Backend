@@ -15,14 +15,6 @@ const connection = mysql.createConnection({
     database: 'TestingDB'
 });
 
-const provider = new apn.Provider({
-    token: {
-        key: "path/to/key.pem",
-        keyId: "key-id",
-        teamId: "BM93ACT257"
-    },
-    production: true
-});
 
 // connect to mysql
 connection.connect(function (err) {

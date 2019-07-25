@@ -68,7 +68,7 @@ app.get('/todaysFact', (req, res) => {
     console.log('TODAYS FACT API HITTED');
     let today = moment().format("YYYY-MM-DD")
     let query = 'SELECT * FROM `Facts` WHERE fact_stamp = ?';
-    let analysisQuery = 'IINSERT INTO `Analysis`(`analysis_date`, `analysis_fact_id`) VALUES (?,?)'
+    let analysisQuery = 'IINSERT INTO `Analysis` (`analysis_date`, `analysis_fact_id`) VALUES (?,?)'
 
     connection.query(query, [today], (err, rows, fields) => {
         if (err) {

@@ -1,74 +1,18 @@
-// Get the mysql service
-var express = require('express');
+const express = require("express");
 const bodyParser = require('body-parser');
-var mysql = require('mysql');
-const PORT = 3000;
-
-// Add the credentials to access your database
-var connection = mysql.createConnection({
-    host      : 'localhost',
-    user      : 'root',
-    password  : 'R@hul1234',
-    database  : 'TestingDB'
-});
-
-// connect to mysql
-connection.connect(function (err) {
-    // in case of error
-    if (err) {
-        console.log("Connection Error")
-        console.log(err.code);
-        console.log(err.fatal);
-    }
-    
-});
-
 const app = express();
-
+const FactController = require('./facts.js');
+const PORT = 3001;
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
-// get all todos
-app.get('/getUsers', (req, res) => {
 
-    var query = 'SELECT * FROM `Users`';
+app.post('/addDeviceToken', FactController.addDeviceToken);
+app.post('/addFacts', FactController.addFacts);
+app.post('/addCommonFacts', FactController.addCommonFacts);
+app.post('/getCommonFacts', FactController.getCommonFacts);
 
-    connection.query(query, function (err, rows, fields) {
-        if (err) {
-            console.log(err,"An error ocurred performing the query.");
-            return;
-        }
-        res.status(200).send({
-            success: 'true',
-            message: 'Data retrieved successfully',
-            data: rows
-        })
-        console.log("Query succesfully executed: ", rows);
-    });
-});
-
-app.post('/addUser', (req, res) => {
-
-    console.log(req.body);
-    var query = 'INSERT INTO `Users`(`user_name`) VALUES (?)';
-
-    connection.query(query, [req.body.user_name],function (err, rows, fields) {
-        if (err) {
-            console.log(err, "An error ocurred performing the query.");
-            return;
-        }
-        res.status(200).send({
-            success: 'true',
-            message: 'User added successfully',
-            data: req.body
-        })
-        console.log("Query succesfully executed: ", rows);
-    });
-});
-
+app.get('/todaysFact', FactController.todaysFact);
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
 });
-

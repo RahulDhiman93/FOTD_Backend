@@ -1,11 +1,6 @@
 // Get the mysql service
-const express = require('express');
 const moment = require('moment');
-const underscore = require('underscore');
-const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const PORT = 3001;
-const app = express();
 
 // Add the credentials to access your database
 const connection = mysql.createConnection({
@@ -27,13 +22,8 @@ connection.connect(function (err) {
 
 });
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-    extended: true,
-}));
-
 //Get device tokens
-app.post('/addDeviceToken', (req, res) => {
+function addDeviceToken (req, res) {
 
     console.log('DEVICE TOKEN API HIT');
     let token = req.body.device_token;
@@ -58,11 +48,11 @@ app.post('/addDeviceToken', (req, res) => {
         });
     });
 
-});
+};
 
 
 // get all facts
-app.get('/todaysFact', (req, res) => {
+function todaysFact (req, res) {
 
     console.log('TODAYS FACT API HITTED');
     let today = moment().format("YYYY-MM-DD");
@@ -98,11 +88,11 @@ app.get('/todaysFact', (req, res) => {
             data: rows[0]
         });
     });
-});
+};
 
 
 // get all facts
-app.post('/addFacts', (req, res) => {
+function addFacts (req, res) {
 
     console.log('ADD FACT API HITTED');
     let today = moment().format("YYYY-MM-DD")
@@ -153,9 +143,9 @@ app.post('/addFacts', (req, res) => {
         }
 
     });
-});
+};
 
-app.post('/addCommonFacts', (req, res) => {
+function addCommonFacts (req, res) {
 
     console.log('ADD COMMON FACT API HITTED');
     if (!req.body.Facts) {
@@ -199,10 +189,10 @@ app.post('/addCommonFacts', (req, res) => {
         }
     });
     
-});
+};
 
 
-app.post('/getCommonFacts', (req, res) => {
+function getCommonFacts (req, res) {
 
     if (!req.body.skip) {
         return res.status(400).send({
@@ -240,11 +230,12 @@ app.post('/getCommonFacts', (req, res) => {
             data: rows
         });
     });
-});
+};
 
+module.exports.addDeviceToken = addDeviceToken;
+module.exports.todaysFact = todaysFact;
+module.exports.addCommonFacts = addCommonFacts;
+module.exports.getCommonFacts = getCommonFacts;
+module.exports.addFacts = addFacts;
 
-
-app.listen(PORT, () => {
-    console.log(`server running on port ${PORT}`)
-});
 

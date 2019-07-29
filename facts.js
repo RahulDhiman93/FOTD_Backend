@@ -156,14 +156,29 @@ app.post('/addFacts', (req, res) => {
 });
 
 
-app.get('/getCommonFacts', (req, res) => {
+app.post('/getCommonFacts', (req, res) => {
+
+    if (!req.body.skip) {
+        return res.status(400).send({
+            success: 'false',
+            message: 'Skip Required',
+            data: null
+        });
+    } else if (!req.body.limit) {
+        return res.status(400).send({
+            success: 'false',
+            message: 'Limit Required',
+            data: null
+        });
+    }
 
     console.log('COMMON FACTS API HITTED');
-    let query = 'SELECT * FROM `CommonFacts` LIMIT ?,? ';
+    let query = 'SELECT * FROM `CommonFacts` LIMIT ?,?';
     let skip = req.body.skip;
     let limit = req.body.limit;
 
     connection.query(query, [skip,limit],(err, rows, fields) => {
+        console.log('query is :',query);
         if (err) {
             console.log(err);
             return res.status(400).send({
@@ -176,7 +191,7 @@ app.get('/getCommonFacts', (req, res) => {
         return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
-            data: rows[0]
+            data: rows
         });
     });
 });

@@ -176,12 +176,13 @@ app.post('/addCommonFacts', (req, res) => {
             });
         }
         let insert_fact = fact.fact_description;
-        insertFacts.push(insert_fact);
+        insertFacts.push([insert_fact]);
     });
 
     console.log('Inserted facts : ',insertFacts);
-    let query = 'INSERT INTO `CommonFacts` (fact_description) VALUES (?)';
-    connection.query(query, insertFacts, (err, rows, fields) => {
+
+    let query = "INSERT INTO `CommonFacts` (fact_description) VALUES ?";
+    connection.query(query, [insertFacts], (err, rows, fields) => {
         console.log("==POST====", err)
         if (err) {
             return res.status(400).send({

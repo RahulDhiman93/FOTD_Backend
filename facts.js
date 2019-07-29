@@ -137,7 +137,7 @@ app.post('/addFacts', (req, res) => {
                 } else {
                     return res.status(200).send({
                         success: 'true',
-                        message: 'Data retrieved successfully',
+                        message: 'Data Inserted successfully',
                         data: rows[0]
                     });
                 }
@@ -153,6 +153,51 @@ app.post('/addFacts', (req, res) => {
         }
 
     });
+});
+
+app.post('/addCommonFacts', (req, res) => {
+
+    console.log('ADD COMMON FACT API HITTED');
+    if (!req.body.Facts) {
+        return res.status(400).send({
+            success: 'false',
+            message: 'Facts required',
+            data: null
+        });
+    } 
+
+    var insertFacts = [];
+    req.body.Facts.forEach((fact, index) => {
+        if (!fact.fact_description) {
+            return res.status(400).send({
+                success: 'false',
+                message: 'fact_description required',
+                data: null
+            });
+        }
+        let insert_fact = fact.fact_description;
+        insertFacts.push(insert_fact);
+    });
+
+    console.log('Inserted facts : ',insertFacts);
+    let query = 'INSERT INTO `CommonFacts` (fact_description) VALUES (?)';
+    connection.query(query, insertFacts, (err, rows, fields) => {
+        console.log("==POST====", err)
+        if (err) {
+            return res.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        } else {
+            return res.status(200).send({
+                success: 'true',
+                message: 'Data Inserted successfully',
+                data: rows[0]
+            });
+        }
+    });
+    
 });
 
 

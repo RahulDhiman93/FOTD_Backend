@@ -4,7 +4,6 @@ const moment = require('moment');
 const underscore = require('underscore');
 const bodyParser = require('body-parser');
 const mysql = require('mysql');
-const apn = require('apn');
 const PORT = 3001;
 const app = express();
 
@@ -27,16 +26,6 @@ connection.connect(function (err) {
     }
 
 });
-
-let provider = new apn.Provider({
-    token: {
-        key: "./AuthKey_TB83X4KZ64.p8",
-        keyId: "TB83X4KZ64",
-        teamId: "BM93ACT257"
-    },
-    production: false
-});
-
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
@@ -167,12 +156,14 @@ app.post('/addFacts', (req, res) => {
 });
 
 
-app.post('/sendBulkPush', (req, res) => {
+app.get('/getCommonFacts', (req, res) => {
 
-    console.log('BULK PUSH API HIT');
-    let query = 'SELECT * FROM `DeviceTokens`';
+    console.log('COMMON FACTS API HITTED');
+    let query = 'SELECT * FROM `CommonFacts` LIMIT ?,? ';
+    let skip = req.body.skip;
+    let limit = req.body.limit;
 
-    connection.query(query, (err, rows, fields) => {
+    connection.query(query, [skip,limit],(err, rows, fields) => {
         if (err) {
             console.log(err);
             return res.status(400).send({
@@ -180,51 +171,17 @@ app.post('/sendBulkPush', (req, res) => {
                 message: 'Server Error, Please try again!',
                 data: null
             });
-        } else if (!underscore.isEmpty(rows)) {
-            let deviceTokensArray = []
-            rows.forEach((row, index) => {
-                deviceTokensArray.push(row.deviceToken)
-            });
-
-            let notification = new apn.Notification();
-            notification.alert = "Hello, world!";
-            notification.badge = 1;
-            notification.topic = "io.github.node-apn.test-app";
-
-            provider.send(notification, deviceTokensArray).then((response) => {
-
-                if (response.sent) {
-                    return res.status(200).send({
-                        success: 'true',
-                        message: 'Bulk Send Successfully',
-                        data: deviceTokensArray
-                    });
-                } 
-                else { 
-                    console.log(err);
-                    return res.status(400).send({
-                        success: 'false',
-                        message: 'Bulk Send Failed',
-                        data: deviceTokensArray
-                    });
-                }
-                // response.sent: Array of device tokens to which the notification was sent succesfully
-                // response.failed: Array of objects containing the device token (`device`) and either an `error`, or a `status` and `response` from the API
-            });
-
-            
-
-        } else {
-            console.log(err);
-            return res.status(400).send({
-                success: 'false',
-                message: 'Server Error, Please try again!',
-                data: null
-            });
         }
-    });
 
+        return res.status(200).send({
+            success: 'true',
+            message: 'Data retrieved successfully',
+            data: rows[0]
+        });
+    });
 });
+
+
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)

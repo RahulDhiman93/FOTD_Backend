@@ -195,11 +195,13 @@ function addCommonFacts (req, res) {
 function getCommonFacts (req, res) {
 
     if (!req.body.skip) {
+        if (req.body.skip != 0 ) {
         return res.status(400).send({
             success: 'false',
             message: 'Skip Required',
             data: null
         });
+    };
     } else if (!req.body.limit) {
         return res.status(400).send({
             success: 'false',

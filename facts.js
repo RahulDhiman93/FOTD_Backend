@@ -212,8 +212,8 @@ function getCommonFacts (req, res) {
 
     console.log('COMMON FACTS API HITTED');
     let query = 'SELECT * FROM `CommonFacts` LIMIT ?,?';
-    let skip = req.body.skip;
-    let limit = req.body.limit;
+    let skip = parseInt(req.body.skip);
+    let limit = parseInt(req.body.limit);
 
     connection.query(query, [skip,limit],(err, rows, fields) => {
         console.log('query is :',query);

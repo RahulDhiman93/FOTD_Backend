@@ -68,7 +68,7 @@ function todaysFact (req, res) {
                 data: null
             });
         }
- 
+
         let factId = rows[0].fact_id
         console.log('fact Id for analysis is : ',factId);
         connection.query(analysisQuery, [today, factId], (err, rows, fields) => {
@@ -154,7 +154,7 @@ function addCommonFacts (req, res) {
             message: 'Facts required',
             data: null
         });
-    } 
+    }
 
     var insertFacts = [];
     req.body.Facts.forEach((fact, index) => {
@@ -188,7 +188,7 @@ function addCommonFacts (req, res) {
             });
         }
     });
-    
+
 };
 
 
@@ -211,7 +211,7 @@ function getCommonFacts (req, res) {
     }
 
     console.log('COMMON FACTS API HITTED');
-    let query = 'SELECT * FROM `CommonFacts` LIMIT ?,?';
+    let query = 'SELECT * FROM `CommonFacts` ORDER BY `fact_id` DESC LIMIT ?,?';
     let skip = parseInt(req.body.skip);
     let limit = parseInt(req.body.limit);
 
@@ -239,5 +239,3 @@ module.exports.todaysFact = todaysFact;
 module.exports.addCommonFacts = addCommonFacts;
 module.exports.getCommonFacts = getCommonFacts;
 module.exports.addFacts = addFacts;
-
-

@@ -10,9 +10,10 @@ app.post('/addDeviceToken', FactController.addDeviceToken);
 app.post('/addFacts', FactController.addFacts);
 app.post('/addCommonFacts', FactController.addCommonFacts);
 app.post('/getCommonFacts', FactController.getCommonFacts);
+app.post('/searchCommonFacts', FactController.searchCommonFacts);
 
 app.get('/todaysFact', FactController.todaysFact);
 
 app.listen(PORT, () => {
     console.log(`server running on port ${PORT}`)
-});
+})

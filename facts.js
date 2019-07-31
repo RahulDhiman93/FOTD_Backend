@@ -234,8 +234,37 @@ function getCommonFacts (req, res) {
     });
 };
 
+function searchCommonFacts (req, res) {
+
+    console.log('SEARCH COMMON FACT API HITTED');
+    let query = 'SELECT * FROM `CommonFacts` WHERE fact_description LIKE ? ORDER BY fact_id DESC';
+    let searchWord = req.body.keyword;
+    console.log('Search word is : ',searchWord);
+    let queryWord = '%' + searchWord + '%';
+    console.log('query Search word is : ',queryWord);
+     
+    connection.query(query, [queryWord], (err, rows, fields) => {
+        console.log('query is :', query);
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        }
+
+        return res.status(200).send({
+            success: 'true',
+            message: 'Data retrieved successfully',
+            data: rows
+        });
+    });
+};
+
 module.exports.addDeviceToken = addDeviceToken;
 module.exports.todaysFact = todaysFact;
 module.exports.addCommonFacts = addCommonFacts;
 module.exports.getCommonFacts = getCommonFacts;
 module.exports.addFacts = addFacts;
+module.exports.searchCommonFacts = searchCommonFacts;

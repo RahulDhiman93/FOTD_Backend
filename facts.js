@@ -271,7 +271,6 @@ function searchCommonFacts (req, res) {
             message: 'Data retrieved successfully',
             data: rows1.concat(rows2)
           });
-
         });
     });
 };

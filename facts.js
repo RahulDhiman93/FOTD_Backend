@@ -266,11 +266,12 @@ function searchCommonFacts (req, res) {
                 });
             }
 
+        console.log(rows1.concat(rows2));
         return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
             data: rows1.concat(rows2)
-          });
+           });
         });
     });
 };

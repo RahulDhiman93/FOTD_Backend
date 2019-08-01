@@ -242,8 +242,8 @@ function searchCommonFacts (req, res) {
     console.log('Search word is : ',searchWord);
     let queryWord = '%' + searchWord + '%';
     console.log('query Search word is : ',queryWord);
-     
-    connection.query(query, [queryWord], (err, rows, fields) => {
+
+    connection.query(query, [queryWord], (err, rows1, fields) => {
         console.log('query is :', query);
         if (err) {
             console.log(err);
@@ -254,10 +254,24 @@ function searchCommonFacts (req, res) {
             });
         }
 
+        let searchQuery = 'SELECT fact_id,fact AS fact_description FROM `Facts` WHERE fact LIKE ? ORDER BY fact_id DESC';
+        connection.query(searchQuery, [queryWord], (err, rows2, fields) => {
+            console.log('query is :', searchQuery);
+            if (err) {
+                console.log(err);
+                return res.status(400).send({
+                    success: 'false',
+                    message: 'Server Error, Please try again!',
+                    data: null
+                });
+            }
+
         return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
-            data: rows
+            data: rows1.concat(rows2)
+          });
+
         });
     });
 };

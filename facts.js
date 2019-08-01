@@ -41,6 +41,7 @@ function addDeviceToken (req, res) {
             });
         }
 
+        console.log(rows[0]);
         return res.status(200).send({
             success: 'true',
             message: 'Token Added Successfully',
@@ -82,6 +83,7 @@ function todaysFact (req, res) {
             }
         });
 
+        console.log(rows[0]);
         return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',
@@ -125,6 +127,7 @@ function addFacts (req, res) {
                         data: null
                     });
                 } else {
+                    console.log(rows[0]);
                     return res.status(200).send({
                         success: 'true',
                         message: 'Data Inserted successfully',
@@ -181,6 +184,7 @@ function addCommonFacts (req, res) {
                 data: null
             });
         } else {
+            console.log(rows[0]);
             return res.status(200).send({
                 success: 'true',
                 message: 'Data Inserted successfully',
@@ -226,6 +230,7 @@ function getCommonFacts (req, res) {
             });
         }
 
+        console.log(rows);
         return res.status(200).send({
             success: 'true',
             message: 'Data retrieved successfully',

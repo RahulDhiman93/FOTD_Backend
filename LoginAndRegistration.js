@@ -69,7 +69,7 @@ function register(req, res) {
                     "user_name": req.body.user_name,
                     "user_email": req.body.user_email,
                     "password": passwordEncrypt,
-                    "access_token": crypto.randomBytes(128).toString('hex'),
+                    "access_token": crypto.randomBytes(64).toString('hex'),
                     "created_at": today,
                     "updated_at": today,
                     "device_token" : req.body.device_token

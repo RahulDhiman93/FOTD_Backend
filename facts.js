@@ -281,9 +281,36 @@ function searchCommonFacts (req, res) {
     });
 };
 
+function dislikeFact (req, res) {
+
+    console.log('DISLIKE FACT API HITTED');
+    let fact_id = req.body.fact_id;
+    console.log('Fact disliked id :',fact_id);
+    let query = 'Update Facts Set fact_dislikes = fact_dislikes + 1 Where fact_id = ?';
+
+    connection.query(query, [fact_id], (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                success: 'false',
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        }
+
+        return res.status(200).send({
+            success: 'true',
+            message: 'Dislike added',
+            data: null
+        });
+    });
+};
+
+
 module.exports.addDeviceToken = addDeviceToken;
 module.exports.todaysFact = todaysFact;
 module.exports.addCommonFacts = addCommonFacts;
 module.exports.getCommonFacts = getCommonFacts;
 module.exports.addFacts = addFacts;
 module.exports.searchCommonFacts = searchCommonFacts;
+module.exports.dislikeFact = dislikeFact;

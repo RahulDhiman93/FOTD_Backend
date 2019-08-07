@@ -327,7 +327,7 @@ function checkAppVersion (req, res) {
 
     console.log('APP VERSION API HITTED');
     let query = 'SELECT * FROM `FactAppVersion`';
-
+    let app_version = req.query.app_version;
     connection.query(query, (err, rows, fields) => {
         if (err) {
             console.log(err);
@@ -339,11 +339,19 @@ function checkAppVersion (req, res) {
         }
 
         console.log('Current app version :',rows[0].app_version);
-        return res.status(200).send({
-            status: true,
-            message: 'Current App Version',
-            data: rows[0]
-        });
+        if (app_version != rows[0].app_version) {
+            return res.status(200).send({
+                status: false,
+                message: 'Please update your app to the latest version',
+                data: null
+            });
+        } else {
+            return res.status(200).send({
+                status: true,
+                message: 'App is upto date',
+                data: null
+            });
+        }
     });
 };
 

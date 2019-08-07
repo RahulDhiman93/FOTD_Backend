@@ -283,8 +283,25 @@ function searchCommonFacts (req, res) {
 
 function dislikeFact (req, res) {
 
+    if (!req.body.fact_id) {
+        return res.status(400).send({
+            status: false,
+            message: 'please send fact_id',
+            data: null
+        });
+    }
+
     console.log('DISLIKE FACT API HITTED');
-    let fact_id = req.body.fact_id;
+    let fact_id = parseInt(req.body.fact_id);
+
+    if (isNaN(fact_id)) {
+        return res.status(400).send({
+            status: false,
+            message: 'fact_id must be a number',
+            data: null
+        });
+    }
+
     console.log('Fact disliked id :',fact_id);
     let query = 'Update Facts Set fact_dislikes = fact_dislikes + 1 Where fact_id = ?';
 

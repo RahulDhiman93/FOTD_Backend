@@ -327,6 +327,15 @@ function checkAppVersion (req, res) {
 
     console.log('APP VERSION API HITTED');
     let query = 'SELECT * FROM `FactAppVersion`';
+
+    if (!req.query.app_version) {
+        return res.status(400).send({
+            status: false,
+            message: 'app_version is required',
+            data: null
+        });
+    }
+
     let app_version = parseInt(req.query.app_version);
     connection.query(query, (err, rows, fields) => {
         if (err) {

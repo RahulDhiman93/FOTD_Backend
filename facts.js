@@ -326,7 +326,7 @@ function dislikeFact (req, res) {
 function checkAppVersion (req, res) {
 
     console.log('APP VERSION API HITTED');
-    let query = 'SELECT * FROM `FactAppVersion`';
+
 
     if (!req.query.app_version) {
         return res.status(400).send({
@@ -334,10 +334,28 @@ function checkAppVersion (req, res) {
             message: 'app_version is required',
             data: null
         });
+    } else if (!req.query.device_type) {
+        return res.status(400).send({
+            status: false,
+            message: 'device_type is required',
+            data: null
+        });
     }
 
+    let query = 'SELECT * FROM `FactAppVersion` WHERE device_type = ?';
     let app_version = parseInt(req.query.app_version);
-    connection.query(query, (err, rows, fields) => {
+    let device_type = parseInt(req.query.device_type);
+
+    if (device_type < 1 || device_type > 2) {
+        return res.status(400).send({
+            status: false,
+            message: 'device_type should be 1 or 2',
+            data: null
+        });
+    }
+
+
+    connection.query(query, [device_type],(err, rows, fields) => {
         if (err) {
             console.log(err);
             return res.status(400).send({

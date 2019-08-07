@@ -245,7 +245,7 @@ function searchCommonFacts (req, res) {
     let query = 'SELECT * FROM `CommonFacts` WHERE fact_description LIKE ? ORDER BY fact_id DESC';
     let searchWord = req.body.keyword;
     console.log('Search word is : ',searchWord);
-    let queryWord = '%' + searchWord + '%';
+    let queryWord = '% ' + searchWord + ' %';
     console.log('query Search word is : ',queryWord);
 
     connection.query(query, [queryWord], (err, rows1, fields) => {
@@ -282,6 +282,7 @@ function searchCommonFacts (req, res) {
 };
 
 function dislikeFact (req, res) {
+    console.log('DISLIKE FACT API HITTED');
 
     if (!req.body.fact_id) {
         return res.status(400).send({
@@ -291,7 +292,6 @@ function dislikeFact (req, res) {
         });
     }
 
-    console.log('DISLIKE FACT API HITTED');
     let fact_id = parseInt(req.body.fact_id);
 
     if (isNaN(fact_id)) {

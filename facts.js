@@ -35,7 +35,7 @@ function addDeviceToken (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Token Error',
                 data: null
             });
@@ -43,7 +43,7 @@ function addDeviceToken (req, res) {
 
         console.log(rows[0]);
         return res.status(200).send({
-            success: 'true',
+            status: true,
             message: 'Token Added Successfully',
             data: rows[0]
         });
@@ -64,7 +64,7 @@ function todaysFact (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
@@ -76,7 +76,7 @@ function todaysFact (req, res) {
             if (err) {
                 console.log('Error in analysis query : ',err);
                 return res.status(400).send({
-                    success: 'false',
+                    status: false,
                     message: 'Server Error, Please try again!',
                     data: null
                 });
@@ -85,7 +85,7 @@ function todaysFact (req, res) {
 
         console.log(rows[0]);
         return res.status(200).send({
-            success: 'true',
+            status: true,
             message: 'Data retrieved successfully',
             data: rows[0]
         });
@@ -104,7 +104,7 @@ function addFacts (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
@@ -122,14 +122,14 @@ function addFacts (req, res) {
                 console.log("==POST====", err, ss.sql)
                 if (err) {
                     return res.status(400).send({
-                        success: 'false',
+                        status: false,
                         message: 'Server Error, Please try again!',
                         data: null
                     });
                 } else {
                     console.log(rows[0]);
                     return res.status(200).send({
-                        success: 'true',
+                        status: true,
                         message: 'Data Inserted successfully',
                         data: rows[0]
                     });
@@ -139,7 +139,7 @@ function addFacts (req, res) {
         } else {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
@@ -153,7 +153,7 @@ function addCommonFacts (req, res) {
     console.log('ADD COMMON FACT API HITTED');
     if (!req.body.Facts) {
         return res.status(400).send({
-            success: 'false',
+            status: false,
             message: 'Facts required',
             data: null
         });
@@ -163,7 +163,7 @@ function addCommonFacts (req, res) {
     req.body.Facts.forEach((fact, index) => {
         if (!fact.fact_description) {
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'fact_description required',
                 data: null
             });
@@ -179,14 +179,14 @@ function addCommonFacts (req, res) {
         console.log("==POST====", err)
         if (err) {
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
         } else {
             console.log(rows[0]);
             return res.status(200).send({
-                success: 'true',
+                status: true,
                 message: 'Data Inserted successfully',
                 data: rows[0]
             });
@@ -201,14 +201,14 @@ function getCommonFacts (req, res) {
     if (!req.body.skip) {
         if (req.body.skip != 0 ) {
         return res.status(400).send({
-            success: 'false',
+            status: false,
             message: 'Skip Required',
             data: null
         });
     };
     } else if (!req.body.limit) {
         return res.status(400).send({
-            success: 'false',
+            status: false,
             message: 'Limit Required',
             data: null
         });
@@ -224,7 +224,7 @@ function getCommonFacts (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
@@ -232,7 +232,7 @@ function getCommonFacts (req, res) {
 
         console.log(rows);
         return res.status(200).send({
-            success: 'true',
+            status: true,
             message: 'Data retrieved successfully',
             data: rows
         });
@@ -253,7 +253,7 @@ function searchCommonFacts (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
@@ -265,7 +265,7 @@ function searchCommonFacts (req, res) {
             if (err) {
                 console.log(err);
                 return res.status(400).send({
-                    success: 'false',
+                    status: false,
                     message: 'Server Error, Please try again!',
                     data: null
                 });
@@ -273,7 +273,7 @@ function searchCommonFacts (req, res) {
 
         console.log(rows1.concat(rows2));
         return res.status(200).send({
-            success: 'true',
+            status: true,
             message: 'Data retrieved successfully',
             data: rows1.concat(rows2)
            });
@@ -292,16 +292,40 @@ function dislikeFact (req, res) {
         if (err) {
             console.log(err);
             return res.status(400).send({
-                success: 'false',
+                status: false,
                 message: 'Server Error, Please try again!',
                 data: null
             });
         }
 
         return res.status(200).send({
-            success: 'true',
+            status: true,
             message: 'Dislike added',
             data: null
+        });
+    });
+};
+
+function checkAppVersion (req, res) {
+
+    console.log('APP VERSION API HITTED');
+    let query = 'SELECT * FROM `FactAppVersion`';
+
+    connection.query(query, (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                status: false,
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        }
+
+        console.log('Current app version :',rows[0].app_version);
+        return res.status(200).send({
+            status: true,
+            message: 'Current App Version',
+            data: rows[0]
         });
     });
 };
@@ -314,3 +338,4 @@ module.exports.getCommonFacts = getCommonFacts;
 module.exports.addFacts = addFacts;
 module.exports.searchCommonFacts = searchCommonFacts;
 module.exports.dislikeFact = dislikeFact;
+module.exports.checkAppVersion = checkAppVersion;

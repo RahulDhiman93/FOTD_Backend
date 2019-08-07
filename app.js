@@ -15,6 +15,7 @@ app.post('/searchCommonFacts', FactController.searchCommonFacts);
 app.post('/dislikeFact', FactController.dislikeFact);
 
 app.get('/todaysFact', FactController.todaysFact);
+app.get('/check_app_version', FactController.checkAppVersion);
 
 app.post('/user_sign_up', LoginAndRegisteration.register);
 app.post('/user_login', LoginAndRegisteration.authenticate);

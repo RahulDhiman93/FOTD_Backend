@@ -153,13 +153,13 @@ function addCommonFacts (req, res) {
     console.log('ADD COMMON FACT API HITTED');
     if (!req.body.Facts) {
         return res.status(400).send({
-            status: false,
+            success: false,
             message: 'Facts required',
             data: null
         });
     }
 
-    var insertFacts = [];
+    let insertFacts = [];
     req.body.Facts.forEach((fact, index) => {
         if (!fact.fact_description) {
             return res.status(400).send({
@@ -168,13 +168,14 @@ function addCommonFacts (req, res) {
                 data: null
             });
         }
-        let insert_fact = fact.fact_description;
-        insertFacts.push([insert_fact]);
+
+        let insert_fact = [fact.fact_description, fact.fact_status];
+        insertFacts.push(insert_fact);
     });
 
     console.log('Inserted facts : ',insertFacts);
 
-    let query = "INSERT INTO `CommonFacts` (fact_description) VALUES ?";
+    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status) VALUES ?";
     connection.query(query, [insertFacts], (err, rows, fields) => {
         console.log("==POST====", err)
         if (err) {
@@ -215,7 +216,7 @@ function getCommonFacts (req, res) {
     }
 
     console.log('COMMON FACTS API HITTED');
-    let query = 'SELECT * FROM `CommonFacts` WHERE status = 1 ORDER BY `fact_id` DESC LIMIT ?,?';
+    let query = 'SELECT * FROM `CommonFacts` WHERE fact_status = 1 ORDER BY `fact_id` DESC LIMIT ?,?';
     let skip = parseInt(req.body.skip);
     let limit = parseInt(req.body.limit);
 

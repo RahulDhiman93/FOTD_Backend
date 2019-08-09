@@ -215,7 +215,7 @@ function getCommonFacts (req, res) {
     }
 
     console.log('COMMON FACTS API HITTED');
-    let query = 'SELECT * FROM `CommonFacts` ORDER BY `fact_id` DESC LIMIT ?,?';
+    let query = 'SELECT * FROM `CommonFacts` WHERE status = 1 ORDER BY `fact_id` DESC LIMIT ?,?';
     let skip = parseInt(req.body.skip);
     let limit = parseInt(req.body.limit);
 

@@ -152,17 +152,17 @@ function addCommonFacts (req, res) {
 
     console.log('ADD COMMON FACT API HITTED');
 
+    if (typeof (req.body) === "string") {
+        console.log('Facts JSON is of string type');
+        req.body = JSON.parse(req.body)
+    }
+
     if (!req.body.Facts) {
         return res.status(400).send({
             success: false,
             message: 'Facts required',
             data: null
         });
-    }
-
-    if (typeof (req.body.Facts) === "string") {
-        console.log('Facts JSON is of string type');
-        req.body.Facts = JSON.parse(req.body.Facts)
     }
 
     let insertFacts = [];

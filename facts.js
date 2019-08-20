@@ -161,6 +161,7 @@ function addCommonFacts (req, res) {
     }
 
     if (typeof (req.body.Facts) === "string") {
+        console.log('Facts JSON is of string type');
         req.body.Facts = JSON.parse(req.body.Facts)
     }
 

@@ -151,12 +151,17 @@ function addFacts (req, res) {
 function addCommonFacts (req, res) {
 
     console.log('ADD COMMON FACT API HITTED');
+
     if (!req.body.Facts) {
         return res.status(400).send({
             success: false,
             message: 'Facts required',
             data: null
         });
+    }
+
+    if (typeof (req.body.Facts) === "string") {
+        req.body.Facts = JSON.parse(req.body.Facts)
     }
 
     let insertFacts = [];

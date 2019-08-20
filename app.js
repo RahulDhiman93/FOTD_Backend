@@ -10,6 +10,7 @@ app.use(bodyParser.json());
 app.post('/addDeviceToken', FactController.addDeviceToken);
 app.post('/addFacts', FactController.addFacts);
 app.post('/addCommonFacts', FactController.addCommonFacts);
+app.post('/addSingleFact', FactController.addSingleFact);
 app.post('/getCommonFacts', FactController.getCommonFacts);
 app.post('/searchCommonFacts', FactController.searchCommonFacts);
 app.post('/dislikeFact', FactController.dislikeFact);

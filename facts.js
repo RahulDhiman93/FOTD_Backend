@@ -152,7 +152,7 @@ function addCommonFacts (req, res) {
 
     console.log('ADD COMMON FACT API HITTED');
 
-    if (typeof (req.body) === "string") {
+    if (typeof (req.body) == "string") {
         console.log('Facts JSON is of string type');
         req.body = JSON.parse(req.body)
     }
@@ -183,6 +183,54 @@ function addCommonFacts (req, res) {
 
     let query = "INSERT INTO `CommonFacts` (fact_description,fact_status) VALUES ?";
     connection.query(query, [insertFacts], (err, rows, fields) => {
+        console.log("==POST====", err)
+        if (err) {
+            return res.status(400).send({
+                status: false,
+                message: 'Server Error, Please try again!',
+                data: null
+            });
+        } else {
+            console.log(rows[0]);
+            return res.status(200).send({
+                status: true,
+                message: 'Data Inserted successfully',
+                data: rows[0]
+            });
+        }
+    });
+
+};
+
+function addSingleFact (req, res) {
+
+    console.log('ADD SINGLE FACT API HITTED');
+
+    if (typeof (req.body) == "string") {
+        console.log('Facts JSON is of string type');
+        req.body = JSON.parse(req.body)
+    }
+
+    if (!req.body.fact_description) {
+        return res.status(400).send({
+            success: false,
+            message: 'fact_description required',
+            data: null
+        });
+    }
+
+    if (!req.body.fact_status) {
+        return res.status(400).send({
+            success: false,
+            message: 'fact_status required',
+            data: null
+        });
+    }
+
+
+
+    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status) VALUES (?,?)";
+    connection.query(query, [req.body.fact_description,req.body.fact_status], (err, rows, fields) => {
         console.log("==POST====", err)
         if (err) {
             return res.status(400).send({
@@ -395,6 +443,7 @@ function checkAppVersion (req, res) {
 module.exports.addDeviceToken = addDeviceToken;
 module.exports.todaysFact = todaysFact;
 module.exports.addCommonFacts = addCommonFacts;
+module.exports.addSingleFact = addSingleFact;
 module.exports.getCommonFacts = getCommonFacts;
 module.exports.addFacts = addFacts;
 module.exports.searchCommonFacts = searchCommonFacts;

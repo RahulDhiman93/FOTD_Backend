@@ -439,6 +439,39 @@ function checkAppVersion (req, res) {
     });
 };
 
+function addFeedback (req, res) {
+
+    console.log('ADD FEEDBACK API HIT');
+
+    if (!req.body.feedback_text) {
+        return res.status(400).send({
+            status: false,
+            message: 'feedback_text required',
+            data: null
+        });
+    }
+
+    let feedbackText = req.body.feedback_text;
+    let query = 'INSERT INTO `Feedback` (`feedback_text`) VALUES (?)';
+
+    connection.query(query, [feedbackText], (err, rows, fields) => {
+        if (err) {
+            console.log(err);
+            return res.status(400).send({
+                status: false,
+                message: 'feedback Error',
+                data: null
+            });
+        }
+
+        return res.status(200).send({
+            status: true,
+            message: 'Feedback added Successfully',
+            data: {}
+        });
+    });
+
+};
 
 module.exports.addDeviceToken = addDeviceToken;
 module.exports.todaysFact = todaysFact;
@@ -449,3 +482,4 @@ module.exports.addFacts = addFacts;
 module.exports.searchCommonFacts = searchCommonFacts;
 module.exports.dislikeFact = dislikeFact;
 module.exports.checkAppVersion = checkAppVersion;
+module.exports.addFeedback = addFeedback;

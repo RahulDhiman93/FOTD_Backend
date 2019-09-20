@@ -175,13 +175,18 @@ function addCommonFacts (req, res) {
             });
         }
 
-        let insert_fact = [fact.fact_description, fact.fact_status];
+        var device_type = 0;
+        if (fact.device_type) {
+            device_type = fact.device_type;
+        }
+
+        let insert_fact = [fact.fact_description, fact.fact_status, device_type];
         insertFacts.push(insert_fact);
     });
 
     console.log('Inserted facts : ',insertFacts);
 
-    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status) VALUES ?";
+    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status,device_type) VALUES ?";
     connection.query(query, [insertFacts], (err, rows, fields) => {
         console.log("==POST====", err)
         if (err) {
@@ -227,10 +232,14 @@ function addSingleFact (req, res) {
         });
     }
 
+    var device_type = 0;
+    if (req.body.device_type) {
+        device_type = req.body.device_type;
+    }
 
 
-    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status) VALUES (?,?)";
-    connection.query(query, [req.body.fact_description,req.body.fact_status], (err, rows, fields) => {
+    let query = "INSERT INTO `CommonFacts` (fact_description,fact_status,device_type) VALUES (?,?,?)";
+    connection.query(query, [req.body.fact_description,req.body.fact_status,device_type], (err, rows, fields) => {
         console.log("==POST====", err)
         if (err) {
             return res.status(400).send({
@@ -451,10 +460,15 @@ function addFeedback (req, res) {
         });
     }
 
-    let feedbackText = req.body.feedback_text;
-    let query = 'INSERT INTO `Feedback` (`feedback_text`) VALUES (?)';
+    var device_type = 0;
+    if (req.body.device_type) {
+        device_type = req.body.device_type;
+    }
 
-    connection.query(query, [feedbackText], (err, rows, fields) => {
+    let feedbackText = req.body.feedback_text;
+    let query = 'INSERT INTO `Feedback` (`feedback_text`,`device_type`) VALUES (?,?)';
+
+    connection.query(query, [feedbackText,device_type], (err, rows, fields) => {
         if (err) {
             console.log(err);
             return res.status(400).send({

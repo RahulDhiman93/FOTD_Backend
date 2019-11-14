@@ -155,7 +155,7 @@ function accessTokenVerification(req, res) {
     console.log('ACCESSTOKEN API HIT');
 
     var accessToken = req.body.access_token;
-    let query = 'SELECT * FROM profiles WHERE access_token = ?';
+    let query = 'SELECT * FROM `profiles` WHERE `access_token` LIKE ?';
     connection.query(query, [accessToken], function (error, results, fields) {
         if (error) {
             return res.status(400).send({

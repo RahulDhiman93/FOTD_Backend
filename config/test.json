@@ -1,0 +1,40 @@
+{
+    "PORT": 8000,
+    "databaseSettings": {
+      "host"    : "localhost",
+      "user"    : "code_user",
+      "password": "Tuu1sadaRLTmDqWe",
+      "database": "FOTD_live"
+    },
+    "slaveDatabaseSettings": {
+      "host"    : "localhost",
+      "user"    : "code_user",
+      "password": "Tuu1sadaRLTmDqWe",
+      "database": "FOTD_live"
+    },
+    "s3BucketCredentials": {
+      "bucket"         : "bucket",
+      "accessKeyId"    : "accessKeyId",
+      "secretAccessKey": "secretAccessKey",
+      "s3URL"          : "s3URL",
+      "folder"         : {
+        "invoices": "invoices"
+      }
+    },
+    "sentry": {
+      "url": "https://<KEY>@sentry.tookan.io/",
+      "project": "PROJECT NUMBER",
+      "options": {
+        "sendTimeout": 5
+      }
+    },
+    "logFiles" : {
+      "requestLogspath" : "../logs/request.log"
+    },
+    "apiURL" : "http://167.99.107.72:8000/",
+    "emailCreds":{
+      "user": "care.fotd@gmail.com",
+      "pass": "R@hul1234",
+      "from": "care.fotd@gmail.com"
+    }
+  }

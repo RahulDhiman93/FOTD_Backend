@@ -1,0 +1,35 @@
+{
+  "PORT": 8080,
+  "databaseSettings": {
+    "host"    : "localhost",
+    "user"    : "root",
+    "password": "R@hul1234",
+    "database": "TestingDB"
+  },
+  "slaveDatabaseSettings": {
+    "host"    : "localhost",
+    "user"    : "root",
+    "password": "R@hul1234",
+    "database": "TestingDB"
+  },
+  "s3BucketCredentials": {
+    "bucket"         : "bucket",
+    "accessKeyId"    : "accessKeyId",
+    "secretAccessKey": "secretAccessKey",
+    "s3URL"          : "s3URL",
+    "folder"         : {
+      "invoices": "invoices"
+    }
+  },
+  "sentry": {
+    "url": "https://<KEY>@sentry.tookan.io/",
+    "project": "PROJECT NUMBER",
+    "options": {
+      "sendTimeout": 5
+    }
+  },
+  "logFiles" : {
+    "requestLogspath" : "../logs/request.log"
+  },
+  "apiURL" : "http://localhost:/8080/"
+}

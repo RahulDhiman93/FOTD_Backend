@@ -51,6 +51,11 @@ async function getUser(apiReference, opts){
             values.push(opts.timezone);
         }
 
+        if(opts.hasOwnProperty("notification_enabled")){
+            sql+= " AND notification_enabled = ? ";
+            values.push(opts.notification_enabled);
+        }
+
         return await dbHandler.executeQuery(apiReference, "getUser", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getUser", ERROR : error.toString()});

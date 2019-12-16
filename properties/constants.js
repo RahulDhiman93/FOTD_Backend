@@ -70,7 +70,7 @@ exports.FACT_TYPE = {
   USER_FACT   : 3
 }
 
-exports.gateway = "gateway.push.apple.com";
+exports.gateway = "gateway.sandbox.push.apple.com";
 exports.pathToPem = "/root/node-app/pem/FOTD.pem";
 exports.FCM_KEY = "AAAAECEfq1A:APA91bG2TqwxhC2cXfwZF-jkJwh-IAbqR0A_EUJrde8hao1d1MpWta22oM1u84yYSDvJovKmjBn1YHN8ydn4cpw0Jkh9sRpi8nlybrKzsSf8zdDo42BzPkxXYokWZAjWf92HMoqPEG_b";
 

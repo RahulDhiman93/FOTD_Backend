@@ -53,6 +53,11 @@ async function getUserDevice(apiReference, opts){
             sql+= " AND tu.timezone = ? ";
             values.push(opts.timezone);
         }
+
+        if(opts.hasOwnProperty("notification_enabled")){
+            sql+= " AND tu.notification_enabled = ? ";
+            values.push(opts.notification_enabled);
+        }
         return await dbHandler.executeQuery(apiReference, "getUserDevice", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getUserDevice", ERROR : error.toString()});

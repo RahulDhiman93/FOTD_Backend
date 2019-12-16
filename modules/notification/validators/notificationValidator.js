@@ -16,7 +16,7 @@ function sendNotification(req,res,next){
     };
     
     let schema = Joi.object().keys({
-      user_id: Joi.number().required(),
+      user_id: Joi.number().optional(),
       title  : Joi.string().required(),
       body   : Joi.string().required()
     });

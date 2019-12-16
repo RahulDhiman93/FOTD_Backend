@@ -2,17 +2,20 @@
  * Created by Rishikesh Arya on 16/11/19.
  */
 
-const apns              = require('apn');
-const FCM               = require('fcm-node');
-const moment			= require("moment");
+const apns     = require('apn');
+const FCM      = require('fcm-node');
+const moment   = require("moment");
+const schedule = require('node-schedule');
+
 const logging           = require("./../../../logging/logging");
 const constants         = require("./../../../properties/constants");
 const userDeviceService = require("./../../users/services/userDeviceService");
 const userService		= require("./../../users/services/userService");
 const factService		= require("./../../facts/service/factService");
 
-exports.sendPushesToUser  = sendPushesToUser;
-exports.sendDailyFactPush = sendDailyFactPush;
+exports.sendPushesToUser     = sendPushesToUser;
+exports.sendDailyFactPush    = sendDailyFactPush;
+exports.scheduleNotification = scheduleNotification;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {
@@ -115,7 +118,7 @@ function sendIosPushNotification(apiReference, iosDeviceToken, pushMessage, payl
 
 async function sendPushesToUser(apiReference, user_id, title, body){
 	try{
-			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1});
+			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1, notification_enabled : 1, inner_join_users : 1});
 			let ios_devices = [];
 			let androidPushObj = {
 				message: body,
@@ -130,7 +133,7 @@ async function sendPushesToUser(apiReference, user_id, title, body){
 					sendAndroidPushNotification(apiReference, androidPushObj, null, temp.device_token);
 			}
 			if(ios_devices.length){
-				sendIosPushNotification(apiReference, ios_devices, { "title": title, "text": body }, { "title": title, "text": body });
+				sendIosPushNotification(apiReference, ios_devices, { "title": title, "body": body }, { "title": title, "body": body });
 			}
 	}catch(error){
 		logging.logError(apiReference, {EVENT: "sendPushesToUser", ERROR : error});
@@ -139,6 +142,7 @@ async function sendPushesToUser(apiReference, user_id, title, body){
 
 async function sendDailyFactPush(apiReference, timezone){
 	try{
+
 		let today      = moment().format("YYYY-MM-DD");
         let todaysFact = await factService.getFacts(apiReference, {
             fact_stamp    : today,
@@ -151,8 +155,8 @@ async function sendDailyFactPush(apiReference, timezone){
 		}
 
 		let fact = todaysFact[0].fact;
-		fact = (fact.substring(0, 25)).trim() + "....";
-		let users = await userService.getUser(apiReference, {timezone});
+		fact = fact.split(" ").slice(0, 7).join(" ")+"...";
+		let users = await userService.getUser(apiReference, {timezone, notification_enabled : 1});
 
 		for(let i=0; i<users.length; i++){
 			sendPushesToUser(apiReference, users[i].user_id, "Did you know??", fact);
@@ -160,4 +164,18 @@ async function sendDailyFactPush(apiReference, timezone){
 	}catch(error){
 		logging.logError(apiReference, {EVENT: "sendDailyFactPush", ERROR : error});
 	}
+}
+
+function scheduleNotification() {
+	schedule.scheduleJob("*/15 * * * *", function () {
+		let curr_date_time    = new Date();
+		let notification_time = new Date();
+		notification_time.setHours(10);
+		notification_time.setMinutes(0);
+		let timezone = -((curr_date_time.getTime() - notification_time.getTime()) / 60000);
+		console.error("notification_time", notification_time);
+		console.error("curr_date_time", curr_date_time);
+		console.error("timezone", timezone);
+		sendDailyFactPush({ module: "notification", api: "sendNotification" }, timezone);
+	});
 }

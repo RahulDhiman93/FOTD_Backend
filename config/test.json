@@ -1,16 +1,16 @@
 {
-    "PORT": 8000,
+    "PORT": 8080,
     "databaseSettings": {
       "host"    : "localhost",
       "user"    : "code_user",
       "password": "Tuu1sadaRLTmDqWe",
-      "database": "FOTD_live"
+      "database": "FOTD_test"
     },
     "slaveDatabaseSettings": {
       "host"    : "localhost",
       "user"    : "code_user",
       "password": "Tuu1sadaRLTmDqWe",
-      "database": "FOTD_live"
+      "database": "FOTD_test"
     },
     "s3BucketCredentials": {
       "bucket"         : "bucket",
@@ -31,7 +31,7 @@
     "logFiles" : {
       "requestLogspath" : "../logs/request.log"
     },
-    "apiURL" : "http://167.99.107.72:8000/",
+    "apiURL" : "http://167.99.107.72:8080/",
     "emailCreds":{
       "user": "care.fotd@gmail.com",
       "pass": "R@hul1234",

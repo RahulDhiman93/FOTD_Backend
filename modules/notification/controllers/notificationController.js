@@ -1,12 +1,11 @@
 /**
  * Created by Rishikesh Arya on 16/11/19.
  */
-const _                  = require("underscore");
-
 const responses           = require("./../../../response/responses");
 const constants           = require("./../../../properties/constants");
 const logging             = require("./../../../logging/logging");
 const notificationService = require("./../service/notificationService");
+const userService         = require("./../../users/services/userService");
 
 exports.sendNotification               = sendNotification;
 
@@ -16,9 +15,7 @@ async function sendNotification(req, res){
         let title   = req.body.title;
         let body    = req.body.body;
 
-        // notificationService.sendPushesToUser(req.apiReference, user_id, title, body);
-        notificationService.sendDailyFactPush(req.apiReference, 330, user_id, title, body);
-        
+        notificationService.sendPushesToUser(req.apiReference, user_id, title, body);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "sendNotification", ERROR : error});

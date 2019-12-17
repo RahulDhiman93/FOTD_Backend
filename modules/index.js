@@ -7,6 +7,7 @@ require('./facts');
 require('./feedback');
 require('./files');
 require('./notification');
+require('./jade');
 
 app.get('/ping', function(req, res) {
   res.send('OK');

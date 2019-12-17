@@ -52,7 +52,8 @@ const fileSwitches = {
   fact        : true,
   feedback    : true,
   image       : true,
-  notification: true
+  notification: true,
+  jade        : true
 };
 
 const modules = {
@@ -84,7 +85,9 @@ const modules = {
     getFavoriteFacts: true,
     getFactDetails  : true,
     getFeaturedFact : true,
-    getUserAddedfact: true
+    getUserAddedfact: true,
+    getPendingFacts : true,
+    approveFact     : true
   },
   feedback : {
     addFeedback: true
@@ -94,5 +97,8 @@ const modules = {
   },
   notification : {
     sendNotification: true
+  },
+  jade : {
+    view : true
   }
 };

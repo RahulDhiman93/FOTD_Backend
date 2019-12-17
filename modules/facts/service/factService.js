@@ -2,7 +2,7 @@
  * Created by Rishikesh Arya on 16/11/19.
  */
 
-const dbHandler = require("./../../../database/mysqllib");
+const dbHandler = require("./../../../database/mysqlLib");
 const logging   = require("./../../../logging/logging");
 
 exports.getAppVersion              = getAppVersion;
@@ -14,6 +14,7 @@ exports.searchFacts                = searchFacts;
 exports.addFact                    = addFact;
 exports.getAppConfig               = getAppConfig;
 exports.getUserFactCountWithStatus = getUserFactCountWithStatus;
+exports.updateFact                 = updateFact;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -199,6 +200,21 @@ async function addFact(apiReference, opts){
         return await dbHandler.executeQuery(apiReference, "addFact", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"addFact", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function updateFact(apiReference, opts, where){
+    try{
+        let sql       = `UPDATE tb_facts SET ? WHERE fact_id = ? `;
+        let updateObj = {};
+        let values    = [updateObj, where.fact_id];
+
+        opts.hasOwnProperty("fact_status")? updateObj.fact_status = opts.fact_status : 0;
+
+        return await dbHandler.executeQuery(apiReference, "updateFact", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"updateFact", ERROR : error.toString()});
         throw(error);
     }
 }

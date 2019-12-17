@@ -2,12 +2,13 @@
  * Created by Rishikesh Arya on 16/11/19.
  */
 
-const _           = require("underscore");
-const moment      = require("moment");
-const responses   = require("./../../../response/responses");
-const constants   = require("./../../../properties/constants");
-const logging     = require("./../../../logging/logging");
-const factService = require("./../service/factService");
+const _                   = require("underscore");
+const moment              = require("moment");
+const responses           = require("./../../../response/responses");
+const constants           = require("./../../../properties/constants");
+const logging             = require("./../../../logging/logging");
+const factService         = require("./../service/factService");
+const notificationService = require("../../notification/service/notificationService");
 
 exports.checkAppVersion  = checkAppVersion;
 exports.getTodaysFact    = getTodaysFact;
@@ -19,6 +20,8 @@ exports.getFavoriteFacts = getFavoriteFacts;
 exports.getFactDetails   = getFactDetails;
 exports.getFeaturedFact  = getFeaturedFact;
 exports.getUserAddedfact = getUserAddedfact;
+exports.getPendingFacts  = getPendingFacts;
+exports.approveFact      = approveFact;
 
 async function checkAppVersion(req, res){
     try{
@@ -300,6 +303,52 @@ async function getUserAddedfact(req, res){
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUserAddedfact", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function getPendingFacts(req, res){
+    try{
+        let fact_status = constants.FACT_STATUS.PENDING;
+        let limit       = req.body.limit || 10;
+        let skip        = req.body.skip || 0;
+        let response    = {
+            facts: [],
+        };
+
+        response.facts = await factService.getFacts(req.apiReference, {
+            fact_type            : constants.FACT_TYPE.USER_FACT,
+            fact_status          : fact_status,
+            limit                : limit,
+            skip                 : skip,
+            order_by             : " ORDER BY tbf.fact_id DESC ",
+            join_user            : 1,
+            columns              : " tbf.fact_id, tbf.fact, tu.name, tu.email "
+        });
+
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "getPendingFacts", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function approveFact(req, res){
+    try{
+        let fact_status = req.body.status;
+        let fact_id     = req.body.fact_id;
+
+        let factDetail = await factService.getFacts(req.apiReference, {fact_id : fact_id, fact_status : constants.FACT_STATUS.PENDING});
+        if(!_.isEmpty(factDetail)){
+            let user_id = factDetail[0].user_id;
+            await factService.updateFact(req.apiReference, {fact_status}, {fact_id});
+            if(user_id && fact_status == constants.FACT_STATUS.APPROVED){
+                notificationService.sendPushesToUser(req.apiReference, user_id, "Fact Approved!!", "Hey!! Your fact just got approved");
+            }
+        }
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "approveFact", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

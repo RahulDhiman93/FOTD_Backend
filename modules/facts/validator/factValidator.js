@@ -17,6 +17,8 @@ exports.getFavoriteFacts = getFavoriteFacts;
 exports.getFactDetails   = getFactDetails;
 exports.getFeaturedFact  = getFeaturedFact;
 exports.getUserAddedfact = getUserAddedfact;
+exports.getPendingFacts  = getPendingFacts;
+exports.approveFact      = approveFact;
 
 function checkAppVersion(req,res,next){
     req.apiReference = {
@@ -185,6 +187,40 @@ function getUserAddedfact(req, res, next){
     });
 
     let validFields = validator.validateFields(req.apiReference, req.query, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function getPendingFacts(req, res, next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "getPendingFacts"
+    };
+    
+    let schema = Joi.object().keys({
+      limit: Joi.number().required(),
+      skip : Joi.number().required(),
+    });
+
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function approveFact(req, res, next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "approveFact"
+    };
+    
+    let schema = Joi.object().keys({
+      fact_id: Joi.number().required(),
+      status : Joi.number().valid(1, 2).required(),
+    });
+
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
     if (validFields) {
         next();
     }

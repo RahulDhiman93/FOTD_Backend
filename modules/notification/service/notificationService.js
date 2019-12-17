@@ -167,6 +167,7 @@ async function sendDailyFactPush(apiReference, timezone){
 }
 
 function scheduleNotification() {
+	console.log("scheduling notifications")
 	schedule.scheduleJob("*/15 * * * *", function () {
 		let curr_date_time    = new Date();
 		let notification_time = new Date();

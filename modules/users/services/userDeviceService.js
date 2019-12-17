@@ -2,7 +2,7 @@
  * Created by Rishikesh Arya on 16/11/19.
  */
 
-const dbHandler = require("./../../../database/mysqllib");
+const dbHandler = require("./../../../database/mysqlLib");
 const logging   = require("./../../../logging/logging");
 
 exports.addUserDevice    = addUserDevice;

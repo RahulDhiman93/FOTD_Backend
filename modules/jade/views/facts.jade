@@ -1,0 +1,16 @@
+h3 GET FACTS
+    form(action='/fact/getPendingFacts', method='POST')
+        | limit :
+        input(type='number', name='limit')
+        | skip :
+        input(type='number', name='skip')
+        | submit :
+        input(type='submit', value='submit')
+h3 APPROVE FACT
+    form(action='/fact/approve', method='POST')
+        | fact_id :
+        input(type='number', name='fact_id')
+        | status (1-> approve, 2-> reject) :
+        input(type='number', name='status')
+        | submit :
+        input(type='submit', value='submit')

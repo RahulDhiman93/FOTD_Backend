@@ -17,3 +17,5 @@ app.get('/fact/favourite/get',  factValidator.getFavoriteFacts,auth.authenticate
 app.get('/fact/getDetails',     factValidator.getFactDetails,  auth.authenticateUser, factController.getFactDetails);
 app.get('/fact/featured',       factValidator.getFeaturedFact, auth.authenticateUser, factController.getFeaturedFact);
 app.get('/fact/userAddedfact',  factValidator.getUserAddedfact,auth.authenticateUser, factController.getUserAddedfact);
+app.post('/fact/getPendingFacts',factValidator.getPendingFacts, factController.getPendingFacts);
+app.post('/fact/approve',        factValidator.approveFact, factController.approveFact);

@@ -1,7 +1,6 @@
 /**
  * Created by Rishikesh Arya on 16/11/19.
  */
-
 const bodyParser              = require('body-parser');
 const logger                  = require('morgan');
 const errorhandler            = require('errorhandler');
@@ -10,6 +9,8 @@ const cors                    = require('cors');
 
 
 app.set('port', config.get('PORT'));
+app.set('views', path.join(BASE_PATH, 'modules/jade/views'));
+app.set('view engine', 'jade');
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(bodyParser.json({limit: '50mb'}));
 

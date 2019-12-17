@@ -36,5 +36,6 @@
       "user": "care.fotd@gmail.com",
       "pass": "R@hul1234",
       "from": "care.fotd@gmail.com"
-    }
+    },
+    "IOSPushGateway" : "gateway.sandbox.push.apple.com"
   }

@@ -31,5 +31,6 @@
   "logFiles" : {
     "requestLogspath" : "../logs/request.log"
   },
-  "apiURL" : "http://localhost:/8080/"
+  "apiURL" : "http://localhost:/8080/",
+  "IOSPushGateway" : "gateway.push.apple.com"
 }

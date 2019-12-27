@@ -260,7 +260,7 @@ async function getFeaturedFact(req, res){
             fact_type: constants.FACT_TYPE.USER_FACT,
             limit    : 10,
             skip     : 0,
-            order_by : " ORDER BY tbf.fact_id DESC "
+            order_by : " ORDER BY tbf.update_datetime DESC "
         });
 
         response.featured = featured;

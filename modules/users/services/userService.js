@@ -78,6 +78,7 @@ async function updateUser(apiReference, updates, {user_id, email}){
         updates.hasOwnProperty("notification_enabled")? updateObj.notification_enabled = updates.notification_enabled : 0;
         updates.hasOwnProperty("timezone")            ? updateObj.timezone             = updates.timezone             : 0;
         updates.hasOwnProperty("timezone_info")       ? updateObj.timezone_info        = updates.timezone_info        : 0;
+        updates.hasOwnProperty("last_login")          ? updateObj.last_login           = updates.last_login           : 0;
         values.push(updateObj);
 
         if(user_id){
@@ -101,6 +102,7 @@ async function getUserInfoResponseObj(apiReference, user_id){
         let result = {};
         let userInfo = await getUser(apiReference, {columns : "*", user_id});
         if(userInfo.length){
+            updateUser(apiReference, {last_login : new Date()}, {user_id});
             result = userInfo[0];
             delete userInfo[0].password;
             delete userInfo[0].otp;

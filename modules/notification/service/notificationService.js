@@ -32,6 +32,7 @@ function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_toke
 
 		fcm.send(message, function (err, response) {
 			if (err) {
+				userDeviceService.updateUserDevice(apiReference,{is_active : 0}, {device_token : device_token}).catch(err=>{});
 				logging.logError(apiReference, { EVENT: "sendAndroidPushNotification", ERROR: err.toString() });
 				return resolve();
 			} 

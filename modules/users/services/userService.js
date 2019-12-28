@@ -11,10 +11,10 @@ exports.getUser                = getUser;
 exports.updateUser             = updateUser;
 exports.getUserInfoResponseObj = getUserInfoResponseObj;
 
-async function addUser(apiReference, {name, password, email, access_token, timezone, timezone_info}){
+async function addUser(apiReference, {name, password, email, access_token, timezone, timezone_info, signup_from=null}){
     try{
         let sql       = "INSERT INTO tb_users SET ? ";
-        let insertObj = {name, password, email, access_token, timezone, timezone_info};
+        let insertObj = {name, password, email, access_token, timezone, timezone_info, signup_from};
         let values    = [insertObj];
         
         let result = await dbHandler.executeQuery(apiReference, "addUser", sql, values);

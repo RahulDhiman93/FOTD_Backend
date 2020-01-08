@@ -312,11 +312,8 @@ async function getPendingFacts(req, res){
         let fact_status = constants.FACT_STATUS.PENDING;
         let limit       = req.body.limit || 10;
         let skip        = req.body.skip || 0;
-        let response    = {
-            facts: [],
-        };
 
-        response.facts = await factService.getFacts(req.apiReference, {
+        let facts = await factService.getFacts(req.apiReference, {
             fact_type            : constants.FACT_TYPE.USER_FACT,
             fact_status          : fact_status,
             limit                : limit,
@@ -326,7 +323,7 @@ async function getPendingFacts(req, res){
             columns              : " tbf.fact_id, tbf.fact, tu.name, tu.email "
         });
 
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+        return res.render('pendingFacts', {facts : facts});
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getPendingFacts", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

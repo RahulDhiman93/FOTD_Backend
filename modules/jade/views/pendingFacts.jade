@@ -1,0 +1,31 @@
+doctype html
+html
+  head
+    style.
+      table, th, td {
+      border: 1px solid black;
+      border-collapse: collapse;
+      }
+      th, td {
+      padding: 5px;
+      }
+      th {
+      text-align: left;
+      }
+      body {
+      background-color: #23F6B6;
+      }
+body
+    h1 Pending Facts
+    table
+      tr
+      th FACT ID
+      th FACT
+      th USER
+      th EMAIL
+      each item in facts
+        tr
+          td=item.fact_id
+          td=item.fact
+          td=item.name
+          td=item.email

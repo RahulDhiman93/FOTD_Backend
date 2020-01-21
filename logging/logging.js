@@ -87,7 +87,8 @@ const modules = {
     getFeaturedFact : true,
     getUserAddedfact: true,
     getPendingFacts : true,
-    approveFact     : true
+    approveFact     : true,
+    getFactsV2      : true
   },
   feedback : {
     addFeedback: true

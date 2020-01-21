@@ -19,3 +19,4 @@ app.get('/fact/featured',       factValidator.getFeaturedFact, auth.authenticate
 app.get('/fact/userAddedfact',  factValidator.getUserAddedfact,auth.authenticateUser, factController.getUserAddedfact);
 app.post('/fact/getPendingFacts',factValidator.getPendingFacts, factController.getPendingFacts);
 app.post('/fact/approve',        factValidator.approveFact, factController.approveFact);
+app.get('/fact/v2/get',          factValidator.getFactsV2,  auth.authenticateUser, factController.getFactsV2);

@@ -123,7 +123,7 @@ async function addFactLike(apiReference, {fact_id, status, user_id}){
     }
 }
 
-async function getFactLikeCount(apiReference, {fact_id}){
+async function getFactLikeCount(apiReference, {fact_id, group_by}){
     try{
         let sql     = ` SELECT COUNT(
                                      CASE WHEN tfl.status = 1 THEN 1
@@ -132,8 +132,12 @@ async function getFactLikeCount(apiReference, {fact_id}){
                                 COUNT(
                                     CASE WHEN tfl.status = 0 THEN 1
                                     END
-                                   ) AS dislike_count    
-                        FROM tb_fact_likes tfl WHERE fact_id = ? `;
+                                   ) AS dislike_count,
+                                   fact_id
+                        FROM tb_fact_likes tfl WHERE fact_id IN (?) `;
+        if(group_by){
+            sql+= group_by;
+        }
         let values  = [fact_id];
         
         return await dbHandler.executeQuery(apiReference, "getFactLikeCount", sql, values);
@@ -166,11 +170,15 @@ async function searchFacts(apiReference, opts){
                     LEFT JOIN tb_user_favourite_facts tuff 
                     ON 
                     tbf.fact_id = tuff.fact_id AND tuff.user_id = ${opts.user_id}
+                    LEFT JOIN tb_users tu ON tbf.user_id = tu.user_id
                     WHERE 
                     MATCH (tbf.fact)
                     AGAINST ("${opts.search_string}" IN NATURAL LANGUAGE MODE)  AND
-                    tbf.fact_type = ${opts.fact_type} AND 
                     tbf.fact_status = 1 `;
+
+        if(opts.fact_type){
+            sql+= `AND tbf.fact_type = ${opts.fact_type} `;
+        }
 
         if(opts.need_user_added_facts == 1){
             sql+= ` AND tbf.user_id = ${opts.user_id} `;

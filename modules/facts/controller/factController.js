@@ -22,6 +22,7 @@ exports.getFeaturedFact  = getFeaturedFact;
 exports.getUserAddedfact = getUserAddedfact;
 exports.getPendingFacts  = getPendingFacts;
 exports.approveFact      = approveFact;
+exports.getFactsV2       = getFactsV2;
 
 async function checkAppVersion(req, res){
     try{
@@ -149,7 +150,6 @@ async function getFacts(req, res){
             limit    : limit,
             skip     : skip,
             order_by : " ORDER BY tbf.fact_id DESC "
-
         }
         if(search_string){
             opts.search_string = search_string;
@@ -248,31 +248,68 @@ async function getFactDetails(req, res){
 
 async function getFeaturedFact(req, res){
     try{
-        
+        let user_id = req.body.user_id;
         let response = {
             featured: [],
             popular : []
         };
+        let obj = {};
 
         let featured = await factService.getFacts(req.apiReference, {
-            join_user: 1,
-            columns  : ` tbf.fact_id, tbf.fact, tbf.creation_datetime AS added_on ,IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, '${constants.DEFAULT_USER_IMAGE}') AS user_image `,
-            fact_type: constants.FACT_TYPE.USER_FACT,
-            limit    : 10,
-            skip     : 0,
-            order_by : " ORDER BY tbf.update_datetime DESC "
+            join_user     : 1,
+            columns       : ` tbf.*, tbf.creation_datetime AS added_on ,IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, '${constants.DEFAULT_USER_IMAGE}') AS user_image, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status `,
+            fact_type     : constants.FACT_TYPE.USER_FACT,
+            limit         : 10,
+            skip          : 0,
+            join_likes    : 1,
+            join_favourite: 1,
+            user_id       : user_id,
+            order_by      : " ORDER BY tbf.update_datetime DESC "
         });
 
         response.featured = featured;
 
         let popular = await factService.getFacts(req.apiReference, {
-            columns  : ` tbf.fact_id, tbf.fact, tbf.creation_datetime AS added_on, "${constants.FOTP_DISPLAY_NAME}" as added_by, "${constants.FOTP_DISPLAY_ICON}" AS user_image `,
-            fact_type: constants.FACT_TYPE.ADMIN_FACT,
-            limit    : 10,
-            skip     : 0,
-            order_by : " ORDER BY tbf.fact_id DESC "
+            columns       : ` tbf.*, tbf.creation_datetime AS added_on, "${constants.FOTP_DISPLAY_NAME}" as added_by, "${constants.FOTP_DISPLAY_ICON}" AS user_image, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status `,
+            fact_type     : constants.FACT_TYPE.ADMIN_FACT,
+            limit         : 10,
+            skip          : 0,
+            join_likes    : 1,
+            join_favourite: 1,
+            user_id       : user_id,
+            order_by      : " ORDER BY tbf.fact_id DESC "
         });
         response.popular = popular;
+
+        let facts = [].concat(response.featured, response.popular);
+        let fact_ids = [];
+
+        for (let i = 0; i < facts.length; i++) {
+            facts[i].added_on = facts[i].creation_datetime;
+            facts[i].like_count = facts[i].minimum_like_count;
+            facts[i].dislike_count = facts[i].minimum_dislike_count;
+            if (facts[i].fact_type == constants.FACT_TYPE.ADMIN_FACT ||
+                facts[i].fact_type == constants.FACT_TYPE.DAILY_FACT) {
+                facts[i].added_by = constants.FOTP_DISPLAY_NAME;
+                facts[i].user_image = constants.FOTP_DISPLAY_ICON;
+            } else {
+                facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
+            }
+            obj[facts[i].fact_id] = facts[i];
+            fact_ids.push(facts[i].fact_id);
+        }
+
+        if(fact_ids.length){
+            let factLikes = await factService.getFactLikeCount(req.apiReference, {fact_id : fact_ids, group_by : " GROUP BY fact_id"});
+            for (let i = 0; i < factLikes.length; i++) {
+                let fact_id = factLikes[i].fact_id;
+                if(!obj[fact_id]){
+                    continue;
+                }
+                obj[fact_id].like_count    = factLikes[i].like_count + obj[fact_id].minimum_like_count || 0;
+                obj[fact_id].dislike_count = factLikes[i].dislike_count + obj[fact_id].minimum_dislike_count || 0;
+            }
+        }
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getFeaturedFact", ERROR : error});
@@ -346,6 +383,81 @@ async function approveFact(req, res){
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "approveFact", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function getFactsV2(req, res){
+    try{
+        let user_id               = req.body.user_id;
+        let fact_type             = parseInt(req.query.fact_type);
+        let limit                 = req.query.limit || 5;
+        let skip                  = req.query.skip || 0;
+        let search_string         = req.query.search_string;
+        let need_user_fav_facts   = req.query.need_user_fav_facts || 0;
+
+        if(need_user_fav_facts){
+            search_string = 0;
+        }
+
+        let response = {facts : []};
+        let obj      = {};
+        let facts    = [];
+        let fact_ids = [];
+
+        let opts     = {
+            user_id  : user_id,
+            columns  : " tbf.*, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status, IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, '') AS user_image ",
+            fact_type: fact_type,
+            limit    : limit,
+            skip     : skip,
+            join_user: 1,
+            order_by : " ORDER BY tbf.fact_id DESC "
+        }
+        if(search_string){
+            opts.search_string = search_string;
+            facts = await factService.searchFacts(req.apiReference, opts);
+        }else if(need_user_fav_facts){
+            opts.join_likes           = 1;
+            opts.inner_join_favourite = 1;
+            delete opts.fact_type;
+            facts = await factService.getFacts(req.apiReference, opts);
+        }else{
+            opts.join_likes     = 1;
+            opts.join_favourite = 1;
+            facts = await factService.getFacts(req.apiReference, opts);
+        }
+
+        for (let i = 0; i < facts.length; i++) {
+            facts[i].added_on = facts[i].creation_datetime;
+            facts[i].like_count = facts[i].minimum_like_count;
+            facts[i].dislike_count = facts[i].minimum_dislike_count;
+            if (facts[i].fact_type == constants.FACT_TYPE.ADMIN_FACT ||
+                facts[i].fact_type == constants.FACT_TYPE.DAILY_FACT) {
+                facts[i].added_by = constants.FOTP_DISPLAY_NAME;
+                facts[i].user_image = constants.FOTP_DISPLAY_ICON;
+            } else {
+                facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
+            }
+            obj[facts[i].fact_id] = facts[i];
+            fact_ids.push(facts[i].fact_id);
+        }
+
+        if(fact_ids.length){
+            let factLikes = await factService.getFactLikeCount(req.apiReference, {fact_id : fact_ids, group_by : " GROUP BY fact_id"});
+            for (let i = 0; i < factLikes.length; i++) {
+                let fact_id = factLikes[i].fact_id;
+                if(!obj[fact_id]){
+                    continue;
+                }
+                obj[fact_id].like_count    = factLikes[i].like_count + obj[fact_id].minimum_like_count || 0;
+                obj[fact_id].dislike_count = factLikes[i].dislike_count + obj[fact_id].minimum_dislike_count || 0;
+            }
+        }
+        response.facts = facts;
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "getFactsV2", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

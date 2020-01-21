@@ -19,6 +19,7 @@ exports.getFeaturedFact  = getFeaturedFact;
 exports.getUserAddedfact = getUserAddedfact;
 exports.getPendingFacts  = getPendingFacts;
 exports.approveFact      = approveFact;
+exports.getFactsV2       = getFactsV2;
 
 function checkAppVersion(req,res,next){
     req.apiReference = {
@@ -221,6 +222,27 @@ function approveFact(req, res, next){
     });
 
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function getFactsV2(req, res, next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "getFactsV2"
+    };
+    
+    let schema = Joi.object().keys({
+      access_token         : Joi.string().required(),
+      fact_type            : Joi.number().valid(0,1,2,3).required(),
+      limit                : Joi.number().required(),
+      skip                 : Joi.number().required(),
+      search_string        : Joi.string().optional(),
+      need_user_fav_facts  : Joi.number().optional().valid(0,1)
+    });
+
+    let validFields = validator.validateFields(req.apiReference, req.query, res, schema);
     if (validFields) {
         next();
     }

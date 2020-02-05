@@ -31,13 +31,7 @@ async function getAppVersion(apiReference, {columns, device_type}){
 
 async function getAppConfig(apiReference,){
     try{
-        let sql = ` SELECT
-                        about_us_page,
-                        insta_handle,
-                        fb_handle,
-                        terms_page,
-                        ad_mob_enabled
-                    FROM tb_app_config `;
+        let sql = ` SELECT * FROM tb_app_config `;
         return await dbHandler.executeQuery(apiReference, "getAppConfig", sql, []);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getAppConfig", ERROR : error.toString()});

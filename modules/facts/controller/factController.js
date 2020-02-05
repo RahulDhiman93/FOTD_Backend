@@ -238,6 +238,7 @@ async function getFactDetails(req, res){
         response.user_fav_status  = fact[0].user_fav_status;
         response.fact             = fact[0].fact;
         response.fact_id          = fact[0].fact_id;
+        response.user_id          = fact[0].user_id;
 
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){

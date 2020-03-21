@@ -55,6 +55,12 @@ async function getUser(apiReference, opts){
             sql+= " AND notification_enabled = ? ";
             values.push(opts.notification_enabled);
         }
+        
+        if(opts.user_ids){
+            sql+= " AND user_id IN (?) ";
+            values.push(opts.user_ids);
+        }
+
 
         return await dbHandler.executeQuery(apiReference, "getUser", sql, values);
     }catch(error){

@@ -97,7 +97,8 @@ const modules = {
     uploadImage : true
   },
   notification : {
-    sendNotification: true
+    sendNotification     : true,
+    sendEmailNotification: true
   },
   jade : {
     view : true

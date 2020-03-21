@@ -12,10 +12,12 @@ const constants         = require("./../../../properties/constants");
 const userDeviceService = require("./../../users/services/userDeviceService");
 const userService		= require("./../../users/services/userService");
 const factService		= require("./../../facts/service/factService");
+const emailUtility		= require("./../../../utilities/emailUtility");
 
-exports.sendPushesToUser     = sendPushesToUser;
-exports.sendDailyFactPush    = sendDailyFactPush;
-exports.scheduleNotification = scheduleNotification;
+exports.sendPushesToUser      = sendPushesToUser;
+exports.sendDailyFactPush     = sendDailyFactPush;
+exports.scheduleNotification  = scheduleNotification;
+exports.sendEmailNotification = sendEmailNotification;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {
@@ -180,4 +182,23 @@ function scheduleNotification() {
 		console.error("timezone", timezone);
 		sendDailyFactPush({ module: "notification", api: "sendNotification" }, timezone);
 	});
+}
+
+async function sendEmailNotification(apiReference, user_ids, html, subject) {
+	try {
+		user_ids = user_ids && user_ids.length ? user_ids : 0;
+		let users = await userService.getUser(apiReference, { user_ids });
+
+		for (let count = 0; count < users.length; count++) {
+			emailUtility.sendEmail(apiReference, {
+				msg    : html,
+				to     : users[count].email,
+				from   : config.get("emailCreds.user"),
+				subject: subject}).then().catch(err=>{
+					logging.logError(apiReference, {EVENT : "send Email", ERROR: err});
+				});
+		}
+	} catch (error) {
+		logging.logError(apiReference, { EVENT: "sendEmailNotification", ERROR: error });
+	}
 }

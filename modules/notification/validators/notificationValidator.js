@@ -34,7 +34,7 @@ function sendEmailNotification(req,res,next){
     };
     
     let schema = Joi.object().keys({
-      user_ids: Joi.array().items(Joi.number().required()).required(),
+      user_ids: Joi.array().items(Joi.number().optional()).required(),
       html    : Joi.string().required(),
       password: Joi.string().required(),
       subject : Joi.string().required()

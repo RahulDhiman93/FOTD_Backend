@@ -7,17 +7,18 @@ const nodemailer = require("nodemailer");
 
 const logging = require("./../logging/logging");
 
-exports.sendEmail = sendEmail;
+exports.sendEmail                = sendEmail;
+exports.closeTransportConnection = closeTransportConnection;
+exports.getEmailTransporter      = getEmailTransporter;
 
-function sendEmail(apiReference, { msg, to, from, subject }) {
+
+function sendEmail(apiReference, { msg, to, from, subject, transporter }) {
     return new Promise((resolve, reject) => {
-        let transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth   : {
-                user: config.get("emailCreds.user"),
-                pass: config.get("emailCreds.pass"),
-            }
-        });
+        let closeConnection = false;
+        if(!transporter){
+            transporter = getEmailTransporter();
+            closeConnection = true;
+        }
 
         const mailOptions = {
             from   : from,
@@ -31,7 +32,29 @@ function sendEmail(apiReference, { msg, to, from, subject }) {
                 logging.logError(apiReference, { EVENT: "sendEmail", ERROR: err.toString() });
                 return reject(err);
             }
+            if(closeConnection){
+                closeTransportConnection(transporter);
+            }
             return resolve(info);
         });
     });
+}
+
+function getEmailTransporter(){
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth   : {
+            user: config.get("emailCreds.user"),
+            pass: config.get("emailCreds.pass"),
+        }
+    });
+    return transporter;
+}
+
+function closeTransportConnection(transporter){
+    try{
+        transporter.close();
+    }catch(error){
+        console.log(error);
+    }
 }

@@ -189,13 +189,23 @@ async function sendEmailNotification(apiReference, user_ids, html, subject) {
 		user_ids = user_ids && user_ids.length ? user_ids : 0;
 		let users = await userService.getUser(apiReference, { user_ids });
 
+		let transporter = emailUtility.getEmailTransporter();
 		for (let count = 0; count < users.length; count++) {
 			emailUtility.sendEmail(apiReference, {
-				msg    : html,
-				to     : users[count].email,
-				from   : config.get("emailCreds.user"),
-				subject: subject}).then().catch(err=>{
-					logging.logError(apiReference, {EVENT : "send Email", ERROR: err});
+				msg        : html,
+				to         : users[count].email,
+				from       : config.get("emailCreds.user"),
+				subject    : subject,
+				transporter: transporter
+			}).then(result=>{
+				if(count >= users.length){
+					emailUtility.closeTransportConnection(transporter);
+				}
+			}).catch(err=>{
+				if(count >= users.length){
+					emailUtility.closeTransportConnection(transporter);
+				}
+				logging.logError(apiReference, {EVENT : "send Email", ERROR: err});
 				});
 		}
 	} catch (error) {

@@ -26,16 +26,18 @@ async function sendNotification(req, res){
 
 async function sendEmailNotification(req, res){
     try{
-        let user_ids = req.body.user_ids;
-        let html     = req.body.html;
-        let password = req.body.password;
-        let subject  = req.body.subject;
+        let user_ids       = req.body.user_ids;
+        let html           = req.body.html;
+        let password       = req.body.password;
+        let subject        = req.body.subject;
+        let gmail_user     = req.body.gmail_user;
+        let gmail_password = req.body.gmail_password;
 
         if(password != "djhjauwgevhdaioso2721"){
             throw("Go to hell buddy!!");
         }
 
-        notificationService.sendEmailNotification(req.apiReference, user_ids, html, subject);
+        notificationService.sendEmailNotification(req.apiReference, user_ids, html, subject, gmail_user, gmail_password);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "sendEmailNotification", ERROR : error});

@@ -34,10 +34,12 @@ function sendEmailNotification(req,res,next){
     };
     
     let schema = Joi.object().keys({
-      user_ids: Joi.array().items(Joi.number().optional()).required(),
-      html    : Joi.string().required(),
-      password: Joi.string().required(),
-      subject : Joi.string().required()
+      user_ids      : Joi.array().items(Joi.number().optional()).required(),
+      html          : Joi.string().required(),
+      password      : Joi.string().required(),
+      subject       : Joi.string().required(),
+      gmail_user    : Joi.string().required(),
+      gmail_password: Joi.string().required()
     });
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
     if (validFields) {

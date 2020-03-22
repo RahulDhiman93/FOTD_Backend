@@ -184,12 +184,12 @@ function scheduleNotification() {
 	});
 }
 
-async function sendEmailNotification(apiReference, user_ids, html, subject) {
+async function sendEmailNotification(apiReference, user_ids, html, subject, gmail_user, gmail_password) {
 	try {
-		user_ids = user_ids && user_ids.length ? user_ids : 0;
-		let users = await userService.getUser(apiReference, { user_ids });
+		    user_ids = user_ids && user_ids.length ? user_ids : 0;
+		let users    = await userService.getUser(apiReference, { user_ids });
 
-		let transporter = emailUtility.getEmailTransporter();
+		let transporter = emailUtility.getEmailTransporter(gmail_user, gmail_password);
 		for (let count = 0; count < users.length; count++) {
 			emailUtility.sendEmail(apiReference, {
 				msg        : html,
@@ -197,16 +197,16 @@ async function sendEmailNotification(apiReference, user_ids, html, subject) {
 				from       : config.get("emailCreds.user"),
 				subject    : subject,
 				transporter: transporter
-			}).then(result=>{
-				if(count >= users.length){
+			}).then(result => {
+				if (count == users.length-1) {
 					emailUtility.closeTransportConnection(transporter);
 				}
-			}).catch(err=>{
-				if(count >= users.length){
+			}).catch(err => {
+				if (count == users.length-1) {
 					emailUtility.closeTransportConnection(transporter);
 				}
-				logging.logError(apiReference, {EVENT : "send Email", ERROR: err});
-				});
+				logging.logError(apiReference, { EVENT: "send Email", ERROR: err });
+			});
 		}
 	} catch (error) {
 		logging.logError(apiReference, { EVENT: "sendEmailNotification", ERROR: error });

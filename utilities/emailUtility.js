@@ -12,11 +12,11 @@ exports.closeTransportConnection = closeTransportConnection;
 exports.getEmailTransporter      = getEmailTransporter;
 
 
-function sendEmail(apiReference, { msg, to, from, subject, transporter }) {
+function sendEmail(apiReference, { msg, to, from, subject, transporter, gmail_user, gmail_password }) {
     return new Promise((resolve, reject) => {
         let closeConnection = false;
         if(!transporter){
-            transporter = getEmailTransporter();
+            transporter = getEmailTransporter(gmail_user, gmail_password);
             closeConnection = true;
         }
 
@@ -40,12 +40,13 @@ function sendEmail(apiReference, { msg, to, from, subject, transporter }) {
     });
 }
 
-function getEmailTransporter(){
+function getEmailTransporter(gmail_user, gmail_password){
+    console.log({EVENT : "getEmailTransporter", gmail_user, gmail_password});
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth   : {
-            user: config.get("emailCreds.user"),
-            pass: config.get("emailCreds.pass"),
+            user: gmail_user || config.get("emailCreds.user"),
+            pass: gmail_password || config.get("emailCreds.pass"),
         }
     });
     return transporter;
@@ -54,7 +55,9 @@ function getEmailTransporter(){
 function closeTransportConnection(transporter){
     try{
         transporter.close();
+        console.log("CLOSED TRANSPORTER CONNECTION");
     }catch(error){
+        console.log("CLOSING TRANSPORTER CONNECTION ERROR");
         console.log(error);
     }
 }

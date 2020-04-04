@@ -106,3 +106,12 @@ exports .FACT_STATUS = {
   "1"       : "APPROVED",
   "2"       : "REJECTED"
 }
+
+exports.AVATAR = [
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_1.png?alt=media&token=f9fd9a4d-474f-4c96-96d7-777dd1913020",
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_2.jpg?alt=media&token=dd030be7-1b3e-446e-99dc-a3a792002f0f",
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_3.jpg?alt=media&token=c3291ede-4a79-4d43-bf15-d742540067a0",
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_4.jpg?alt=media&token=326d3a7a-647c-4f7d-b7ea-66add5c132f3",
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_5.jpg?alt=media&token=708eb75f-3dc5-4015-aed3-662ce886e1b3",
+"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_6.jpg?alt=media&token=3dd6af28-b860-44c6-8373-292fe1d62748"
+]

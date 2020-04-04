@@ -107,7 +107,8 @@ function editProfile(req,res,next){
       password            : Joi.string().optional(),
       notification_enabled: Joi.number().valid(0,1).optional(),
       timezone            : Joi.number().optional(),
-      timezone_info       : Joi.string().optional()
+      timezone_info       : Joi.string().optional(),
+      profile_image       : Joi.string().uri().optional()
     });
 
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);

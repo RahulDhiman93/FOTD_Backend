@@ -133,7 +133,7 @@ async function editProfile(req, res){
         let timezone             = req.body.timezone;
         let timezone_info        = req.body.timezone_info;
         let password             = req.body.password;
-        let profile_image        = "";
+        let profile_image        = req.body.profile_image;
         let notification_enabled = req.body.notification_enabled;
         
         

@@ -5,6 +5,7 @@
 const dbHandler   = require("./../../../database/mysqlLib");
 const logging     = require("./../../../logging/logging");
 const factService = require("./../../facts/service/factService");
+const constants   = require("./../../../properties/constants");
 
 exports.addUser                = addUser;
 exports.getUser                = getUser;
@@ -114,6 +115,7 @@ async function getUserInfoResponseObj(apiReference, user_id){
             delete userInfo[0].otp;
             let userFactCount = await factService.getUserFactCountWithStatus(apiReference, {user_id});
             result.userFactCount = userFactCount[0];
+            result.avatars = constants.AVATAR;
         }
         return result;
     }catch(error){

@@ -11,6 +11,7 @@ exports.addUser                = addUser;
 exports.getUser                = getUser;
 exports.updateUser             = updateUser;
 exports.getUserInfoResponseObj = getUserInfoResponseObj;
+exports.getApiKeyUser          = getApiKeyUser;
 
 async function addUser(apiReference, {name, password, email, access_token, timezone, timezone_info, signup_from=null}){
     try{
@@ -121,6 +122,23 @@ async function getUserInfoResponseObj(apiReference, user_id){
     }catch(error){
         console.error(error);
         logging.logError(apiReference, {EVENT:"getUserInfoResponseObj", ERROR: error.toString(), STACK : error.STACK});
+        throw(error);
+    }
+}
+
+async function getApiKeyUser(apiReference, {api_key, columns}){
+    try{
+        let values  = [];
+        columns     = columns || "*";
+        let sql     = `SELECT ${columns} FROM tb_user_api_keys WHERE is_deleted = 0 `;
+        if(api_key){
+            sql+= " AND api_key = ? ";
+            values.push(api_key);
+        }
+
+        return await dbHandler.executeQuery(apiReference, "getApiKeyUser", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getApiKeyUser", ERROR : error.toString()});
         throw(error);
     }
 }

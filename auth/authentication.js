@@ -8,7 +8,8 @@ const responses   = require("./../response/responses");
 const constants   = require("./../properties/constants");
 const logging     = require("./../logging/logging");
 
-exports.authenticateUser = authenticateUser;
+exports.authenticateUser     = authenticateUser;
+exports.authenticateOpenApis = authenticateOpenApis;
 
 async function authenticateUser(req, res, next) {
     try {
@@ -25,5 +26,23 @@ async function authenticateUser(req, res, next) {
     } catch (error) {
         logging.log(req.apiReference, {EVENT : "authenticateUser", ERROR : error});
         responses.sendResponse(res, constants.responseMessages.INVALID_ACCESS_TOKEN, constants.responseFlags.SHOW_ERROR_MESSAGE, {});
+    }
+}
+
+async function authenticateOpenApis(req, res, next){
+    try{
+        let api_key = req.headers.api_key || req.body.api_key;
+        if(!api_key){
+            throw (constants.responseMessages.INVALID_API_KEY); 
+        }
+        let userInfo = await userService.getApiKeyUser(req.apiReference, {api_key});
+        if(_.isEmpty(userInfo)){
+            throw (constants.responseMessages.INVALID_API_KEY);
+        }
+        req.body.user_id = userInfo[0].user_id;
+        next();
+    }catch(error){
+        logging.log(req.apiReference, {EVENT : "authenticateUser", ERROR : error});
+        responses.sendResponse(res, constants.responseMessages.INVALID_API_KEY, constants.responseFlags.SHOW_ERROR_MESSAGE, {});
     }
 }

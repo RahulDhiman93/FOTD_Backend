@@ -7,19 +7,20 @@ const Joi = require("joi");
 const apiReferenceModule      = "fact"
 const validator               = require("./../../../validators/validator");
 
-exports.checkAppVersion  = checkAppVersion;
-exports.getTodaysFact    = getTodaysFact;
-exports.likeFact         = likeFact;
-exports.addFavourite     = addFavourite;
-exports.getFacts         = getFacts;
-exports.addFact          = addFact;
-exports.getFavoriteFacts = getFavoriteFacts;
-exports.getFactDetails   = getFactDetails;
-exports.getFeaturedFact  = getFeaturedFact;
-exports.getUserAddedfact = getUserAddedfact;
-exports.getPendingFacts  = getPendingFacts;
-exports.approveFact      = approveFact;
-exports.getFactsV2       = getFactsV2;
+exports.checkAppVersion   = checkAppVersion;
+exports.getTodaysFact     = getTodaysFact;
+exports.likeFact          = likeFact;
+exports.addFavourite      = addFavourite;
+exports.getFacts          = getFacts;
+exports.addFact           = addFact;
+exports.getFavoriteFacts  = getFavoriteFacts;
+exports.getFactDetails    = getFactDetails;
+exports.getFeaturedFact   = getFeaturedFact;
+exports.getUserAddedfact  = getUserAddedfact;
+exports.getPendingFacts   = getPendingFacts;
+exports.approveFact       = approveFact;
+exports.getFactsV2        = getFactsV2;
+exports.getTodaysFactOpen = getTodaysFactOpen;
 
 function checkAppVersion(req,res,next){
     req.apiReference = {
@@ -243,6 +244,21 @@ function getFactsV2(req, res, next){
     });
 
     let validFields = validator.validateFields(req.apiReference, req.query, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function getTodaysFactOpen(req,res,next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "getTodaysFactOpen"
+    };
+    
+    let schema = Joi.object().keys({
+      api_key: Joi.string().required()
+    }).unknown(true);
+    let validFields = validator.validateFields(req.apiReference, req.headers, res, schema);
     if (validFields) {
         next();
     }

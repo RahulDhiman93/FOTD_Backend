@@ -76,19 +76,20 @@ const modules = {
     changePassword     : true
   },
   fact : {
-    checkAppVersion : true,
-    getTodaysFact   : true,
-    likeFact        : true,
-    addFavourite    : true,
-    getFacts        : true,
-    addFact         : true,
-    getFavoriteFacts: true,
-    getFactDetails  : true,
-    getFeaturedFact : true,
-    getUserAddedfact: true,
-    getPendingFacts : true,
-    approveFact     : true,
-    getFactsV2      : true
+    checkAppVersion  : true,
+    getTodaysFact    : true,
+    likeFact         : true,
+    addFavourite     : true,
+    getFacts         : true,
+    addFact          : true,
+    getFavoriteFacts : true,
+    getFactDetails   : true,
+    getFeaturedFact  : true,
+    getUserAddedfact : true,
+    getPendingFacts  : true,
+    approveFact      : true,
+    getFactsV2       : true,
+    getTodaysFactOpen: true
   },
   feedback : {
     addFeedback: true

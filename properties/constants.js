@@ -18,7 +18,8 @@ exports.responseMessages = {
   "FORCE_UPDATE"              : "We have added a lot of new features for you.\n\nPlease, update it to the latest version.",
   "SOFT_UPDATE"               : "We have added a lot of new features for you.\n\nDo you want to make them available for your use?",
   "INVALID_OTP"               : "Invalid OTP",
-  "UNABLE_TO_UPLOAD"          : "Something is wrong! Unable to upload at the moment."
+  "UNABLE_TO_UPLOAD"          : "Something is wrong! Unable to upload at the moment.",
+  "INVALID_API_KEY"           : "You are not authorised to perform this action"
 };
 
 //FOR FLAGS
@@ -75,8 +76,8 @@ exports.pathToPem = "/root/node-app/pem/FOTD.pem";
 exports.FCM_KEY = "AAAAECEfq1A:APA91bG2TqwxhC2cXfwZF-jkJwh-IAbqR0A_EUJrde8hao1d1MpWta22oM1u84yYSDvJovKmjBn1YHN8ydn4cpw0Jkh9sRpi8nlybrKzsSf8zdDo42BzPkxXYokWZAjWf92HMoqPEG_b";
 
 exports.FOTP_DISPLAY_NAME = "fotd@official";
-exports.FOTP_DISPLAY_ICON = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Fic_default_fotd.png?alt=media&token=cb4d0096-4559-403f-ad6f-c14e0f28e709");
-exports.DEFAULT_USER_IMAGE = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Fic_default_user.png?alt=media&token=1a7a0652-0380-4423-b472-ba043b9c7e2d");
+exports.FOTP_DISPLAY_ICON = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Ffotd_placeholder.png?alt=media&token=cb60987d-cb02-4c0a-ad93-7216f06c8f54");
+exports.DEFAULT_USER_IMAGE = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Fprofile_placeholder.png?alt=media&token=3be2458b-8f08-4b76-808c-5ea8d10b8e2b");
 
 exports.CLOUD_CREDS = {
   PROJECT_ID           : "fotd-60e29",
@@ -108,10 +109,10 @@ exports .FACT_STATUS = {
 }
 
 exports.AVATAR = [
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_1.png?alt=media&token=f9fd9a4d-474f-4c96-96d7-777dd1913020",
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_2.jpg?alt=media&token=dd030be7-1b3e-446e-99dc-a3a792002f0f",
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_3.jpg?alt=media&token=c3291ede-4a79-4d43-bf15-d742540067a0",
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_4.jpg?alt=media&token=326d3a7a-647c-4f7d-b7ea-66add5c132f3",
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_5.jpg?alt=media&token=708eb75f-3dc5-4015-aed3-662ce886e1b3",
-"https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_6.jpg?alt=media&token=3dd6af28-b860-44c6-8373-292fe1d62748"
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_1.png?alt=media&token=74414203-43f9-4bc7-8a6c-0f5c258bf5b8",
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_2.png?alt=media&token=c79d4d91-6101-4500-8b20-d06cc1740dd8",
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_3.png?alt=media&token=cd783f2e-3a04-4113-9b5b-fb83e86b6dbd",
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_4.png?alt=media&token=f7a609fd-0eda-4126-9018-2fc295e48259",
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_5.png?alt=media&token=a07301ed-df38-49b4-8245-3f6f0a9bc03b",
+  "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_6.png?alt=media&token=c88578e5-0225-4ccc-ab30-a301176a90c3",
 ]

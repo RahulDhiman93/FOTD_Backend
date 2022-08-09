@@ -1,6 +1,6 @@
 {
   "name": "fotd",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "Facts of the day",
   "main": "app.js",
   "scripts": {
@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/RahulDhiman93/NodeDeployment.git"
   },
-  "author": "rishikesh arya",
+  "author": "Rahul Dhiman",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/RahulDhiman93/NodeDeployment/issues"
@@ -29,7 +29,7 @@
     "fcm-node": "^1.5.2",
     "handlebars": "^4.5.2",
     "http": "0.0.0",
-    "jade": "^1.11.0",
+    "pug": "^1.11.0",
     "joi": "^14.3.1",
     "md5": "^2.2.1",
     "moment": "^2.24.0",

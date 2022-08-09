@@ -4,7 +4,5 @@ _store
 newrelic.js
 /node_modules
 *.pem
-config/live.json
-config/beta.json
 *.vscode
 package-lock.json

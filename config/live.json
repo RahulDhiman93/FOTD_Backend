@@ -32,5 +32,10 @@
     "requestLogspath" : "../logs/request.log"
   },
   "apiURL" : "http://159.65.145.163:8000/",
-  "IOSPushGateway" : "gateway.push.apple.com"
+  "IOSPushGateway" : "gateway.push.apple.com",
+  "emailCreds":{
+    "user": "care.fotd@gmail.com",
+    "pass": "R@hul1234",
+    "from": "care.fotd@gmail.com"
+  }
 }

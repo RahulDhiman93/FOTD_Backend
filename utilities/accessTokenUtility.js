@@ -2,7 +2,7 @@
  * Created by Rishikesh Arya on 16/11/19.
  */
 
-var MD5                                 =   require('MD5');
+var md5                                 =   require('md5');
 
 exports.generateAccessToken            = generateAccessToken;
 exports.generateRandomStringAndNumbers = generateRandomStringAndNumbers;
@@ -19,7 +19,7 @@ function generateAccessToken(input, userID) {
     string2 += input;
   }
   string2 += generateRandomStringAndNumbers() + new Date().getTime();
-  string = MD5(string2);
+  string = md5(string2);
   return string;
 }
 
@@ -32,7 +32,7 @@ function generateRandomStringAndNumbers() {
 }
 
 function encrypt(string){
-  return MD5(string);
+  return md5(string);
 }
 
 function generateOTP (length) {

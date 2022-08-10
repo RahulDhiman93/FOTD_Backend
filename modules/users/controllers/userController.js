@@ -60,6 +60,7 @@ async function register(req, res){
         let encrypted_password = accessTokenUtility.encrypt(password);
         let access_token       = accessTokenUtility.generateAccessToken();
 
+        let is_guest           = req.body.is_guest;
         let device_token       = req.body.device_token;
         let device_name        = req.body.device_name;
         let device_type        = req.body.device_type;
@@ -68,7 +69,7 @@ async function register(req, res){
         if(!_.isEmpty(emailCheck)){
             throw(constants.responseMessages.EMAIl_ALREADY_EXIST);
         }
-        let user_id = await userService.addUser(req.apiReference, {name, password : encrypted_password, email, access_token, timezone, timezone_info, signup_from : device_type});
+        let user_id = await userService.addUser(req.apiReference, {name, password : encrypted_password, email, access_token, is_guest, timezone, timezone_info, signup_from : device_type});
         if(device_token && device_type){
             userDeviceService.addUserDevice(req.apiReference, {device_name, device_token, device_type, user_id, is_active : 1}).then().catch(err=>{
                 logging.logError(req.apiReference, {EVENT : "ADDUSERDEVICE", ERROR: err});

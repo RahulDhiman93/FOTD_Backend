@@ -89,7 +89,8 @@ const modules = {
     getPendingFacts  : true,
     approveFact      : true,
     getFactsV2       : true,
-    getTodaysFactOpen: true
+    getTodaysFactOpen: true,
+    addBulkFacts     : true
   },
   feedback : {
     addFeedback: true

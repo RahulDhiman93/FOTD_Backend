@@ -21,6 +21,7 @@ exports.getPendingFacts   = getPendingFacts;
 exports.approveFact       = approveFact;
 exports.getFactsV2        = getFactsV2;
 exports.getTodaysFactOpen = getTodaysFactOpen;
+exports.addBulkFacts      = addBulkFacts;
 
 function checkAppVersion(req,res,next){
     req.apiReference = {
@@ -260,6 +261,22 @@ function getTodaysFactOpen(req,res,next){
     }).unknown(true);
     let validFields = validator.validateFields(req.apiReference, req.headers, res, schema);
     if (validFields) {
+        next();
+    }
+}
+
+function addBulkFacts(req, res, next) {
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "addBulkFacts"
+    };
+
+    let schema = Joi.object().keys({
+        facts: Joi.array().items(),
+        date: Joi.string().required()
+    });
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if(validFields) {
         next();
     }
 }

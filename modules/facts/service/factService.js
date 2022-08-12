@@ -15,6 +15,8 @@ exports.addFact                    = addFact;
 exports.getAppConfig               = getAppConfig;
 exports.getUserFactCountWithStatus = getUserFactCountWithStatus;
 exports.updateFact                 = updateFact;
+exports.addBulkFacts               = addBulkFacts;
+exports.getFactsForBulk            = getFactsForBulk;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -244,6 +246,39 @@ async function getUserFactCountWithStatus(apiReference, {user_id}){
         return await dbHandler.executeQuery(apiReference, "getUserFactCountWithStatus", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getUserFactCountWithStatus", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function addBulkFacts(apiReference, opts) {
+    try{
+        let facts = opts.facts;
+        let momentDate = opts.startDate;
+        let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp) 
+        VALUES `;
+
+        facts.forEach((fact, index) => {
+            let tempDate = momentDate.add(1, 'days');
+            sqlQuery += `(1, 0, '${fact}', 2, '${tempDate.format("YYYY-MM-DD")}')`;
+            if(index < facts.length-1) sqlQuery += `,`
+        })
+        
+        sqlQuery += ';'
+        console.log(sqlQuery);
+        return await dbHandler.executeQuery(apiReference, "addBulkFacts", sqlQuery);
+    }catch(error) {
+        logging.logError(apiReference, {EVENT:"addBulkFacts", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getFactsForBulk(apiReference){
+    try{
+        let sql = `SELECT * FROM tb_facts ORDER BY fact_stamp DESC LIMIT 1`;
+        let result = await dbHandler.executeQuery(apiReference, "getFacts", sql);
+        return result;
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getFacts", ERROR : error.toString()});
         throw(error);
     }
 }

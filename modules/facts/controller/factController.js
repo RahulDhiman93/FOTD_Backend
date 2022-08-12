@@ -23,6 +23,7 @@ exports.getUserAddedfact = getUserAddedfact;
 exports.getPendingFacts  = getPendingFacts;
 exports.approveFact      = approveFact;
 exports.getFactsV2       = getFactsV2;
+exports.addBulkFacts     = addBulkFacts;
 
 async function checkAppVersion(req, res){
     try{
@@ -459,6 +460,28 @@ async function getFactsV2(req, res){
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getFactsV2", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function addBulkFacts(req, res) {
+    try {
+        let apiReference = req.apiReference;
+        let facts = req.body.facts;
+        let startDate = req.body.date;
+        let formattedDate = moment(startDate);
+        let last_fact_date = await factService.getFactsForBulk(apiReference);
+        let response = {};
+
+        if(!_.isEmpty(last_fact_date) && last_fact_date[0].fact_stamp >= moment(formattedDate)) {
+            response.lastFactDate = moment(last_fact_date[0].fact_stamp).format("YYYY-MM-DD");
+            return responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+        }
+        
+        await factService.addBulkFacts(apiReference, { facts, startDate: moment(startDate) });
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error) {
+        logging.logError(req.apiReference, {EVENT : "addBulkFacts", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

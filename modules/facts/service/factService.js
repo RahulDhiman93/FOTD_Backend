@@ -255,7 +255,7 @@ async function addBulkFacts(apiReference, opts) {
         let facts = opts.facts;
         let formattedDate = opts.startDate;
         let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp) VALUES `;
-        
+
         let tempDate = formattedDate;
 
         facts.forEach((fact, index) => {
@@ -265,7 +265,6 @@ async function addBulkFacts(apiReference, opts) {
         })
         
         sqlQuery += ';'
-        console.log(sqlQuery);
         return await dbHandler.executeQuery(apiReference, "addBulkFacts", sqlQuery);
     }catch(error) {
         logging.logError(apiReference, {EVENT:"addBulkFacts", ERROR : error.toString()});

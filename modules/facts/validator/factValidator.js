@@ -272,7 +272,7 @@ function addBulkFacts(req, res, next) {
     };
 
     let schema = Joi.object().keys({
-        facts: Joi.array().items(),
+        facts: Joi.array().items().min(1).required(),
         date: Joi.string().required()
     });
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);

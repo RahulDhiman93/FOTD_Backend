@@ -253,13 +253,14 @@ async function getUserFactCountWithStatus(apiReference, {user_id}){
 async function addBulkFacts(apiReference, opts) {
     try{
         let facts = opts.facts;
-        let momentDate = opts.startDate;
-        let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp) 
-        VALUES `;
+        let formattedDate = opts.startDate;
+        let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp) VALUES `;
+        
+        let tempDate = formattedDate;
 
         facts.forEach((fact, index) => {
-            let tempDate = momentDate.add(1, 'days');
             sqlQuery += `(1, 0, '${fact}', 2, '${tempDate.format("YYYY-MM-DD")}')`;
+            tempDate = formattedDate.add(1, 'days');
             if(index < facts.length-1) sqlQuery += `,`
         })
         

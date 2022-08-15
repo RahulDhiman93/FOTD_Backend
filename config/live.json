@@ -1,13 +1,13 @@
 {
   "PORT": 8000,
   "databaseSettings": {
-    "host"    : "159.65.145.163",
+    "host"    : "localhost",
     "user"    : "root",
     "password": "R@hul!234Dhiman",
     "database": "FOTD"
   },
   "slaveDatabaseSettings": {
-    "host"    : "159.65.145.163",
+    "host"    : "localhost",
     "user"    : "root",
     "password": "R@hul!234Dhiman",
     "database": "FOTD"

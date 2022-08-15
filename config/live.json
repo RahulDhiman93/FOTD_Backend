@@ -4,13 +4,15 @@
     "host"    : "159.65.145.163",
     "user"    : "root",
     "password": "R@hul!234Dhiman",
-    "database": "FOTD"
+    "database": "FOTD",
+    "PORT":8000
   },
   "slaveDatabaseSettings": {
     "host"    : "159.65.145.163",
     "user"    : "root",
     "password": "R@hul!234Dhiman",
-    "database": "FOTD"
+    "database": "FOTD",
+    "PORT":8000
   },
   "s3BucketCredentials": {
     "bucket"         : "bucket",

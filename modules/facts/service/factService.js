@@ -110,7 +110,7 @@ async function getFacts(apiReference, opts){
 async function addFactLike(apiReference, {fact_id, status, user_id}){
     try{
         let sql     = `INSERT INTO tb_fact_likes SET ? ON DUPLICATE KEY UPDATE status = ? `;
-        let values  = [{fact_id, status, user_id}, status];
+        let values  = [{fact_id, user_id, status}, status];
         
         return await dbHandler.executeQuery(apiReference, "addFactLike", sql, values);
     }catch(error){

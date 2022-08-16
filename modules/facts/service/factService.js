@@ -111,8 +111,8 @@ async function addFactLike(apiReference, {fact_id, status, user_id}){
     try{
         console.log("USER ID FOR LIKE/DISLIKE");
         console.log(user_id);
-        let sql     = `INSERT INTO tb_fact_likes SET ? ON DUPLICATE KEY UPDATE status = ? `;
-        let values  = [{fact_id, status, user_id}, status];
+        let sql     = `INSERT INTO tb_fact_likes SET ? ON DUPLICATE KEY UPDATE status = ? WHERE user_id = ?`;
+        let values  = [{fact_id, status, user_id}, status, user_id];
         
         return await dbHandler.executeQuery(apiReference, "addFactLike", sql, values);
     }catch(error){

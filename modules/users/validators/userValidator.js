@@ -45,6 +45,7 @@ function register(req,res,next){
       email        : Joi.string().required(),
       name         : Joi.string().required(),
       password     : Joi.string().required(),
+      is_guest     : Joi.number().optional(),
       device_token : Joi.string().optional(),
       device_type  : Joi.number().optional(),
       device_name  : Joi.string().optional(),

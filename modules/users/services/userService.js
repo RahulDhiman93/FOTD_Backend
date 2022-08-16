@@ -13,7 +13,7 @@ exports.updateUser             = updateUser;
 exports.getUserInfoResponseObj = getUserInfoResponseObj;
 exports.getApiKeyUser          = getApiKeyUser;
 
-async function addUser(apiReference, {name, password, email, access_token, is_guest, timezone, timezone_info, signup_from=null}){
+async function addUser(apiReference, {name, password, email, access_token, is_guest , timezone, timezone_info, signup_from=null}){
     try{
         let sql       = "INSERT INTO tb_users SET ? ";
         let insertObj = {name, password, email, access_token, is_guest, timezone, timezone_info, signup_from};

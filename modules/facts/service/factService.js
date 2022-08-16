@@ -259,7 +259,7 @@ async function addBulkFacts(apiReference, opts) {
         let tempDate = formattedDate;
 
         facts.forEach((fact, index) => {
-            sqlQuery += `(1, 0, '${fact}', 2, '${tempDate.format("YYYY-MM-DD")}')`;
+            sqlQuery += `(1, 0, '${fact}', 1, '${tempDate.format("YYYY-MM-DD")}')`;
             tempDate = formattedDate.add(1, 'days');
             if(index < facts.length-1) sqlQuery += `,`
         })

@@ -104,6 +104,8 @@ async function likeFact(req, res){
         let status   = req.body.status;
         let fact_id  = req.body.fact_id;
         let user_id  = req.body.user_id;
+        console.log("USER ID FOR LIKE/DISLIKE");
+        console.log(user_id);
         let response = {like_count : 0, dislike_count : 0};
        await factService.addFactLike(req.apiReference, {status, fact_id, user_id});
        let factInfo = await factService.getFacts(req.apiReference, {fact_id, columns : " minimum_like_count, minimum_dislike_count "});

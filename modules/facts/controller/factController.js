@@ -195,8 +195,7 @@ async function getFavoriteFacts(req, res){
             inner_join_favourite: 1,
             columns             : " tbf.*, IFNULL(tfl.status, 2) as like_status, IFNULL(tuff.status,0) as fav_status ",
             limit               : limit,
-            skip                : skip,
-            order_by            : " ORDER BY tuff.id DESC "
+            skip                : skip
         });
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){

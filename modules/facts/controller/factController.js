@@ -9,6 +9,7 @@ const constants           = require("./../../../properties/constants");
 const logging             = require("./../../../logging/logging");
 const factService         = require("./../service/factService");
 const notificationService = require("../../notification/service/notificationService");
+const userServices        = require("../../users/services/userService");
 
 exports.checkAppVersion  = checkAppVersion;
 exports.getTodaysFact    = getTodaysFact;
@@ -377,6 +378,12 @@ async function approveFact(req, res){
         if(!_.isEmpty(factDetail)){
             let user_id = factDetail[0].user_id;
             await factService.updateFact(req.apiReference, {fact_status}, {fact_id});
+            let userDetails = await userServices.getUser(req.apiReference, { user_id });
+            await userServices.updateUser(req.apiReference, {
+                reward_points: parseInt(userDetails[0].reward_points) + constants.REWARD_POINT.FACT_APPROVED 
+            }, {
+                user_id: user_id
+            });
             if(user_id && fact_status == constants.FACT_STATUS.APPROVED){
                 notificationService.sendPushesToUser(req.apiReference, user_id, "Fact Approved!!", "Hey!! Your fact just got approved");
             }

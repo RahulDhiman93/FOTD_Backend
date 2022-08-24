@@ -87,6 +87,7 @@ async function updateUser(apiReference, updates, {user_id, email}){
         updates.hasOwnProperty("timezone")            ? updateObj.timezone             = updates.timezone             : 0;
         updates.hasOwnProperty("timezone_info")       ? updateObj.timezone_info        = updates.timezone_info        : 0;
         updates.hasOwnProperty("last_login")          ? updateObj.last_login           = updates.last_login           : 0;
+        updates.hasOwnProperty("reward_points")       ? updateObj.reward               = updates.reward_points        : 0;
         values.push(updateObj);
 
         if(user_id){

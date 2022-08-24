@@ -116,3 +116,8 @@ exports.AVATAR = [
   "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_5.png?alt=media&token=a07301ed-df38-49b4-8245-3f6f0a9bc03b",
   "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/userAvatars%2FAvatar_6.png?alt=media&token=c88578e5-0225-4ccc-ab30-a301176a90c3",
 ]
+
+exports.REWARD_POINT = {
+  FACT_APPROVED: 5,
+  FACT_LIKE    : 1
+}

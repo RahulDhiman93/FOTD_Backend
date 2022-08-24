@@ -63,12 +63,14 @@ async function getFacts(apiReference, opts){
             sql+= ` LEFT JOIN tb_users tu ON tu.user_id = tbf.user_id `;
         }
         
-        if(opts.hasOwnProperty("fact_status")){
-            sql+= " WHERE tbf.fact_status = ? ";
-            values.push(opts.fact_status);
-        }else{
-            sql+= " WHERE tbf.fact_status = 1 ";
-        }
+        // if(opts.hasOwnProperty("fact_status")){
+        //     sql+= " WHERE tbf.fact_status = ? ";
+        //     values.push(opts.fact_status);
+        // }else{
+        //     sql+= " WHERE tbf.fact_status = 1 ";
+        // }
+
+        sql+= " WHERE 1=1 ";
 
         if(opts.fact_stamp){
             sql+= " AND tbf.fact_stamp = ? ";

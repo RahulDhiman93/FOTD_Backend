@@ -374,14 +374,21 @@ async function approveFact(req, res){
         let fact_status = req.body.status;
         let fact_id     = req.body.fact_id;
 
-        let factDetail = await factService.getFacts(req.apiReference, {fact_id : fact_id, fact_status : constants.FACT_STATUS.PENDING});
+        let factDetail = await factService.getFacts(req.apiReference, { fact_id });
         if(!_.isEmpty(factDetail)){
             let user_id = factDetail[0].user_id;
             await factService.updateFact(req.apiReference, {fact_status}, {fact_id});
             let userDetails = await userServices.getUser(req.apiReference, { user_id });
-            console.log(userDetails);
+            let points;
+            if (factDetail[0].fact_status == constants.FACT_STATUS.PENDING && fact_status == constants.FACT_STATUS.APPROVED) {
+                points = constants.REWARD_POINT.FACT_APPROVED;
+            }else if (factDetail[0].fact_status == constants.FACT_STATUS.APPROVED && fact_status == constants.FACT_STATUS.REJECTED) {
+                points = constants.REWARD_POINT.FACT_REJECTED;
+            }else {
+                points = 0;
+            }
             await userServices.updateUser(req.apiReference, {
-                reward_points: parseInt(userDetails[0].reward_points) + constants.REWARD_POINT.FACT_APPROVED 
+                reward_points: parseInt(userDetails[0].reward_points) + points
             }, {
                 user_id: user_id
             });

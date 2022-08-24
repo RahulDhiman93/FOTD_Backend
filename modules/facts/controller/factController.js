@@ -379,6 +379,7 @@ async function approveFact(req, res){
             let user_id = factDetail[0].user_id;
             await factService.updateFact(req.apiReference, {fact_status}, {fact_id});
             let userDetails = await userServices.getUser(req.apiReference, { user_id });
+            console.log(userDetails);
             await userServices.updateUser(req.apiReference, {
                 reward_points: parseInt(userDetails[0].reward_points) + constants.REWARD_POINT.FACT_APPROVED 
             }, {

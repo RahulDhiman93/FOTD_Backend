@@ -257,6 +257,8 @@ async function getFeaturedFact(req, res){
         };
         let obj = {};
 
+        let fact_status = 1;
+
         let featured = await factService.getFacts(req.apiReference, {
             join_user     : 1,
             columns       : ` tbf.*, tbf.creation_datetime AS added_on ,IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, '${constants.DEFAULT_USER_IMAGE}') AS user_image, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status `,
@@ -266,7 +268,8 @@ async function getFeaturedFact(req, res){
             join_likes    : 1,
             join_favourite: 1,
             user_id       : user_id,
-            order_by      : " ORDER BY tbf.update_datetime DESC "
+            order_by      : " ORDER BY tbf.update_datetime DESC ",
+            fact_status
         });
 
         response.featured = featured;

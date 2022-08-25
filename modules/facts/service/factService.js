@@ -72,6 +72,11 @@ async function getFacts(apiReference, opts){
 
         sql+= " WHERE 1=1 ";
 
+        if(opts.fact_status) {
+            sql+= " AND tbf.fact_status = ? ";
+            values.push(opts.fact_status);
+        }
+
         if(opts.fact_stamp){
             sql+= " AND tbf.fact_stamp = ? ";
             values.push(opts.fact_stamp);

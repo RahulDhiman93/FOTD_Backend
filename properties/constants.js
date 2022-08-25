@@ -119,5 +119,6 @@ exports.AVATAR = [
 
 exports.REWARD_POINT = {
   FACT_APPROVED: 5,
+  FACT_REJECTED: -5,
   FACT_LIKE    : 1
 }

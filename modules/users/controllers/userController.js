@@ -60,7 +60,7 @@ async function register(req, res){
         let encrypted_password = accessTokenUtility.encrypt(password);
         let access_token       = accessTokenUtility.generateAccessToken();
 
-        let is_guest           = req.body.is_guest;
+        let is_guest           = req.body.is_guest || 0;
         let device_token       = req.body.device_token;
         let device_name        = req.body.device_name;
         let device_type        = req.body.device_type;

@@ -21,3 +21,4 @@ app.post("/user/verifyOtp",           userValidators.verifyOtp,           userCo
 app.post("/user/logout",              userValidators.logOut,         auth.authenticateUser, userControllers.logOut);
 app.post("/user/editProfile",         multer.single('file'),         userValidators.editProfile,    auth.authenticateUser, userControllers.editProfile);
 app.post("/user/changePassword",      userValidators.changePassword,    auth.authenticateUser, userControllers.changePassword);
+app.get("/getAllUsers",               userControllers.getAllUsers);

@@ -483,8 +483,8 @@ async function getFactsV2(req, res){
                 obj[fact_id].dislike_count = factLikes[i].dislike_count + obj[fact_id].minimum_dislike_count || 0;
             }
         }
-        logging.log(apiReference, { EVENT : "response: " + response });
-        console.error("response: ", response);
+        logging.logError(req.apiReference, { EVENT : "response: " + response });
+        // console.error("response: ", response);
         response.facts = facts;
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){

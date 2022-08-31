@@ -461,7 +461,7 @@ async function getFactsV2(req, res){
             } else {
                 facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
             }
-            logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_id[i]:", fact_id1: fact_id[i] });
+            logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_id[i]:", fact_id1: facts[i].fact_id });
             // console.error("fact_id[i]: ", facts[i]);
             obj[facts[i].fact_id] = facts[i];
             fact_ids.push(facts[i].fact_id);

@@ -31,6 +31,7 @@ function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_toke
 			to  : device_token,
 			data: pushObj
 		}
+		logging.logError(apiReference, { EVENT: "sendAndroidPushNotification userDevices", message });
 
 		fcm.send(message, function (err, response) {
 			if (err) {
@@ -127,6 +128,8 @@ async function sendPushesToUser(apiReference, user_id, title, body){
 				message: body,
 				title  : title
 			}
+			logging.logError(apiReference, { EVENT: "sendPushesToUser androidPushObj", androidPushObj });
+			logging.logError(apiReference, { EVENT: "sendPushesToUser userDevices", userDevices });
 			for(let count = 0; count< userDevices.length; count++){
 					let temp = userDevices[count];
 					if(temp.device_type == constants.DEVICE_TYPE.IOS){

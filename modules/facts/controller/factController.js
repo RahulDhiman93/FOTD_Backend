@@ -447,8 +447,8 @@ async function getFactsV2(req, res){
             facts = await factService.getFacts(req.apiReference, opts);
         }
 
-        logging.log(apiReference, { EVENT : "facts: " + facts });
-        console.error("facts: ", facts);
+        logging.logError(req.apiReference, {EVENT : "getFactsV2 facts", facts });
+        // console.error("facts: ", facts);
 
         for (let i = 0; i < facts.length; i++) {
             facts[i].added_on = facts[i].creation_datetime;
@@ -461,16 +461,16 @@ async function getFactsV2(req, res){
             } else {
                 facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
             }
-            logging.log(apiReference, { EVENT : "fact_id[i]: " + facts[i] });
-            console.error("fact_id[i]: ", facts[i]);
+            logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_id[i]:", fact_id1: fact_id[i] });
+            // console.error("fact_id[i]: ", facts[i]);
             obj[facts[i].fact_id] = facts[i];
             fact_ids.push(facts[i].fact_id);
         }
 
-        logging.log(apiReference, { EVENT : "obj: " + obj });
-        console.error("obj: ", obj);
-        logging.log(apiReference, { EVENT : "fact_ids: " + fact_ids });
-        console.error("fact_ids: ", fact_ids);
+        logging.logError(req.apiReference, {EVENT : "getFactsV2 obj:", obj });
+        // console.error("obj: ", obj);
+        logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_ids:", fact_ids });
+        // console.error("fact_ids: ", fact_ids);
 
         if(fact_ids.length){
             let factLikes = await factService.getFactLikeCount(req.apiReference, {fact_id : fact_ids, group_by : " GROUP BY fact_id"});

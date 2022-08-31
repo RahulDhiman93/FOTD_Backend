@@ -12,6 +12,7 @@ exports.getUser                = getUser;
 exports.updateUser             = updateUser;
 exports.getUserInfoResponseObj = getUserInfoResponseObj;
 exports.getApiKeyUser          = getApiKeyUser;
+exports.getAllUsers            = getAllUsers;
 
 async function addUser(apiReference, {name, password, email, access_token, is_guest , timezone, timezone_info, signup_from=null}){
     try{
@@ -140,6 +141,16 @@ async function getApiKeyUser(apiReference, {api_key, columns}){
         return await dbHandler.executeQuery(apiReference, "getApiKeyUser", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getApiKeyUser", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getAllUsers(apiReference){
+    try{
+        let sql     = `SELECT * FROM tb_users ORDER BY user_id DESC`;
+        return await dbHandler.executeQuery(apiReference, "getAllUsers", sql);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getAllUsers", ERROR : error.toString()});
         throw(error);
     }
 }

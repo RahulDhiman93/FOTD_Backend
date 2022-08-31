@@ -153,9 +153,11 @@ async function getFacts(req, res){
             skip     : skip,
             order_by : " ORDER BY tbf.fact_id DESC "
         }
+        console.log("opts: ", opts);
         if(search_string){
             opts.search_string = search_string;
             response.facts = await factService.searchFacts(req.apiReference, opts);
+            console.log("response.facts: ", response.facts);
         }else{
             opts.join_likes     = 1;
             opts.join_favourite = 1;

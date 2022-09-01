@@ -17,6 +17,7 @@ exports.getUserFactCountWithStatus = getUserFactCountWithStatus;
 exports.updateFact                 = updateFact;
 exports.addBulkFacts               = addBulkFacts;
 exports.getFactsForBulk            = getFactsForBulk;
+exports.getAllFacts                = getAllFacts;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -287,6 +288,16 @@ async function getFactsForBulk(apiReference){
         return result;
     }catch(error){
         logging.logError(apiReference, {EVENT:"getFacts", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getAllFacts(apiReference){
+    try{
+        let sql     = `SELECT * FROM tb_facts ORDER BY fact_id  DESC`;
+        return await dbHandler.executeQuery(apiReference, "getAllFacts", sql);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getAllFacts", ERROR : error.toString()});
         throw(error);
     }
 }

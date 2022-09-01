@@ -25,6 +25,7 @@ exports.getPendingFacts  = getPendingFacts;
 exports.approveFact      = approveFact;
 exports.getFactsV2       = getFactsV2;
 exports.addBulkFacts     = addBulkFacts;
+exports.getAllFacts      = getAllFacts;
 
 async function checkAppVersion(req, res){
     try{
@@ -513,6 +514,20 @@ async function addBulkFacts(req, res) {
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error) {
         logging.logError(req.apiReference, {EVENT : "addBulkFacts", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function getAllFacts(req, res){
+    try{
+        req.apiReference = {
+            module: "Facts",
+            api   : "getAllFacts"
+        };
+        let response = await factService.getAllFacts(req.apiReference);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "getAllFacts", ERROR : error, STACK : error.stack});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

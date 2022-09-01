@@ -22,4 +22,4 @@ app.post('/fact/approve',         factValidator.approveFact,        factControll
 app.get('/fact/v2/get',           factValidator.getFactsV2,         auth.authenticateUser, factController.getFactsV2);
 app.post('/open/fact/today',      factValidator.getTodaysFactOpen,  auth.authenticateOpenApis, factController.getTodaysFact);
 app.post('/fact/addBulkFacts',    factValidator.addBulkFacts,       factController.addBulkFacts);
-app.get('/getAllFacts',           factController.getFactsV2);
+app.get('/getAllFacts',           factController.getAllFacts);

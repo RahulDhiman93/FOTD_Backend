@@ -246,7 +246,7 @@ async function getAllUsers(req, res){
             api   : "getAllUsers"
         };
         let response = await userService.getAllUsers(req.apiReference);
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getAllUsers", ERROR : error, STACK : error.stack});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

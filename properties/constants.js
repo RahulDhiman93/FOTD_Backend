@@ -76,8 +76,8 @@ exports.pathToPem = "/root/node-app/pem/FOTD.pem";
 exports.FCM_KEY = "AAAAECEfq1A:APA91bG2TqwxhC2cXfwZF-jkJwh-IAbqR0A_EUJrde8hao1d1MpWta22oM1u84yYSDvJovKmjBn1YHN8ydn4cpw0Jkh9sRpi8nlybrKzsSf8zdDo42BzPkxXYokWZAjWf92HMoqPEG_b";
 
 exports.FOTP_DISPLAY_NAME = "official@factoftheday.in";
-exports.FOTP_DISPLAY_ICON = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Ffotd_placeholder.png?alt=media&token=cb60987d-cb02-4c0a-ad93-7216f06c8f54");
-exports.DEFAULT_USER_IMAGE = encodeURIComponent("https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Fprofile_placeholder.png?alt=media&token=3be2458b-8f08-4b76-808c-5ea8d10b8e2b");
+exports.FOTP_DISPLAY_ICON = "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Ffotd_placeholder.png?alt=media&token=cb60987d-cb02-4c0a-ad93-7216f06c8f54";
+exports.DEFAULT_USER_IMAGE = "https://firebasestorage.googleapis.com/v0/b/fotd-60e29.appspot.com/o/Documents%2Fprofile_placeholder.png?alt=media&token=3be2458b-8f08-4b76-808c-5ea8d10b8e2b";
 
 exports.CLOUD_CREDS = {
   PROJECT_ID           : "fotd-60e29",

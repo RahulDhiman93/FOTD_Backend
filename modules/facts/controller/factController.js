@@ -450,9 +450,6 @@ async function getFactsV2(req, res){
             facts = await factService.getFacts(req.apiReference, opts);
         }
 
-        logging.logError(req.apiReference, {EVENT : "getFactsV2 facts", facts });
-        // console.error("facts: ", facts);
-
         for (let i = 0; i < facts.length; i++) {
             facts[i].added_on = facts[i].creation_datetime;
             facts[i].like_count = facts[i].minimum_like_count;
@@ -464,16 +461,9 @@ async function getFactsV2(req, res){
             } else {
                 facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
             }
-            logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_id[i]:", fact_id1: facts[i].fact_id });
-            // console.error("fact_id[i]: ", facts[i]);
             obj[facts[i].fact_id] = facts[i];
             fact_ids.push(facts[i].fact_id);
         }
-
-        logging.logError(req.apiReference, {EVENT : "getFactsV2 obj:", obj });
-        // console.error("obj: ", obj);
-        logging.logError(req.apiReference, {EVENT : "getFactsV2 fact_ids:", fact_ids });
-        // console.error("fact_ids: ", fact_ids);
 
         if(fact_ids.length){
             let factLikes = await factService.getFactLikeCount(req.apiReference, {fact_id : fact_ids, group_by : " GROUP BY fact_id"});
@@ -486,8 +476,6 @@ async function getFactsV2(req, res){
                 obj[fact_id].dislike_count = factLikes[i].dislike_count + obj[fact_id].minimum_dislike_count || 0;
             }
         }
-        logging.logError(req.apiReference, { EVENT : "response: " + response });
-        // console.error("response: ", response);
         response.facts = facts;
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){

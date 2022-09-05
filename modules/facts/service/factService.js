@@ -191,7 +191,6 @@ async function searchFacts(apiReference, opts){
         if(opts.limit != null && opts.skip != null){
             sql+= ` LIMIT ${opts.skip}, ${opts.limit} `;
         }
-        console.log("sql: ", sql);
         return await dbHandler.executeQuery(apiReference, "searchFacts", sql, []);
     }catch(error){
         logging.logError(apiReference, {EVENT:"searchFacts", ERROR : error});

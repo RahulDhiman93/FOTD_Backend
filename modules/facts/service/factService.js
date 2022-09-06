@@ -44,6 +44,7 @@ async function getAppConfig(apiReference,){
 
 async function getFacts(apiReference, opts){
     try{
+        console.log("OPTS: ", opts);
         opts.columns     = opts.columns || "*";
         let sql     = `SELECT ${opts.columns} FROM tb_facts tbf`;
         let values  = [];
@@ -74,6 +75,7 @@ async function getFacts(apiReference, opts){
         sql+= " WHERE 1=1 ";
 
         if(opts.fact_status) {
+            console.log("opts.fact_status: ", opts.fact_status);
             sql+= " AND tbf.fact_status = ? ";
             values.push(opts.fact_status);
         }
@@ -89,6 +91,7 @@ async function getFacts(apiReference, opts){
         }
 
         if(opts.fact_type){
+            console.log("opts.fact_type: ", opts.fact_type);
             sql+= " AND tbf.fact_type = ? ";
             values.push(opts.fact_type);
         }
@@ -105,6 +108,7 @@ async function getFacts(apiReference, opts){
         if(opts.limit != null && opts.skip != null){
             sql+= ` LIMIT ${opts.skip}, ${opts.limit} `;
         }
+        console.log("values: ", values);
 
         
         let result = await dbHandler.executeQuery(apiReference, "getFacts", sql, values);

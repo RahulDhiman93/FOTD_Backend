@@ -434,7 +434,8 @@ async function getFactsV2(req, res){
             limit    : limit,
             skip     : skip,
             join_user: 1,
-            order_by : " ORDER BY tbf.fact_id DESC "
+            order_by : " ORDER BY tbf.fact_id DESC ",
+            fact_status: 1
         }
         if(search_string){
             opts.search_string = search_string;

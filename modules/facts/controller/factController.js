@@ -264,7 +264,7 @@ async function getFeaturedFact(req, res){
 
         let featured = await factService.getFacts(req.apiReference, {
             join_user     : 1,
-            columns       : ` tbf.*, tbf.creation_datetime AS added_on ,IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, ${constants.DEFAULT_USER_IMAGE}) AS user_image, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status `,
+            columns       : ` tbf.*, tbf.creation_datetime AS added_on ,IFNULL(tu.name,'') as added_by, IFNULL(tu.profile_image, '${constants.DEFAULT_USER_IMAGE}') AS user_image, IFNULL(tfl.status, 2) as user_like_status, IFNULL(tuff.status,0) as user_fav_status `,
             fact_type     : constants.FACT_TYPE.USER_FACT,
             limit         : 10,
             skip          : 0,

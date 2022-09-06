@@ -272,7 +272,7 @@ async function getFeaturedFact(req, res){
             join_favourite: 1,
             user_id       : user_id,
             order_by      : " ORDER BY tbf.update_datetime DESC ",
-            fact_status   : 1
+            fact_status
         });
 
         response.featured = featured;

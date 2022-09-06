@@ -3,8 +3,8 @@
   "databaseSettings": {
     "host"    : "localhost",
     "user"    : "root",
-    "password": "R@hul1234",
-    "database": "TestingDB"
+    "password": "",
+    "database": "FOTD"
   },
   "slaveDatabaseSettings": {
     "host"    : "localhost",

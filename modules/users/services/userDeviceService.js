@@ -78,7 +78,7 @@ async function getUserDevicesForBulk(apiReference, opts){
         sql+= " WHERE 1=1 ";
 
         if(opts.user_ids){
-            sql+= " AND user_id IN (?) ";
+            sql+= " AND tu.user_id IN (?) ";
             values.push(opts.user_ids);
         }
 

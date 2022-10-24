@@ -146,7 +146,7 @@ async function sendPushesToUser(apiReference, user_id, title, body){
 
 async function sendPushesToUserForBulk(apiReference, user_ids, title, body){
 	try{
-			let userDevices = await userDeviceService.getUserDevicsForBulk(apiReference, {user_ids, is_active : 1, notification_enabled : 1, inner_join_users : 1});
+			let userDevices = await userDeviceService.getUserDevicesForBulk(apiReference, {user_ids, is_active : 1, notification_enabled : 1, inner_join_users : 1});
 			let ios_devices = [];
 			let androidPushObj = {
 				message: body,

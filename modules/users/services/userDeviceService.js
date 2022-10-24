@@ -8,6 +8,7 @@ const logging   = require("./../../../logging/logging");
 exports.addUserDevice    = addUserDevice;
 exports.getUserDevice    = getUserDevice;
 exports.updateUserDevice = updateUserDevice;
+exports.getUserDevicesForBulk = getUserDevicesForBulk;
 
 async function addUserDevice(apiReference, {user_id, device_type, device_token, device_name, is_active}){
     try{
@@ -37,6 +38,48 @@ async function getUserDevice(apiReference, opts){
         if(opts.user_id){
             sql+= " AND tud.user_id = ? ";
             values.push(opts.user_id);
+        }
+
+        if(opts.device_token){
+            sql+= " AND tud.device_token = ? ";
+            values.push(opts.device_token);
+        }
+
+        if(opts.is_active == 0 || opts.is_active == 1){
+            sql+= " AND tud.is_active = ? ";
+            values.push(opts.is_active);
+        }
+
+        if(opts.hasOwnProperty("timezone")){
+            sql+= " AND tu.timezone = ? ";
+            values.push(opts.timezone);
+        }
+
+        if(opts.hasOwnProperty("notification_enabled")){
+            sql+= " AND tu.notification_enabled = ? ";
+            values.push(opts.notification_enabled);
+        }
+        return await dbHandler.executeQuery(apiReference, "getUserDevice", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getUserDevice", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getUserDevicesForBulk(apiReference, opts){
+    try{
+        let values   = [];
+        opts.columns = opts.columns || "*";
+        let sql      = `SELECT ${opts.columns} FROM tb_user_devices tud `;
+
+        if(opts.inner_join_users){
+            sql+= " INNER JOIN tb_users tu ON tud.user_id = tu.user_id ";
+        }
+        sql+= " WHERE 1=1 ";
+
+        if(opts.user_ids){
+            sql+= " AND user_id IN (?) ";
+            values.push(opts.user_ids);
         }
 
         if(opts.device_token){

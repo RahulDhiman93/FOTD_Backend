@@ -18,6 +18,7 @@ exports.sendPushesToUser      = sendPushesToUser;
 exports.sendDailyFactPush     = sendDailyFactPush;
 exports.scheduleNotification  = scheduleNotification;
 exports.sendEmailNotification = sendEmailNotification;
+exports.sendPushesToUserForBulk = sendPushesToUserForBulk;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {
@@ -122,6 +123,30 @@ function sendIosPushNotification(apiReference, iosDeviceToken, pushMessage, payl
 async function sendPushesToUser(apiReference, user_id, title, body){
 	try{
 			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1, notification_enabled : 1, inner_join_users : 1});
+			let ios_devices = [];
+			let androidPushObj = {
+				message: body,
+				title  : title
+			}
+			for(let count = 0; count< userDevices.length; count++){
+					let temp = userDevices[count];
+					if(temp.device_type == constants.DEVICE_TYPE.IOS){
+						ios_devices.push(temp.device_token);
+						continue;
+					}
+					sendAndroidPushNotification(apiReference, androidPushObj, null, temp.device_token);
+			}
+			if(ios_devices.length){
+				sendIosPushNotification(apiReference, ios_devices, { "title": title, "body": body }, { "title": title, "body": body });
+			}
+	}catch(error){
+		logging.logError(apiReference, {EVENT: "sendPushesToUser", ERROR : error});
+	}
+}
+
+async function sendPushesToUserForBulk(apiReference, user_ids, title, body){
+	try{
+			let userDevices = await userDeviceService.getUserDevicsForBulk(apiReference, {user_ids, is_active : 1, notification_enabled : 1, inner_join_users : 1});
 			let ios_devices = [];
 			let androidPushObj = {
 				message: body,

@@ -31,10 +31,8 @@ async function sendNotificationForBulk(req, res){
         let title   = req.body.title;
         let body    = req.body.body;
 
-        for (let i = 0; i < user_ids.length; i++) {
-            notificationService.sendPushesToUser(req.apiReference, user_ids[i], title, body);
-            responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
-        }
+        notificationService.sendPushesToUserForBulk(req.apiReference, user_ids, title, body);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "sendNotification", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

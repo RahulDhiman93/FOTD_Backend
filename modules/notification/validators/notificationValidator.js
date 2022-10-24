@@ -27,6 +27,23 @@ function sendNotification(req,res,next){
     }
 }
 
+function sendNotificationForBulk(req,res,next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "sendNotification"
+    };
+    
+    let schema = Joi.object().keys({
+      user_ids : Joi.array().items(Joi.number()).optional(),
+      title    : Joi.string().required(),
+      body     : Joi.string().required()
+    });
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
 function sendEmailNotification(req,res,next){
     req.apiReference = {
         module: apiReferenceModule,

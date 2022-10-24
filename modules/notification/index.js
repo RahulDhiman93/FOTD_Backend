@@ -7,4 +7,5 @@ const notificationValidators  = require("./validators/notificationValidator");
 // const auth                    = require("./../../auth/authentication");
 
 app.post("/notification/send",      notificationValidators.sendNotification, notificationControllers.sendNotification);
+app.post("/notification/bulkSend",  notificationValidators.sendNotificationForBulk, notificationControllers.sendNotificationForBulk);
 app.post("/notification/sendEmail", notificationValidators.sendEmailNotification, notificationControllers.sendEmailNotification);

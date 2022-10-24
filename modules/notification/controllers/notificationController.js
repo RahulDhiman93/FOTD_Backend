@@ -30,7 +30,7 @@ async function sendNotificationForBulk(req, res){
         let user_ids = req.body.user_ids;
         let title   = req.body.title;
         let body    = req.body.body;
-
+        
         notificationService.sendPushesToUser(req.apiReference, user_ids, title, body);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){

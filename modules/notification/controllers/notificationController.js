@@ -9,6 +9,7 @@ const userService         = require("./../../users/services/userService");
 
 exports.sendNotification      = sendNotification;
 exports.sendEmailNotification = sendEmailNotification;
+exports.sendNotificationForBulk = sendNotificationForBulk;
 
 async function sendNotification(req, res){
     try{

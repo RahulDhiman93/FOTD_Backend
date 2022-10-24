@@ -9,6 +9,7 @@ const validator               = require("./../../../validators/validator");
 
 exports.sendNotification      = sendNotification;
 exports.sendEmailNotification = sendEmailNotification;
+exports.sendNotificationForBulk = sendNotificationForBulk;
 
 function sendNotification(req,res,next){
     req.apiReference = {
@@ -30,7 +31,7 @@ function sendNotification(req,res,next){
 function sendNotificationForBulk(req,res,next){
     req.apiReference = {
         module: apiReferenceModule,
-        api   : "sendNotification"
+        api   : "sendNotificationForBulk"
     };
     
     let schema = Joi.object().keys({

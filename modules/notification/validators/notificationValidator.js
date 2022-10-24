@@ -41,7 +41,6 @@ function sendNotificationForBulk(req,res,next){
     });
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
     if (validFields) {
-        console.log("BULK NOTIFICATION VALIDATION SUCCESS -->");
         next();
     }
 }

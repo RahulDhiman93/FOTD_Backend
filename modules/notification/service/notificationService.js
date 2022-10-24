@@ -133,8 +133,6 @@ async function sendPushesToUser(apiReference, user_id, title, body){
 						ios_devices.push(temp.device_token);
 						continue;
 					}
-					console.log("ANDROID DEVICE PUSH COUNT -->");
-					console.log(userDevices[count]);
 					sendAndroidPushNotification(apiReference, androidPushObj, null, temp.device_token);
 			}
 			if(ios_devices.length){

@@ -246,9 +246,12 @@ async function getAllUsers(req, res){
             api   : "getAllUsers"
         };
         
-        let limit = req.body.limit;
-        let offset = req.body.offset;
-        
+        let limitParam = req.query.limit;
+        let offsetParam = req.query.offset;
+
+        let limit = limitParam == null ? 50 : limitParam;
+        let offset = offsetParam == null ? 0 : offsetParam;
+
         let response = await userService.getAllUsers(req.apiReference, limit, offset);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){

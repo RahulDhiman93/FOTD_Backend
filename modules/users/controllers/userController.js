@@ -245,7 +245,11 @@ async function getAllUsers(req, res){
             module: "Users",
             api   : "getAllUsers"
         };
-        let response = await userService.getAllUsers(req.apiReference);
+        
+        let limit = req.body.limit;
+        let offset = req.body.offset;
+        
+        let response = await userService.getAllUsers(req.apiReference, limit, offset);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getAllUsers", ERROR : error, STACK : error.stack});

@@ -513,7 +513,14 @@ async function getAllFacts(req, res){
             module: "Facts",
             api   : "getAllFacts"
         };
-        let response = await factService.getAllFacts(req.apiReference);
+
+        let limitParam = req.query.limit;
+        let offsetParam = req.query.offset;
+
+        let limit = limitParam == null ? 50 : limitParam;
+        let offset = offsetParam == null ? 0 : offsetParam;
+
+        let response = await factService.getAllFacts(req.apiReference, limit, offset);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getAllFacts", ERROR : error, STACK : error.stack});

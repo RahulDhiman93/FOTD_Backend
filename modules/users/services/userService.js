@@ -147,7 +147,7 @@ async function getApiKeyUser(apiReference, {api_key, columns}){
 
 async function getAllUsers(apiReference, limit, offset){
     try{
-        let sql     = `SELECT * FROM tb_users ORDER BY user_id DESC LIMIT ? OFFSET ?`;
+        let sql     = `SELECT * FROM tb_users ORDER BY user_id DESC ?`;
         let insertObj = {limit, offset}
         let values    = [insertObj];
         return await dbHandler.executeQuery(apiReference, "getAllUsers", sql, values);

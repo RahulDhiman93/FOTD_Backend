@@ -298,8 +298,8 @@ function calculateLikeDislike(opts) {
     let dislike_count_start = (opts.dislike_count - 20) > 0 ? (opts.dislike_count - 20) : 5;
     let dislike_count_end = opts.dislike_count + 50;
 
-    let like_count = Math.floor(Math.random() * like_count_end) + like_count_start;
-    let dislike_count = Math.floor(Math.random() * dislike_count_end) + dislike_count_start;
+    let like_count = Math.floor(Math.random() * (like_count_end - like_count_start + 1)) + like_count_start;
+    let dislike_count = Math.floor(Math.random() * (dislike_count_end - dislike_count_start + 1)) + dislike_count_start;
 
     return {
         like_count,

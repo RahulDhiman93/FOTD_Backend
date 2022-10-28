@@ -498,9 +498,9 @@ async function addBulkFacts(req, res) {
             response.lastFactDate = moment(last_fact_date[0].fact_stamp).format("YYYY-MM-DD");
             return responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
         }
-        
+
         let lastFactResult = await factService.getFacts(apiReference, {
-            order_by : "fact_id DESC",
+            order_by : " ORDER BY fact_id DESC",
             skip     : 0,
             limit    : 1,
             fact_status: constants.FACT_STATUS.APPROVED,

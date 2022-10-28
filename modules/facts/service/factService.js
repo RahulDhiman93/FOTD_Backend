@@ -262,14 +262,25 @@ async function addBulkFacts(apiReference, opts) {
     try{
         let facts = opts.facts;
         let formattedDate = opts.startDate;
-        let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp) VALUES `;
+        let like_count = opts.like_count;
+        let dislike_count = opts.dislike_count;
+
+        let like_dislike = calculateLikeDislike({ like_count, dislike_count });
+
+        like_count = like_dislike.like_count;
+        dislike_count = like_dislike.dislike_count;
+
+        let sqlQuery = `INSERT INTO tb_facts (fact_status, user_id, fact, fact_type, fact_stamp, minimum_like_count, minimum_dislike_count) VALUES `;
 
         let tempDate = formattedDate;
 
         facts.forEach((fact, index) => {
-            sqlQuery += `(1, 0, '${fact}', 1, '${tempDate.format("YYYY-MM-DD")}')`;
+            sqlQuery += `(1, 0, '${fact}', 1, '${tempDate.format("YYYY-MM-DD")}', ${like_count}, ${dislike_count})`;
             tempDate = formattedDate.add(1, 'days');
             if(index < facts.length-1) sqlQuery += `,`
+            like_dislike = calculateLikeDislike({ like_count, dislike_count });
+            like_count = like_dislike.like_count;
+            dislike_count = like_dislike.dislike_count;
         })
         
         sqlQuery += ';'
@@ -277,6 +288,22 @@ async function addBulkFacts(apiReference, opts) {
     }catch(error) {
         logging.logError(apiReference, {EVENT:"addBulkFacts", ERROR : error.toString()});
         throw(error);
+    }
+}
+
+function calculateLikeDislike(opts) {
+    let like_count_start = (opts.like_count - 60) > 0 ? opts.like_count - 60 : 10;
+    let like_count_end = opts.like_count + 80;
+
+    let dislike_count_start = (opts.dislike_count - 20) > 0 ? (opts.dislike_count - 20) : 5;
+    let dislike_count_end = opts.dislike_count + 50;
+
+    let like_count = Math.floor(Math.random() * like_count_end) + like_count_start;
+    let dislike_count = Math.floor(Math.random() * dislike_count_end) + dislike_count_start;
+
+    return {
+        like_count,
+        dislike_count
     }
 }
 

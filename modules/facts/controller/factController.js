@@ -499,7 +499,18 @@ async function addBulkFacts(req, res) {
             return responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
         }
         
-        await factService.addBulkFacts(apiReference, { facts, startDate: moment(startDate) });
+        let lastFactResult = await factService.getFacts(apiReference, {
+            order_by : "fact_id DESC",
+            skip     : 0,
+            limit    : 1,
+            fact_status: constants.FACT_STATUS.APPROVED,
+            fact_type: constants.FACT_TYPE.DAILY_FACT
+        });
+
+        let like_count = lastFactResult[0].minimum_like_count;
+        let dislike_count = lastFactResult[0].minimum_dislike_count;        
+        
+        await factService.addBulkFacts(apiReference, { facts, startDate: moment(startDate), like_count, dislike_count });
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error) {
         logging.logError(req.apiReference, {EVENT : "addBulkFacts", ERROR : error});

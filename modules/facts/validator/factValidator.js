@@ -79,7 +79,8 @@ function getFactComments(req,res,next){
     };
     
     let schema = Joi.object().keys({
-      fact_id: Joi.number().required()
+      access_token   : Joi.string().required(),
+      fact_id        : Joi.number().required()
     });
     let validFields = validator.validateFields(req.apiReference, req.query, res, schema);
     if (validFields) {

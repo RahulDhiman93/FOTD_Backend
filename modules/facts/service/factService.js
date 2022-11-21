@@ -119,7 +119,7 @@ async function getFacts(apiReference, opts){
 
 async function getComments(apiReference, fact_id){
     try{
-        let sql     = `SELECT * FROM tb_fact_comments WHERE fact_id = ?`;
+        let sql     = `SELECT * FROM tb_fact_comments WHERE fact_id = ? AND is_active = 1`;
         let values  = [fact_id];
 
         let result = await dbHandler.executeQuery(apiReference, "getComments", sql, values);

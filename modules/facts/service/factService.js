@@ -18,6 +18,7 @@ exports.updateFact                 = updateFact;
 exports.addBulkFacts               = addBulkFacts;
 exports.getFactsForBulk            = getFactsForBulk;
 exports.getAllFacts                = getAllFacts;
+exports.getComments                = getComments;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -114,6 +115,20 @@ async function getFacts(apiReference, opts){
         throw(error);
     }
 }
+
+async function getComments(apiReference, fact_id){
+    try{
+        let sql     = `SELECT * FROM tb_fact_comments WHERE fact_id = ?`;
+        let values  = [fact_id];
+
+        let result = await dbHandler.executeQuery(apiReference, "getComments", sql, values);
+        return result;
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getComments", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
 
 async function addFactLike(apiReference, {fact_id, status, user_id}){
     try{

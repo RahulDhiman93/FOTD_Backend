@@ -26,6 +26,7 @@ exports.approveFact      = approveFact;
 exports.getFactsV2       = getFactsV2;
 exports.addBulkFacts     = addBulkFacts;
 exports.getAllFacts      = getAllFacts;
+exports.factComments     = factComments;
 
 async function checkAppVersion(req, res){
     try{
@@ -119,6 +120,21 @@ async function likeFact(req, res){
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "likeFact", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function factComments(req, res){
+    try{
+        let fact_id  = req.body.fact_id;
+        let response    = {
+            comments: [],
+        };
+
+        response.comments = await factService.getComments(req.apiReference, fact_id);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "factComments", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

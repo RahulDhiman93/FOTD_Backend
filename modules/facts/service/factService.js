@@ -132,7 +132,7 @@ async function getComments(apiReference, fact_id){
 
 async function addComment(apiReference, fact_id, user_id, comment_text){
     try{
-        let sql     = `INSERT INTO tb_fact_comments (fact_id, user_id, comment_text) VALUES ( ${fact_id}, ${user_id}, ${comment_text})`;
+        let sql     = `INSERT INTO tb_fact_comments (fact_id, user_id, comment_text) VALUES ( ${fact_id}, ${user_id}, "${comment_text}")`;
         let result = await dbHandler.executeQuery(apiReference, "addComment", sql);
         return result;
     }catch(error){

@@ -126,7 +126,7 @@ async function likeFact(req, res){
 
 async function factComments(req, res){
     try{
-        let fact_id  = req.body.fact_id;
+        let fact_id  = req.query.fact_id;
         let response    = {
             comments: [],
         };

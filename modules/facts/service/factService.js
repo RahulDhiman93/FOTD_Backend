@@ -19,6 +19,7 @@ exports.addBulkFacts               = addBulkFacts;
 exports.getFactsForBulk            = getFactsForBulk;
 exports.getAllFacts                = getAllFacts;
 exports.getComments                = getComments;
+exports.addComment                 = addComment;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -125,6 +126,17 @@ async function getComments(apiReference, fact_id){
         return result;
     }catch(error){
         logging.logError(apiReference, {EVENT:"getComments", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function addComment(apiReference, fact_id, user_id, comment_text){
+    try{
+        let sql     = `INSERT INTO tb_fact_comments (fact_id, user_id, comment_text) VALUES ( ${fact_id}, ${user_id}, ${comment_text})`;
+        let result = await dbHandler.executeQuery(apiReference, "addComment", sql);
+        return result;
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"addComment", ERROR : error.toString()});
         throw(error);
     }
 }

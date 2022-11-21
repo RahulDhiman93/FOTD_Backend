@@ -23,6 +23,7 @@ exports.getFactsV2        = getFactsV2;
 exports.getTodaysFactOpen = getTodaysFactOpen;
 exports.addBulkFacts      = addBulkFacts;
 exports.getFactComments   = getFactComments;
+exports.addFactComment    = addFactComment;
 
 function checkAppVersion(req,res,next){
     req.apiReference = {
@@ -83,6 +84,25 @@ function getFactComments(req,res,next){
       fact_id        : Joi.number().required()
     });
     let validFields = validator.validateFields(req.apiReference, req.query, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function addFactComment(req,res,next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "fact/addComment"
+    };
+    
+    let schema = Joi.object().keys({
+      access_token   : Joi.string().required(),
+      fact_id        : Joi.number().required(),
+      user_id        : Joi.number().required(),
+      comment_text   : Joi.string().required()
+    });
+
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
     if (validFields) {
         next();
     }

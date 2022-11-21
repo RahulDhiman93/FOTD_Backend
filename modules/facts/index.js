@@ -23,4 +23,5 @@ app.get('/fact/v2/get',           factValidator.getFactsV2,         auth.authent
 app.post('/open/fact/today',      factValidator.getTodaysFactOpen,  auth.authenticateOpenApis, factController.getTodaysFact);
 app.post('/fact/addBulkFacts',    factValidator.addBulkFacts,       factController.addBulkFacts);
 app.get('/getAllFacts',           factController.getAllFacts);
+app.post('/fact/addComment',      factValidator.addFactComment,     auth.authenticateUser, factController.addFactComment);
 app.get('/fact/comments',         factValidator.getFactComments,    auth.authenticateUser, factController.factComments);

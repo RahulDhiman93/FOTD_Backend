@@ -5,8 +5,9 @@
 const dbHandler = require("./../../../database/mysqlLib");
 const logging   = require("./../../../logging/logging");
 
-exports.addFeedback    = addFeedback;
-exports.getFeedback    = getFeedback;
+exports.addFeedback     = addFeedback;
+exports.getFeedback     = getFeedback;
+exports.getAllFeedbacks = getAllFeedbacks;
 
 async function addFeedback(apiReference, {user_id, device_type, feedback, comments, rating}){
     try{
@@ -36,6 +37,17 @@ async function getFeedback(apiReference, {columns, user_id}){
         return await dbHandler.executeQuery(apiReference, "getFeedback", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getFeedback", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getAllFeedbacks(apiReference, limit, offset){
+    try{
+        let sql     = `SELECT * FROM tb_feedbacks ORDER BY id DESC LIMIT ? OFFSET ?`;
+        let values  = [parseInt(limit), parseInt(offset)];
+        return await dbHandler.executeQuery(apiReference, "getAllFeedbacks", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getAllFeedbacks", ERROR : error.toString()});
         throw(error);
     }
 }

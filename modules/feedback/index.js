@@ -7,3 +7,4 @@ const feedbackValidator  = require("./validators/feedbackValidator");
 const auth               = require("./../../auth/authentication");
 
 app.post("/feedback/add", feedbackValidator.addFeedback, auth.authenticateUser, feedbackController.addFeedback);
+app.get("/getAllFeedbacks",  feedbackController.addFeedback);

@@ -40,8 +40,8 @@ async function getAllFeedbacks(req, res){
         let limit = limitParam == null ? 50 : limitParam;
         let offset = offsetParam == null ? 0 : offsetParam;
 
-        await feedbackService.getAllFeedbacks(req.apiReference, limit, offset);
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
+        let response = await feedbackService.getAllFeedbacks(req.apiReference, limit, offset);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getAllFeedbacks", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

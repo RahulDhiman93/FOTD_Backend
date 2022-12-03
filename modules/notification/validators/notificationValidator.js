@@ -10,6 +10,7 @@ const validator               = require("./../../../validators/validator");
 exports.sendNotification      = sendNotification;
 exports.sendEmailNotification = sendEmailNotification;
 exports.sendNotificationForBulk = sendNotificationForBulk;
+exports.sendNotificationToAll = sendNotificationToAll;
 
 function sendNotification(req,res,next){
     req.apiReference = {
@@ -36,6 +37,22 @@ function sendNotificationForBulk(req,res,next){
     
     let schema = Joi.object().keys({
       user_ids : Joi.array().items(Joi.number()).optional(),
+      title    : Joi.string().required(),
+      body     : Joi.string().required()
+    });
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function sendNotificationToAll(req,res,next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "sendNotificationToAll"
+    };
+    
+    let schema = Joi.object().keys({
       title    : Joi.string().required(),
       body     : Joi.string().required()
     });

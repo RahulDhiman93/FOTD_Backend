@@ -8,4 +8,5 @@ const notificationValidators  = require("./validators/notificationValidator");
 
 app.post("/notification/send",      notificationValidators.sendNotification, notificationControllers.sendNotification);
 app.post("/notification/bulkSend",  notificationValidators.sendNotificationForBulk, notificationControllers.sendNotificationForBulk);
+app.post("/notification/sendToAll",  notificationValidators.sendNotificationToAll, notificationControllers.sendNotificationToAll);
 app.post("/notification/sendEmail", notificationValidators.sendEmailNotification, notificationControllers.sendEmailNotification);

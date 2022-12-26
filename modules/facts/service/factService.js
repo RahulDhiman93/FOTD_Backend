@@ -302,7 +302,7 @@ async function addBulkFacts(apiReference, opts) {
         let tempDate = formattedDate;
 
         facts.forEach((fact, index) => {
-            sqlQuery += `(1, 0, '${fact}', 1, '${tempDate.format("YYYY-MM-DD")}', ${like_count}, ${dislike_count})`;
+            sqlQuery += `(1, 0, "${fact}", 1, '${tempDate.format("YYYY-MM-DD")}', ${like_count}, ${dislike_count})`;
             tempDate = formattedDate.add(1, 'days');
             if(index < facts.length-1) sqlQuery += `,`
             like_dislike = calculateLikeDislike({ like_count, dislike_count });
@@ -322,8 +322,8 @@ function calculateLikeDislike(opts) {
     let like_count_start = (opts.like_count - 60) > 0 ? opts.like_count - 60 : 10;
     let like_count_end = opts.like_count + 80;
 
-    let dislike_count_start = (opts.dislike_count - 20) > 0 ? (opts.dislike_count - 20) : 5;
-    let dislike_count_end = opts.dislike_count + 50;
+    let dislike_count_start = (opts.dislike_count - 50) > 0 ? (opts.dislike_count - 50) : 5;
+    let dislike_count_end = opts.dislike_count + 30;
 
     let like_count = Math.floor(Math.random() * (like_count_end - like_count_start + 1)) + like_count_start;
     let dislike_count = Math.floor(Math.random() * (dislike_count_end - dislike_count_start + 1)) + dislike_count_start;

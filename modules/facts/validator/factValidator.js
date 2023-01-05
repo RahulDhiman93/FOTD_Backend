@@ -99,6 +99,7 @@ function addFactComment(req,res,next){
       access_token   : Joi.string().required(),
       fact_id        : Joi.number().required(),
       user_id        : Joi.number().required(),
+      user_name      : Joi.string().required(),
       comment_text   : Joi.string().required()
     });
 

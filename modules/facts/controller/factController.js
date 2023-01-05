@@ -144,9 +144,10 @@ async function addFactComment(req, res){
     try{
         let fact_id      = req.body.fact_id;
         let user_id      = req.body.user_id;
+        let user_name    = req.body.user_name;
         let comment_text = req.body.comment_text;
 
-        await factService.addComment(req.apiReference, fact_id, user_id, comment_text);
+        await factService.addComment(req.apiReference, fact_id, user_id, user_name, comment_text);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "addComment", ERROR : error});

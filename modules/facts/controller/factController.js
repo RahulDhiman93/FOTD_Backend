@@ -128,11 +128,9 @@ async function likeFact(req, res){
 async function factComments(req, res){
     try{
         let fact_id  = req.query.fact_id;
-        let response    = {
-            comments: [],
-        };
+        let response = [];
 
-        response.comments = await factService.getComments(req.apiReference, fact_id);
+        response = await factService.getComments(req.apiReference, fact_id);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "factComments", ERROR : error});

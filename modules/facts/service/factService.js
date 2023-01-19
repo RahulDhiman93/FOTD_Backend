@@ -117,11 +117,10 @@ async function getFacts(apiReference, opts){
     }
 }
 
-async function getComments(apiReference, fact_id){
+async function getComments(apiReference, fact_id, limit, offset){
     try{
-        let sql     = `SELECT * FROM tb_fact_comments WHERE fact_id = ? AND is_active = 1 ORDER BY id DESC`;
-        let values  = [fact_id];
-
+        let sql     = `SELECT * FROM tb_fact_comments WHERE fact_id = ? AND is_active = 1 ORDER BY id DESC LIMIT ? OFFSET ?`;
+        let values  = [fact_id, parseInt(limit), parseInt(offset)];
         let result = await dbHandler.executeQuery(apiReference, "getComments", sql, values);
         return result;
     }catch(error){

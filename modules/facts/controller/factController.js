@@ -128,7 +128,9 @@ async function likeFact(req, res){
 async function factComments(req, res){
     try{
         let fact_id  = req.query.fact_id;
-        let response = [];
+        let response    = {
+            comments: [],
+        };
 
         let limitParam = req.query.limit;
         let offsetParam = req.query.offset;
@@ -136,7 +138,7 @@ async function factComments(req, res){
         let limit = limitParam == null ? 10 : limitParam;
         let offset = offsetParam == null ? 0 : offsetParam;
 
-        response = await factService.getComments(req.apiReference, fact_id, limit, offset);
+        response.comments = await factService.getComments(req.apiReference, fact_id, limit, offset);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "factComments", ERROR : error});

@@ -28,6 +28,7 @@ exports.addBulkFacts     = addBulkFacts;
 exports.getAllFacts      = getAllFacts;
 exports.factComments     = factComments;
 exports.addFactComment   = addFactComment;
+exports.getAllComments   = getAllComments;
 
 async function checkAppVersion(req, res){
     try{
@@ -573,6 +574,27 @@ async function getAllFacts(req, res){
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getAllFacts", ERROR : error, STACK : error.stack});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function getAllComments(req, res){
+    try{
+        req.apiReference = {
+            module: "Facts",
+            api   : "getAllComments"
+        };
+
+        let limitParam = req.query.limit;
+        let offsetParam = req.query.offset;
+
+        let limit = limitParam == null ? 50 : limitParam;
+        let offset = offsetParam == null ? 0 : offsetParam;
+
+        let response = await factService.getAllComments(req.apiReference, limit, offset);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, response, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "getAllComments", ERROR : error, STACK : error.stack});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

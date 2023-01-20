@@ -25,3 +25,4 @@ app.post('/fact/addBulkFacts',    factValidator.addBulkFacts,       factControll
 app.get('/getAllFacts',           factController.getAllFacts);
 app.post('/fact/addComment',      factValidator.addFactComment,     auth.authenticateUser, factController.addFactComment);
 app.get('/fact/comments',         factValidator.getFactComments,    auth.authenticateUser, factController.factComments);
+app.get('/fact/getAllComments',   factController.getAllComments);

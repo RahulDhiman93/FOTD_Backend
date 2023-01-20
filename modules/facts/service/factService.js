@@ -20,6 +20,7 @@ exports.getFactsForBulk            = getFactsForBulk;
 exports.getAllFacts                = getAllFacts;
 exports.getComments                = getComments;
 exports.addComment                 = addComment;
+exports.getAllComments             = getAllComments;
 
 async function getAppVersion(apiReference, {columns, device_type}){
     try{
@@ -351,6 +352,17 @@ async function getAllFacts(apiReference, limit, offset){
         return await dbHandler.executeQuery(apiReference, "getAllFacts", sql, values);
     }catch(error){
         logging.logError(apiReference, {EVENT:"getAllFacts", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function getAllComments(apiReference, limit, offset){
+    try{
+        let sql     = `SELECT * FROM tb_fact_comments ORDER BY id DESC LIMIT ? OFFSET ?`;
+        let values  = [parseInt(limit), parseInt(offset)];
+        return await dbHandler.executeQuery(apiReference, "getAllComments", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"getAllComments", ERROR : error.toString()});
         throw(error);
     }
 }

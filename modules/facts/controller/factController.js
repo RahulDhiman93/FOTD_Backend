@@ -153,7 +153,12 @@ async function addFactComment(req, res){
         let user_id      = req.body.user_id;
         let user_name    = req.body.user_name;
         let comment_text = req.body.comment_text;
-
+        let userDetails = await userServices.getUser(req.apiReference, { user_id });
+        await userServices.updateUser(req.apiReference, {
+            reward_points: parseInt(userDetails[0].reward_points) + 1
+        }, {
+            user_id: user_id
+        });
         await factService.addComment(req.apiReference, fact_id, user_id, user_name, comment_text);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
@@ -439,6 +444,8 @@ async function approveFact(req, res){
             });
             if(user_id && fact_status == constants.FACT_STATUS.APPROVED){
                 notificationService.sendPushesToUser(req.apiReference, user_id, "Fact Approved!!", "Hey!! Your fact just got approved");
+            } else {
+                notificationService.sendPushesToUser(req.apiReference, user_id, "Uh Ohh!!", "Some error found in your fact :/");
             }
         }
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);

@@ -10,6 +10,7 @@ exports.getUserDevice    = getUserDevice;
 exports.updateUserDevice = updateUserDevice;
 exports.getUserDevicesForBulk = getUserDevicesForBulk;
 exports.getUserDevicesForAll = getUserDevicesForAll;
+exports.updateUserDeviceKeys = updateUserDeviceKeys;
 
 async function addUserDevice(apiReference, {user_id, device_type, device_token, device_name, is_active}){
     try{
@@ -163,6 +164,29 @@ async function updateUserDevice(apiReference, {is_active}, {user_id, device_toke
         if(device_token){
             sql += " AND device_token = ? ";
             values.push(device_token);    
+        }
+
+        return await dbHandler.executeQuery(apiReference, "updateUserDevice", sql, values);
+    }catch(error){
+        logging.logError(apiReference, {EVENT:"updateUserDevice", ERROR : error.toString()});
+        throw(error);
+    }
+}
+
+async function updateUserDeviceKeys(apiReference, {user_id, device_type, device_token, device_name}){
+    try{
+        let values    = [];
+        let updateObj = {};
+        let sql       = ` UPDATE tb_user_devices SET ? WHERE 1=1 `;
+        
+        updateObj.device_type = device_type;
+        updateObj.device_token = device_token;
+        updateObj.device_name = device_name;
+        values.push(updateObj);
+
+        if(user_id){
+            sql += " AND user_id = ? ";
+            values.push(user_id);    
         }
 
         return await dbHandler.executeQuery(apiReference, "updateUserDevice", sql, values);

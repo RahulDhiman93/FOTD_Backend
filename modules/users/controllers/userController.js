@@ -39,8 +39,8 @@ async function login(req, res){
         }
 
         if(device_token && device_type){
-            userDeviceService.addUserDevice(req.apiReference, {device_name, device_token, device_type, user_id : userInfo[0].user_id, is_active : 1}).then().catch(err=>{
-                logging.logError(req.apiReference, {EVENT : "ADDUSERDEVICE", ERROR: err});
+            userDeviceService.updateUserDeviceKeys(req.apiReference, {user_id : userInfo[0].user_id, device_type, device_token, device_name}).then().catch(err=>{
+                logging.logError(req.apiReference, {EVENT : "UPDATEUSERDEVICE_LOGIN", ERROR: err});
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, userInfo[0].user_id);
@@ -116,8 +116,8 @@ async function loginViaAccessToken(req, res){
         }
 
         if(device_token && device_type){
-            userDeviceService.addUserDevice(req.apiReference, {user_id : userInfo[0].user_id, device_type, device_token, device_name, is_active : 1}).then().catch(err=>{
-                logging.logError(req.apiReference, {EVENT : "addUserDevice", ERROR : err});
+            userDeviceService.updateUserDeviceKeys(req.apiReference, {user_id : userInfo[0].user_id, device_type, device_token, device_name}).then().catch(err=>{
+                logging.logError(req.apiReference, {EVENT : "UPDATEUSERDEVICE_ACCESSTOKEN", ERROR: err});
             });
         }
 

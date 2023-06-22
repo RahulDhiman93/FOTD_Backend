@@ -182,6 +182,7 @@ async function updateUserDeviceKeys(apiReference, {user_id, device_type, device_
         updateObj.device_type = device_type;
         updateObj.device_token = device_token;
         updateObj.device_name = device_name;
+        updateObj.is_active = 1;
         values.push(updateObj);
 
         if(user_id){

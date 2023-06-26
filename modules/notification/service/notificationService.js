@@ -16,10 +16,13 @@ const emailUtility		= require("./../../../utilities/emailUtility");
 
 exports.sendPushesToUser      = sendPushesToUser;
 exports.sendDailyFactPush     = sendDailyFactPush;
+exports.sendDailyFactToBlog   = sendDailyFactToBlog;
 exports.scheduleNotification  = scheduleNotification;
+exports.scheduleTodayFactInBlog = scheduleTodayFactInBlog;
 exports.sendEmailNotification = sendEmailNotification;
 exports.sendPushesToUserForBulk = sendPushesToUserForBulk;
 exports.sendPushesToAllUsers = sendPushesToAllUsers;
+exports.addFactToBlog = addFactToBlog;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {
@@ -219,6 +222,43 @@ async function sendDailyFactPush(apiReference, timezone){
 	}
 }
 
+async function sendDailyFactToBlog(){
+	try{
+
+		let yesterday      = moment().subtract(1, 'days').format("YYYY-MM-DD");
+        let yesterdaysFact = await factService.getFacts(apiReference, {
+            fact_stamp    : yesterday,
+            columns       : " tbf.* ",
+            fact_type     : constants.FACT_TYPE.DAILY_FACT
+		});
+		
+		if(!yesterdaysFact.length){
+			return;
+		}
+
+		let fact = yesterdaysFact[0].fact;
+		addFactToBlog(fact);
+
+	}catch(error){
+		logging.logError(apiReference, {EVENT: "sendDailyFactToBlog", ERROR : error});
+	}
+}
+
+async function addFactToBlog(fact_string){
+    try{
+        let user_id     = 0;
+        let fact_type   = constants.FACT_TYPE.USER_FACT;
+        let fact        = fact_string;
+        let fact_status = 1;
+
+        await factService.addFact(req.apiReference, {user_id, fact_type, fact, fact_status});
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "addFact", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
 function scheduleNotification() {
 	console.log("scheduling notifications")
 	schedule.scheduleJob("*/15 * * * *", function () {
@@ -231,6 +271,13 @@ function scheduleNotification() {
 		console.error("curr_date_time", curr_date_time);
 		console.error("timezone", timezone);
 		sendDailyFactPush({ module: "notification", api: "sendNotification" }, timezone);
+	});
+}
+
+function scheduleTodayFactInBlog() {
+	console.log("scheduling today fact to blog")
+	schedule.scheduleJob("0 23 * * *", function () {
+		sendDailyFactToBlog()
 	});
 }
 

@@ -26,6 +26,7 @@ async function initializeServer() {
       jadeViews = await fileUtility.readDir(apiReference, {dirNamePath: path.join(BASE_PATH, 'modules/jade/views')});
       if(envProperties.isEnvLive()){
         notificationService.scheduleNotification();
+        notificationService.scheduleTodayFactInBlog();
       }
     } catch (error) {
       console.log(error)

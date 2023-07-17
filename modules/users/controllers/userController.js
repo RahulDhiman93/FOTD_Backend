@@ -89,7 +89,7 @@ async function register(req, res){
 }
 
 async function sendPushesToUser(user_id){
-	request({
+	require('http').request({
         url: 'http://localhost:8000/notification/send',
         method: 'POST',
         json: {

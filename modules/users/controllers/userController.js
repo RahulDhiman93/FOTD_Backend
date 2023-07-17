@@ -12,6 +12,7 @@ const accessTokenUtility = require("./../../../utilities/accessTokenUtility");
 const userDeviceService  = require("./../services/userDeviceService");
 const emailUtility       = require("./../../../utilities/emailUtility");
 const fileService        = require("./../../files/services/fileService");
+const notificationService = require("./../service/notificationService");
 
 exports.login               = login;
 exports.register            = register;
@@ -22,6 +23,7 @@ exports.forgetPassword      = forgetPassword;
 exports.verifyOtp           = verifyOtp;
 exports.changePassword      = changePassword;
 exports.getAllUsers         = getAllUsers;
+exports.sendNotification    = sendNotification;
 
 async function login(req, res){
     try{
@@ -79,9 +81,24 @@ async function register(req, res){
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
+        setTimeout(sendNotification(user_id), 120000);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function sendNotification(newUserID){
+    try{
+        let user_id = newUserID;
+        let title   = "Welcome BOSS 🤴";
+        let body    = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
+
+        notificationService.sendPushesToUser(req.apiReference, user_id, title, body);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "sendNotification", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }

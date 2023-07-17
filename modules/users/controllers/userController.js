@@ -23,7 +23,7 @@ exports.forgetPassword      = forgetPassword;
 exports.verifyOtp           = verifyOtp;
 exports.changePassword      = changePassword;
 exports.getAllUsers         = getAllUsers;
-exports.sendNotification    = sendNotification;
+exports.sendPushesToUser    = sendPushesToUser;
 
 async function login(req, res){
     try{
@@ -81,7 +81,7 @@ async function register(req, res){
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
-        setTimeout(sendNotification(user_id), 120000);
+        setTimeout(sendNotification({ module: "notification", api: "sendNotification" },user_id), 120000);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
@@ -89,18 +89,30 @@ async function register(req, res){
     }
 }
 
-async function sendNotification(newUserID){
-    try{
-        let user_id = newUserID;
-        let title   = "Welcome BOSS 🤴";
-        let body    = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
-
-        notificationService.sendPushesToUser(req.apiReference, user_id, title, body);
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
-    }catch(error){
-        logging.logError(req.apiReference, {EVENT : "sendNotification", ERROR : error});
-        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
-    }
+async function sendPushesToUser(apiReference, user_id){
+	try{
+            let title = "Welcome BOSS 🤴"
+            let body = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
+			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1, notification_enabled : 1, inner_join_users : 1});
+			let ios_devices = [];
+			let androidPushObj = {
+				message: body,
+				title  : title
+			}
+			for(let count = 0; count< userDevices.length; count++){
+					let temp = userDevices[count];
+					if(temp.device_type == constants.DEVICE_TYPE.IOS){
+						ios_devices.push(temp.device_token);
+						continue;
+					}
+					sendAndroidPushNotification(apiReference, androidPushObj, null, temp.device_token);
+			}
+			if(ios_devices.length){
+				sendIosPushNotification(apiReference, ios_devices, { "title": title, "body": body }, { "title": title, "body": body });
+			}
+	}catch(error){
+		logging.logError(apiReference, {EVENT: "sendPushesToUser", ERROR : error});
+	}
 }
 
 async function logOut(req, res){

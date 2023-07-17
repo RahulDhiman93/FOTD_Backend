@@ -22,7 +22,6 @@ exports.forgetPassword      = forgetPassword;
 exports.verifyOtp           = verifyOtp;
 exports.changePassword      = changePassword;
 exports.getAllUsers         = getAllUsers;
-exports.sendPushesToUser    = sendPushesToUser;
 
 async function login(req, res){
     try{
@@ -80,26 +79,11 @@ async function register(req, res){
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
-        setTimeout(sendPushesToUser(user_id), 120000);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
-}
-
-async function sendPushesToUser(user_id){
-	require('http').request({
-        url: 'http://localhost:8000/notification/send',
-        method: 'POST',
-        json: {
-            user_id: user_id,
-            title: "Welcome BOSS 🤴",
-            body: "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃"
-        }
-    }, function (error, response, body) {
-        console.log({error: error, response: response, body: body});
-    });
 }
 
 async function logOut(req, res){

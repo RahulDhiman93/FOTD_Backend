@@ -81,8 +81,8 @@ async function register(req, res){
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
-        setTimeout(sendNotification({ module: "notification", api: "sendNotification" },user_id), 120000);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
+        setTimeout(sendNotification({ module: "notification", api: "sendNotification" },user_id), 120000);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

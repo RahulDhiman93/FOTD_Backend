@@ -94,6 +94,9 @@ async function sendPushesToUser(apiReference, user_id){
             let title = "Welcome BOSS 🤴"
             let body = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
 			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1, notification_enabled : 1, inner_join_users : 1});
+            console.log("NOTIFICATION AFTER REGISTER -->");
+            console.log(user_id);
+            console.log(userDevices);
 			let ios_devices = [];
 			let androidPushObj = {
 				message: body,

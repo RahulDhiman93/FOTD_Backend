@@ -12,7 +12,7 @@ const accessTokenUtility = require("./../../../utilities/accessTokenUtility");
 const userDeviceService  = require("./../services/userDeviceService");
 const emailUtility       = require("./../../../utilities/emailUtility");
 const fileService        = require("./../../files/services/fileService");
-const notificationService = require("./../service/notificationService");
+const notificationService = require("/Users/rahuldhiman/Desktop/FP/NodeDeployment/modules/notification/service/notificationService");
 
 exports.login               = login;
 exports.register            = register;

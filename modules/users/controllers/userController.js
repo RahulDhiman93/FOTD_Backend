@@ -12,7 +12,6 @@ const accessTokenUtility = require("./../../../utilities/accessTokenUtility");
 const userDeviceService  = require("./../services/userDeviceService");
 const emailUtility       = require("./../../../utilities/emailUtility");
 const fileService        = require("./../../files/services/fileService");
-const notificationService = require("./../../notification/service/notificationService");
 
 exports.login               = login;
 exports.register            = register;
@@ -81,7 +80,7 @@ async function register(req, res){
             });
         }
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
-        setTimeout(sendPushesToUser({ module: "notification", api: "sendNotification" },user_id), 120000);
+        setTimeout(sendPushesToUser(user_id), 120000);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
@@ -89,33 +88,18 @@ async function register(req, res){
     }
 }
 
-async function sendPushesToUser(apiReference, user_id){
-	try{
-            let title = "Welcome BOSS 🤴"
-            let body = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
-			let userDevices = await userDeviceService.getUserDevice(apiReference, {user_id, is_active : 1, notification_enabled : 1, inner_join_users : 1});
-            console.log("NOTIFICATION AFTER REGISTER -->");
-            console.log(user_id);
-            console.log(userDevices);
-			let ios_devices = [];
-			let androidPushObj = {
-				message: body,
-				title  : title
-			}
-			for(let count = 0; count< userDevices.length; count++){
-					let temp = userDevices[count];
-					if(temp.device_type == constants.DEVICE_TYPE.IOS){
-						ios_devices.push(temp.device_token);
-						continue;
-					}
-					sendAndroidPushNotification(apiReference, androidPushObj, null, temp.device_token);
-			}
-			if(ios_devices.length){
-				sendIosPushNotification(apiReference, ios_devices, { "title": title, "body": body }, { "title": title, "body": body });
-			}
-	}catch(error){
-		logging.logError(apiReference, {EVENT: "sendPushesToUser", ERROR : error});
-	}
+async function sendPushesToUser(user_id){
+	request({
+        url: 'http://localhost:8000/notification/send',
+        method: 'POST',
+        json: {
+            user_id: user_id,
+            title: "Welcome BOSS 🤴",
+            body: "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃"
+        }
+    }, function (error, response, body) {
+        console.log({error: error, response: response, body: body});
+    });
 }
 
 async function logOut(req, res){

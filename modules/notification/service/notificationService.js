@@ -233,6 +233,8 @@ async function sendDailyFactToBlog(apiReference){
 	try{
 
 		let yesterday      = moment().subtract(1, 'days').format("YYYY-MM-DD");
+		console.log("DAILY FACT BLOG YESTERDAY ---->")
+		console.log(yesterday)
         let yesterdaysFact = await factService.getFacts(apiReference, {
             fact_stamp    : yesterday,
             columns       : " tbf.* ",
@@ -242,6 +244,8 @@ async function sendDailyFactToBlog(apiReference){
 		if(!yesterdaysFact.length){
 			return;
 		}
+		console.log("DAILY FACT BLOG YESTERDAY FACT---->")
+		console.log(yesterdaysFact[0].fact)
 
 		let fact = yesterdaysFact[0].fact;
 		addFactToBlog(fact);

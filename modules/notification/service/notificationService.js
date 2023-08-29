@@ -333,7 +333,7 @@ const postToInsta = async () => {
     });
 }
 
-const cronInsta = new CronJob("59 * * * * *", async () => {
+const cronInsta = new CronJob("30 * * * * *", async () => {
 	console.error("Posting to Insta");
     postToInsta();
 });

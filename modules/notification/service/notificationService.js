@@ -16,6 +16,7 @@ const userDeviceService = require("./../../users/services/userDeviceService");
 const userService		= require("./../../users/services/userService");
 const factService		= require("./../../facts/service/factService");
 const emailUtility		= require("./../../../utilities/emailUtility");
+const envProperties     = require('../properties/envProperties');
 const { IgApiClient } = require('instagram-private-api');
 const { get } = require('request-promise');
 
@@ -320,11 +321,11 @@ async function sendEmailNotification(apiReference, user_ids, html, subject, gmai
 const postToInsta = async () => {
     const ig = new IgApiClient();
 	console.log("IG USER & PASS --->")
-	console.log(process.env.IG_USERNAME)
-	console.log(process.env.IG_PASSWORD)
+	console.log(envProperties.ig_username)
+	console.log(envProperties.ig_password)
 	console.log("<---- IG END")
-    ig.state.generateDevice(process.env.IG_USERNAME.toString());
-    await ig.account.login(process.env.IG_USERNAME.toString(), process.env.IG_PASSWORD.toString());
+    ig.state.generateDevice(envProperties.ig_username.toString());
+    await ig.account.login(envProperties.ig_username.toString(), envProperties.ig_password.toString());
 
 	const imageBuffer = await get({
         url: 'https://i.imgur.com/BZBHsauh.jpg',

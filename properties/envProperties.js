@@ -30,6 +30,8 @@ exports.databaseSettings = {
 };
 
 exports.port = config.get('PORT');
+exports.ig_username = config.get('IG_USERNAME');
+exports.ig_password = config.get('IG_PASSWORD');
 
 function isEnv(env) {
   return process.env.NODE_ENV == env;

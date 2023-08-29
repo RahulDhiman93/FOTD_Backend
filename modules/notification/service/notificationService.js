@@ -288,6 +288,7 @@ function scheduleTodayFactInBlog() {
 	schedule.scheduleJob("0 0 23 * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog({ module: "notification", api: "sendDailyFactToblog" })
+		postToInsta()
 	});
 }
 
@@ -322,10 +323,6 @@ async function sendEmailNotification(apiReference, user_ids, html, subject, gmai
 
 const postToInsta = async () => {
     const ig = new IgApiClient();
-	console.log("IG USER & PASS --->")
-	console.log(envProperties.ig_username)
-	console.log(envProperties.ig_password)
-	console.log("<---- IG END")
     ig.state.generateDevice(envProperties.ig_username.toString());
     await ig.account.login(envProperties.ig_username.toString(), envProperties.ig_password.toString());
 
@@ -338,14 +335,4 @@ const postToInsta = async () => {
         file: imageBuffer,
         caption: 'Really nice photo from the internet!',
     });
-}
-
-const cronInsta = new CronJob("30 * * * * *", async () => {
-	console.error("Posting to Insta");
-    postToInsta();
-});
-
-function scheduleInstaPost() {
-	console.log("scheduling insta post")
-	cronInsta.start();
 }

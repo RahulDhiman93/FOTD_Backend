@@ -285,7 +285,7 @@ function scheduleNotification() {
 
 function scheduleTodayFactInBlog() {
 	console.log("scheduling today fact to blog")
-	schedule.scheduleJob("59 * * * * *", function () {
+	schedule.scheduleJob("0 0 23 * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog({ module: "notification", api: "sendDailyFactToblog" })
 	});

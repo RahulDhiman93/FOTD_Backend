@@ -349,6 +349,7 @@ async function getFeaturedFact(req, res){
             }
 
             if (user_id == 0) {
+                console.log("INSIDE ADMIN USER -->")
                 facts[i].added_by = constants.FOTP_DISPLAY_NAME;
                 facts[i].user_image = constants.FOTP_DISPLAY_ICON;
             }

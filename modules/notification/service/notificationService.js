@@ -228,7 +228,7 @@ async function sendDailyFactPush(apiReference, timezone){
 	}
 }
 
-async function sendDailyFactToBlog(){
+async function sendDailyFactToBlog(apiReference){
 	try{
 
 		let yesterday      = moment().subtract(1, 'days').format("YYYY-MM-DD");
@@ -284,7 +284,7 @@ function scheduleTodayFactInBlog() {
 	console.log("scheduling today fact to blog")
 	schedule.scheduleJob("59 * * * * *", function () {
 		console.error("Updating blog section");
-		sendDailyFactToBlog()
+		sendDailyFactToBlog({ module: "notification", api: "sendDailyFactToblog" })
 	});
 }
 

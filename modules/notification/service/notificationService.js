@@ -6,6 +6,9 @@ const apns     = require('apn');
 const FCM      = require('fcm-node');
 const moment   = require("moment");
 const schedule = require('node-schedule');
+const CronJob  = require("cron").CronJob;
+require("dotenv").config();
+
 
 const logging           = require("./../../../logging/logging");
 const constants         = require("./../../../properties/constants");
@@ -13,6 +16,8 @@ const userDeviceService = require("./../../users/services/userDeviceService");
 const userService		= require("./../../users/services/userService");
 const factService		= require("./../../facts/service/factService");
 const emailUtility		= require("./../../../utilities/emailUtility");
+const { IgApiClient } = require('instagram-private-api');
+const { get } = require('request-promise');
 
 exports.sendPushesToUser      = sendPushesToUser;
 exports.sendDailyFactPush     = sendDailyFactPush;
@@ -23,6 +28,7 @@ exports.sendEmailNotification = sendEmailNotification;
 exports.sendPushesToUserForBulk = sendPushesToUserForBulk;
 exports.sendPushesToAllUsers = sendPushesToAllUsers;
 exports.addFactToBlog = addFactToBlog;
+exports.scheduleInstaPost = scheduleInstaPost;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {
@@ -276,7 +282,7 @@ function scheduleNotification() {
 
 function scheduleTodayFactInBlog() {
 	console.log("scheduling today fact to blog")
-	schedule.scheduleJob("* */23 * * *", function () {
+	schedule.scheduleJob("0 59 * * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog()
 	});
@@ -309,4 +315,29 @@ async function sendEmailNotification(apiReference, user_ids, html, subject, gmai
 	} catch (error) {
 		logging.logError(apiReference, { EVENT: "sendEmailNotification", ERROR: error });
 	}
+}
+
+const postToInsta = async () => {
+    const ig = new IgApiClient();
+    ig.state.generateDevice(process.env.IG_USERNAME);
+    await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
+
+	const imageBuffer = await get({
+        url: 'https://i.imgur.com/BZBHsauh.jpg',
+        encoding: null, 
+    });
+
+    await ig.publish.photo({
+        file: imageBuffer,
+        caption: 'Really nice photo from the internet!',
+    });
+}
+
+const cronInsta = new CronJob("0 59 * * * ?", async () => {
+	console.error("Posting to Insta");
+    postToInsta();
+});
+
+function scheduleInstaPost() {
+	cronInsta.start();
 }

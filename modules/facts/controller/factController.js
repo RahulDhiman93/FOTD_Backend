@@ -348,6 +348,9 @@ async function getFeaturedFact(req, res){
                 facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
             }
 
+            console.log("USER TYPE -->")
+            console.log(user_id)
+            console.log(typeof(user_id))
             if (user_id == 0) {
                 console.log("INSIDE ADMIN USER -->")
                 facts[i].added_by = constants.FOTP_DISPLAY_NAME;

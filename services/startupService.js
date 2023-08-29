@@ -27,7 +27,6 @@ async function initializeServer() {
       if(envProperties.isEnvLive()){
         notificationService.scheduleNotification();
         notificationService.scheduleTodayFactInBlog();
-        notificationService.scheduleInstaPost();
       }
     } catch (error) {
       console.log(error)

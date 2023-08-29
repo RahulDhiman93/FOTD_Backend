@@ -6,7 +6,6 @@ const apns     = require('apn');
 const FCM      = require('fcm-node');
 const moment   = require("moment");
 const schedule = require('node-schedule');
-const CronJob  = require("cron").CronJob;
 require("dotenv").config();
 
 
@@ -29,7 +28,6 @@ exports.sendEmailNotification = sendEmailNotification;
 exports.sendPushesToUserForBulk = sendPushesToUserForBulk;
 exports.sendPushesToAllUsers = sendPushesToAllUsers;
 exports.addFactToBlog = addFactToBlog;
-exports.scheduleInstaPost = scheduleInstaPost;
 
 function sendAndroidPushNotification(apiReference, pushObj, fcm_key, device_token) {
 	return new Promise((resolve) => {

@@ -248,7 +248,7 @@ async function sendDailyFactToBlog(apiReference){
 		console.log(yesterdaysFact[0].fact)
 
 		let fact = yesterdaysFact[0].fact;
-		addFactToBlog(fact);
+		addFactToBlog(apiReference, fact);
 
 	}catch(error){
 		logging.logError(apiReference, {EVENT: "sendDailyFactToBlog", ERROR : error});

@@ -282,7 +282,7 @@ function scheduleNotification() {
 
 function scheduleTodayFactInBlog() {
 	console.log("scheduling today fact to blog")
-	schedule.scheduleJob("0 59 * * * *", function () {
+	schedule.scheduleJob("59 * * * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog()
 	});
@@ -333,11 +333,12 @@ const postToInsta = async () => {
     });
 }
 
-const cronInsta = new CronJob("0 59 * * * ?", async () => {
+const cronInsta = new CronJob("59 * * * * *", async () => {
 	console.error("Posting to Insta");
     postToInsta();
 });
 
 function scheduleInstaPost() {
+	console.log("scheduling insta post")
 	cronInsta.start();
 }

@@ -319,8 +319,12 @@ async function sendEmailNotification(apiReference, user_ids, html, subject, gmai
 
 const postToInsta = async () => {
     const ig = new IgApiClient();
-    ig.state.generateDevice(process.env.IG_USERNAME);
-    await ig.account.login(process.env.IG_USERNAME, process.env.IG_PASSWORD);
+	console.log("IG USER & PASS --->")
+	console.log(process.env.IG_USERNAME)
+	console.log(process.env.IG_PASSWORD)
+	console.log("<---- IG END")
+    ig.state.generateDevice(process.env.IG_USERNAME.toString());
+    await ig.account.login(process.env.IG_USERNAME.toString(), process.env.IG_PASSWORD.toString());
 
 	const imageBuffer = await get({
         url: 'https://i.imgur.com/BZBHsauh.jpg',

@@ -352,7 +352,10 @@ async function getFeaturedFact(req, res){
                 facts[i].added_by = constants.FOTP_DISPLAY_NAME;
                 facts[i].user_image = constants.FOTP_DISPLAY_ICON;
             }
-            
+
+            console.log("ALL FEATURED Facts -->")
+            console.log(facts)
+
             obj[facts[i].fact_id] = facts[i];
             fact_ids.push(facts[i].fact_id);
         }

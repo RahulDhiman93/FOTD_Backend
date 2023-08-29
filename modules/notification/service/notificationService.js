@@ -251,18 +251,16 @@ async function sendDailyFactToBlog(apiReference){
 	}
 }
 
-async function addFactToBlog(fact_string){
+async function addFactToBlog(apiReference, fact_string){
     try{
         let user_id     = 0;
         let fact_type   = constants.FACT_TYPE.USER_FACT;
         let fact        = fact_string;
         let fact_status = 1;
 
-        await factService.addFact(req.apiReference, {user_id, fact_type, fact, fact_status});
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
+        await factService.addFact(apiReference, {user_id, fact_type, fact, fact_status});
     }catch(error){
-        logging.logError(req.apiReference, {EVENT : "addFact", ERROR : error});
-        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+        logging.logError(apiReference, {EVENT : "addFact", ERROR : error});
     }
 }
 

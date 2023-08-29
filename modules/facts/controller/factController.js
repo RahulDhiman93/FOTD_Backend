@@ -341,13 +341,18 @@ async function getFeaturedFact(req, res){
             facts[i].like_count = facts[i].minimum_like_count;
             facts[i].dislike_count = facts[i].minimum_dislike_count;
             if (facts[i].fact_type == constants.FACT_TYPE.ADMIN_FACT ||
-                facts[i].fact_type == constants.FACT_TYPE.DAILY_FACT || 
-                user_id == 0) {
+                facts[i].fact_type == constants.FACT_TYPE.DAILY_FACT) {
                 facts[i].added_by = constants.FOTP_DISPLAY_NAME;
                 facts[i].user_image = constants.FOTP_DISPLAY_ICON;
             } else {
                 facts[i].user_image = facts[i].user_image || constants.DEFAULT_USER_IMAGE;
             }
+
+            if (user_id == 0) {
+                facts[i].added_by = constants.FOTP_DISPLAY_NAME;
+                facts[i].user_image = constants.FOTP_DISPLAY_ICON;
+            }
+            
             obj[facts[i].fact_id] = facts[i];
             fact_ids.push(facts[i].fact_id);
         }

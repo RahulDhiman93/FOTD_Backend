@@ -16,7 +16,7 @@ const userDeviceService = require("./../../users/services/userDeviceService");
 const userService		= require("./../../users/services/userService");
 const factService		= require("./../../facts/service/factService");
 const emailUtility		= require("./../../../utilities/emailUtility");
-const envProperties     = require('../properties/envProperties');
+const envProperties     = require("./../../../properties/envProperties");
 const { IgApiClient } = require('instagram-private-api');
 const { get } = require('request-promise');
 

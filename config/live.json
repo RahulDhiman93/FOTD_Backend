@@ -5,13 +5,13 @@
   "databaseSettings": {
     "host"    : "localhost",
     "user"    : "root",
-    "password": "R@hul!234Dhiman",
+    "password": "R@hul1234",
     "database": "FOTD"
   },
   "slaveDatabaseSettings": {
     "host"    : "localhost",
     "user"    : "root",
-    "password": "R@hul!234Dhiman",
+    "password": "R@hul1234",
     "database": "FOTD"
   },
   "s3BucketCredentials": {

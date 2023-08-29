@@ -342,7 +342,7 @@ async function getFeaturedFact(req, res){
             facts[i].dislike_count = facts[i].minimum_dislike_count;
             if (facts[i].fact_type == constants.FACT_TYPE.ADMIN_FACT ||
                 facts[i].fact_type == constants.FACT_TYPE.DAILY_FACT || 
-                user_id == "0") {
+                user_id == 0) {
                 facts[i].added_by = constants.FOTP_DISPLAY_NAME;
                 facts[i].user_image = constants.FOTP_DISPLAY_ICON;
             } else {

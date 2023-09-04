@@ -12,6 +12,7 @@ const accessTokenUtility = require("./../../../utilities/accessTokenUtility");
 const userDeviceService  = require("./../services/userDeviceService");
 const emailUtility       = require("./../../../utilities/emailUtility");
 const fileService        = require("./../../files/services/fileService");
+const notificationService = require("./../../notification/service/notificationService");
 
 exports.login               = login;
 exports.register            = register;
@@ -78,11 +79,25 @@ async function register(req, res){
                 logging.logError(req.apiReference, {EVENT : "ADDUSERDEVICE", ERROR: err});
             });
         }
+        sendNotification({ module: "notification", api: "sendRegisterNotification" }, user_id)
         let response = await userService.getUserInfoResponseObj(req.apiReference, user_id);
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function sendNotification(apiReference, user_id_from_signup){
+    await delay(1000 * 20);
+    try{
+        let user_id = user_id_from_signup;
+        let title   = "Welcome BOSS 🤴";
+        let body    = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
+
+        notificationService.sendPushesToUser(apiReference, user_id, title, body);
+    }catch(error){
+        logging.logError(apiReference, {EVENT : "sendNotification", ERROR : error});
     }
 }
 
@@ -96,6 +111,7 @@ async function logOut(req, res){
                 logging.logError(req.apiReference, {EVENT : "User logout", ERROR : err.toString()});
             });
         }
+        
         responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});

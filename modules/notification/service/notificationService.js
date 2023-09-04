@@ -286,7 +286,7 @@ function scheduleTodayFactInBlog() {
 	schedule.scheduleJob("0 0 23 * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog({ module: "notification", api: "sendDailyFactToblog" })
-		postToInsta()
+		//postToInsta()
 	});
 }
 

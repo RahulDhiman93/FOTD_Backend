@@ -88,6 +88,10 @@ async function register(req, res){
     }
 }
 
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+} 
+
 async function sendNotification(apiReference, user_id_from_signup){
     await delay(1000 * 20);
     try{

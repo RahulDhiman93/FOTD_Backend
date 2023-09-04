@@ -93,13 +93,14 @@ function delay(time) {
 } 
 
 async function sendNotification(apiReference, user_id_from_signup){
-    await delay(1000 * 20);
+    await delay(1000 * 900); //Will delay this for 15 mins
     try{
         let user_id = user_id_from_signup;
         let title   = "Welcome BOSS 🤴";
         let body    = "Hey there, welcome to the world of FOTD 📖. Checkout our blog page for some amazing facts by our users 😃";
 
         notificationService.sendPushesToUser(apiReference, user_id, title, body);
+        console.log("Notification after signup sent successfully")
     }catch(error){
         logging.logError(apiReference, {EVENT : "sendNotification", ERROR : error});
     }

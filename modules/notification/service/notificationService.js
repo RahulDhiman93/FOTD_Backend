@@ -286,7 +286,6 @@ function scheduleTodayFactInBlog() {
 	schedule.scheduleJob("0 0 23 * * *", function () {
 		console.error("Updating blog section");
 		sendDailyFactToBlog({ module: "notification", api: "sendDailyFactToblog" })
-		//postToInsta()
 	});
 }
 
@@ -317,20 +316,4 @@ async function sendEmailNotification(apiReference, user_ids, html, subject, gmai
 	} catch (error) {
 		logging.logError(apiReference, { EVENT: "sendEmailNotification", ERROR: error });
 	}
-}
-
-const postToInsta = async () => {
-    const ig = new IgApiClient();
-    ig.state.generateDevice(envProperties.ig_username.toString());
-    await ig.account.login(envProperties.ig_username.toString(), envProperties.ig_password.toString());
-
-	const imageBuffer = await get({
-        url: 'https://i.imgur.com/BZBHsauh.jpg',
-        encoding: null, 
-    });
-
-    await ig.publish.photo({
-        file: imageBuffer,
-        caption: 'Really nice photo from the internet!',
-    });
 }

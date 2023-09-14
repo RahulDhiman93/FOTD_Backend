@@ -1,7 +1,5 @@
 {
   "PORT": 8000,
-  "IG_USERNAME": "fact__of_the__day",
-  "IG_PASSWORD" : "R@hul1234",
   "databaseSettings": {
     "host"    : "localhost",
     "user"    : "root",

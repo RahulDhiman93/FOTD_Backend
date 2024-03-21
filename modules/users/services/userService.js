@@ -6,6 +6,7 @@ const dbHandler   = require("./../../../database/mysqlLib");
 const logging     = require("./../../../logging/logging");
 const factService = require("./../../facts/service/factService");
 const constants   = require("./../../../properties/constants");
+const func = require("joi/lib/types/func");
 
 exports.addUser                = addUser;
 exports.getUser                = getUser;
@@ -13,6 +14,7 @@ exports.updateUser             = updateUser;
 exports.getUserInfoResponseObj = getUserInfoResponseObj;
 exports.getApiKeyUser          = getApiKeyUser;
 exports.getAllUsers            = getAllUsers;
+exports.deleteUser             = deleteUser;
 
 async function addUser(apiReference, {name, password, email, access_token, is_guest , timezone, timezone_info, signup_from=null}){
     try{
@@ -153,5 +155,17 @@ async function getAllUsers(apiReference, limit, offset){
     }catch(error){
         logging.logError(apiReference, {EVENT:"getAllUsers", ERROR : error.toString()});
         throw(error);
+    }
+}
+
+async function deleteUser(apiReference, user_id){
+    try {
+        const rand = CONCAT('delete_', SUBSTRING(UUID(), 1, 16));
+        let sql = `UPDATE tb_users SET email = ?, name = ? WHERE user_id = ?;`;
+        let values = [CONCAT(rand, "@fotd.in"), rand, user_id];
+        return await dbHandler.executeQuery(apiReference, "deleteUser", sql, values);
+    } catch (error) {
+        logging.logError(apiReference, { EVENT: "deleteUser", ERROR: error.toString() });
+        throw (error);
     }
 }

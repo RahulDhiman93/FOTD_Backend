@@ -19,11 +19,7 @@ app.post("/user/loginViaAccessToken", userValidators.loginViaAccessToken, userCo
 app.post("/user/forgetPassword", userValidators.forgetPassword, userControllers.forgetPassword);
 app.post("/user/verifyOtp", userValidators.verifyOtp, userControllers.verifyOtp);
 app.post("/user/logout", userValidators.logOut, auth.authenticateUser, userControllers.logOut);
-<<<<<<< HEAD
 app.post("/user/delete", userValidators.deleteAccount, userControllers.deleteAccount);
-=======
-app.post("/user/delete", userValidators.deleteAccount, userControllers.logOut);
->>>>>>> cc69433f33e7c7d74cce9cea89c811b829d4993e
 app.post("/user/editProfile", multer.single('file'), userValidators.editProfile, auth.authenticateUser, userControllers.editProfile);
 app.post("/user/changePassword", userValidators.changePassword, auth.authenticateUser, userControllers.changePassword);
 app.get("/getAllUsers", userControllers.getAllUsers);

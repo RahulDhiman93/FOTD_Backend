@@ -7,6 +7,8 @@ const logging     = require("./../../../logging/logging");
 const factService = require("./../../facts/service/factService");
 const constants   = require("./../../../properties/constants");
 const func = require("joi/lib/types/func");
+const { v4: uuidv4 } = require('uuid');
+
 
 exports.addUser                = addUser;
 exports.getUser                = getUser;
@@ -160,9 +162,9 @@ async function getAllUsers(apiReference, limit, offset){
 
 async function deleteUser(apiReference, user_id){
     try {
-        const rand = CONCAT('delete_', SUBSTRING(UUID(), 1, 16));
+        const rand = 'delete_' + uuidv4().slice(0, 16);
         let sql = `UPDATE tb_users SET email = ?, name = ? WHERE user_id = ?;`;
-        let values = [CONCAT(rand, "@fotd.in"), rand, user_id];
+        let values = [rand+"@fotd.in", rand, user_id];
         return await dbHandler.executeQuery(apiReference, "deleteUser", sql, values);
     } catch (error) {
         logging.logError(apiReference, { EVENT: "deleteUser", ERROR: error.toString() });

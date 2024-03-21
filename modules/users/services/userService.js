@@ -163,8 +163,8 @@ async function getAllUsers(apiReference, limit, offset){
 async function deleteUser(apiReference, user_id){
     try {
         const rand = 'delete_' + uuidv4().slice(0, 16);
-        let sql = `UPDATE tb_users SET email = ?, name = ? WHERE user_id = ?;`;
-        let values = [rand+"@fotd.in", rand, user_id];
+        let sql = `UPDATE tb_users SET access_token = ?, email = ?, name = ? WHERE user_id = ?;`;
+        let values = [rand, rand+"@fotd.in", rand, user_id];
         return await dbHandler.executeQuery(apiReference, "deleteUser", sql, values);
     } catch (error) {
         logging.logError(apiReference, { EVENT: "deleteUser", ERROR: error.toString() });

@@ -18,6 +18,7 @@ exports.login               = login;
 exports.register            = register;
 exports.loginViaAccessToken = loginViaAccessToken;
 exports.logOut              = logOut;
+exports.deleteAccount       = deleteAccount;
 exports.editProfile         = editProfile;
 exports.forgetPassword      = forgetPassword;
 exports.verifyOtp           = verifyOtp;
@@ -121,6 +122,25 @@ async function logOut(req, res){
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
         responses.sendResponse(res, constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
+    }
+}
+
+async function deleteAccount(req, res){
+    try{
+        let email              = req.body.email;
+        let password           = req.body.password;
+        let encrypted_password = accessTokenUtility.encrypt(password);
+
+        let userInfo = await userService.getUser(req.apiReference, {email});
+        if(_.isEmpty(userInfo) || userInfo[0].password != encrypted_password){
+            throw(constants.responseMessages.INVALID_ACCESS);
+        }
+
+        let response = await userService.deleteUser(req.apiReference, userInfo[0].user_id);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
+    }catch(error){
+        logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
+        responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);
     }
 }
 

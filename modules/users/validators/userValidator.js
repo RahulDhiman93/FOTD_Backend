@@ -11,6 +11,7 @@ exports.login               = login;
 exports.register            = register;
 exports.loginViaAccessToken = loginViaAccessToken;
 exports.logOut              = logOut;
+exports.deleteAccount       = deleteAccount;
 exports.editProfile         = editProfile;
 exports.forgetPassword      = forgetPassword;
 exports.verifyOtp           = verifyOtp;
@@ -87,6 +88,23 @@ function logOut(req,res,next){
       access_token: Joi.string().required(),
       device_token: Joi.string().optional(),
       device_type : Joi.number().optional(),
+    });
+
+    let validFields = validator.validateFields(req.apiReference, req.body, res, schema);
+    if (validFields) {
+        next();
+    }
+}
+
+function deleteAccount(req,res,next){
+    req.apiReference = {
+        module: apiReferenceModule,
+        api   : "deleteAccount"
+    };
+    
+    let schema = Joi.object().keys({
+        email       : Joi.string().required(),
+        password    : Joi.string().required(),
     });
 
     let validFields = validator.validateFields(req.apiReference, req.body, res, schema);

@@ -137,7 +137,7 @@ async function deleteAccount(req, res){
         }
 
         let response = await userService.deleteUser(req.apiReference, userInfo[0].user_id);
-        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {userInfo : response}, req.apiReference);
+        responses.sendResponse(res, constants.responseMessages.ACTION_COMPLETE, constants.responseFlags.ACTION_COMPLETE, {}, req.apiReference);
     }catch(error){
         logging.logError(req.apiReference, {EVENT : "getUser", ERROR : error});
         responses.sendResponse(res, error || constants.responseMessages.SHOW_ERROR_MESSAGE, constants.responseFlags.SHOW_ERROR_MESSAGE, {}, req.apiReference);

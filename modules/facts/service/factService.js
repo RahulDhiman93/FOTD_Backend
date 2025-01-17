@@ -347,9 +347,12 @@ async function getFactsForBulk(apiReference){
 
 async function getAllFacts(apiReference, limit, offset){
     try{
-        let sql     = `SELECT * FROM tb_facts ORDER BY fact_id  DESC LIMIT ? OFFSET ?`;
-        let values  = [parseInt(limit), parseInt(offset)];
-        return await dbHandler.executeQuery(apiReference, "getAllFacts", sql, values);
+        let sql = `SELECT fact FROM tb_facts ORDER BY fact_id DESC LIMIT ? OFFSET ?`;
+        let values = [parseInt(limit), parseInt(offset)];
+        let result = await dbHandler.executeQuery(apiReference, "getAllFacts", sql, values);
+
+        let facts = result.map(row => row.fact);
+        return [{ ...facts }];
     }catch(error){
         logging.logError(apiReference, {EVENT:"getAllFacts", ERROR : error.toString()});
         throw(error);

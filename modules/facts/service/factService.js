@@ -352,7 +352,7 @@ async function getAllFacts(apiReference, limit, offset){
         let result = await dbHandler.executeQuery(apiReference, "getAllFacts", sql, values);
 
         let facts = result.map(row => row.fact);
-        return [{ ...facts }];
+        return [facts];
     }catch(error){
         logging.logError(apiReference, {EVENT:"getAllFacts", ERROR : error.toString()});
         throw(error);
